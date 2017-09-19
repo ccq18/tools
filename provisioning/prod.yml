@@ -1,0 +1,13 @@
+---
+ - hosts: webservers
+   become: yes
+   user: ubuntu
+   roles:
+     - nginx
+     - itcraftsmanpl.php7
+     - geerlingguy.memcached
+     - geerlingguy.git
+     - geerlingguy.composer
+     - redis
+     - supervisor
+     - webserver

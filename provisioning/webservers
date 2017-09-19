@@ -1,0 +1,2 @@
+[webservers]
+192.168.2.233 ansible_sudo_pass='vagrant'

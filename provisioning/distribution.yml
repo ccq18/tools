@@ -1,0 +1,5 @@
+---
+- hosts: webservers
+  user: vagrant
+  roles:
+    - role: distribution
