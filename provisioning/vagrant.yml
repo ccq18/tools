@@ -3,9 +3,9 @@
    become: yes
    user: vagrant
    roles:
-    - nginx
-    - php
-    - git
-    - redis
-    - supervisor
-    - webserver
+#    - nginx
+#    - php
+#    - git
+#    - redis
+#    - supervisor
+#    - webserver

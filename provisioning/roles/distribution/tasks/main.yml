@@ -1,5 +1,76 @@
 ---
-- include: prepare.yml
-- include: distribute.yml
-- include: supervisor.yml
+- name: determine if code distributed
+  stat:
+    path: "{{ new_application_path }}"
+  register: code_stat
+- name: determine if code distributed
+  shell: "mkdir -p {{ new_application_path }}"
+  when: not code_stat.stat.exists
+- name: distribute code with git
+  shell: "cd {{ new_application_path }};git clone {{ repository }} ./"
+  when: not code_stat.stat.exists
+- name: chmod storage
+  shell: chmod -R 777 storage
+  args:
+    chdir: "{{ new_application_path }}"
+  when: not code_stat.stat.exists
+  become: true
+  become_user: "{{ application_user }}"
+- name: composer install
+  shell: composer install
+  args:
+    chdir: "{{ new_application_path }}"
+  when: not code_stat.stat.exists
+  become: true
+  become_user: "{{ application_user }}"
+
+- name: setup application env file
+  template:
+    src: templates/env.j2
+    dest: "{{ new_application_path }}/.env"
+  become: true
+  become_user: "{{ application_user }}"
+
+- name: run migrations
+  shell: php artisan migrate --force
+  args:
+    chdir: "{{ new_application_path }}"
+  become: true
+  become_user: "{{ application_user }}"
   when: jobserver
+
+- name: link code to current application version
+  file:
+    path: "{{ application_path }}"
+    src: "{{ new_application_path }}"
+    state: link
+    owner: "{{ application_user }}"
+    group: "{{ application_group }}"
+  register: release_stat
+
+- name: restart php-fpm service if release version is changed
+  shell: sudo service php{{ php_version }}-fpm restart
+  sudo: true
+  when: release_stat.changed
+
+- name: restart jobs gracefully if release version is changed
+  shell: php artisan queue:restart
+  args:
+    chdir: "{{ application_path }}"
+  become: true
+  become_user: "{{ application_user }}"
+  when: release_stat.changed
+
+- name: add Kernel into crontab
+  cron:
+    name:  "add laravel into crontab"
+    user: "{{ application_user }}"
+    job: "/usr/bin/php {{ application_path }}/artisan schedule:run 1>> {{ crontab_logfile }} 2>&1"
+  when: jobserver
+- name: ensure supervisord
+  shell: . {{ supervisor_path }}/venv/bin/activate && supervisord -c {{ supervisor_path }}/supervisord.conf
+  args:
+    chdir: "{{ supervisor_path }}"
+    creates: "{{ supervisor_path }}/supervisord.pid"
+  sudo: true
+

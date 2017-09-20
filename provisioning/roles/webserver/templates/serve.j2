@@ -1,6 +1,6 @@
 server {
     listen       80 default_server;
-
+    server_name {{ domain }};
     root {{ nginx_root }};
     index index.php;
 
@@ -18,11 +18,4 @@ server {
         include        fastcgi_params;
     }
 
-}
-
-
-server {
-    listen 80;
-    server_name {{ domain }};
-    root {{ nginx_root }};
 }

@@ -1,7 +1,6 @@
 ---
  - hosts: webservers
    become: yes
-   user: ubuntu
    roles:
     - nginx
     - php
@@ -9,4 +8,5 @@
     - redis
     - supervisor
     - webserver
+    - predistribution
     - distribution

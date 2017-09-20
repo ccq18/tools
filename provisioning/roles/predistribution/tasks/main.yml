@@ -23,9 +23,10 @@
     owner: "{{ application_user }}"
     group: "{{ application_group }}"
     mode: 0600
-- name: sshd reload
-  shell: sudo service ssh reload
-  sudo: true
+- name: git restart
+  shell:  eval `ssh-agent`;ssh-add ~/.ssh/id_rsa
+  ignore_errors: yes
+
 #
 #- name: add gitlab to known hosts
 #  known_hosts:
@@ -33,7 +34,7 @@
 #    key: "{{ lookup('file', 'id_rsa.pub') }}"
 #  become: true
 #  become_user: "{{ application_user }}"
-  
+
 - name: ensure directory for code distribution
   file:
     path: "{{ distribution_path }}"
