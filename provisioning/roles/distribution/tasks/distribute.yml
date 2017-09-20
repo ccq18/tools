@@ -1,19 +1,21 @@
 ---
 - name: determine if code distributed
-  shell: "mkdir -p {{ distribution_path }}/{{ application_version }}"
-  sudo: true
+  stat:
+    path: "{{ new_application_path }}"
   register: code_stat
+- name: determine if code distributed
+  shell: "mkdir -p {{ new_application_path }}"
+  when: not code_stat.stat.exists
 - name: distribute code with git
-  shell: "git clone {{ repository }}"
+  shell: "git clone {{ repository }} ./"
   args:
-    chdir: "{{ distribution_path }}/{{ application_version }}"
-  sudo: true
-  when: jobserver
+    chdir: "{{ new_application_path }}"
+  when: not code_stat.stat.exists
 
 - name: composer install
   composer:
     command: install
-    working_dir: "{{ distribution_path }}"
+    working_dir: "{{ new_application_path }}"
     prefer_dist: true
   when: not code_stat.stat.exists
   become: true
@@ -22,14 +24,14 @@
 - name: setup application env file
   template:
     src: templates/env.j2
-    dest: "{{ distribution_path }}/{{ application_version }}/.env"
+    dest: "{{ new_application_path }}/.env"
   become: true
   become_user: "{{ application_user }}"
 
 - name: run migrations
   shell: php artisan migrate --force
   args:
-    chdir: "{{ distribution_path }}/{{ application_version }}"
+    chdir: "{{ new_application_path }}"
   become: true
   become_user: "{{ application_user }}"
   when: jobserver
@@ -37,7 +39,7 @@
 - name: link code to current application version
   file:
     path: "{{ application_path }}"
-    src: "{{ distribution_path }}/{{ application_version }}"
+    src: "{{ new_application_path }}"
     state: link
     owner: "{{ application_user }}"
     group: "{{ application_group }}"

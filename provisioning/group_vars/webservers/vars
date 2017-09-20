@@ -7,3 +7,4 @@ repository: "git@gitee.com:ccq18/service.git"
 supervisor_path: /data/supervisor
 nginx_root: "{{ application_path }}/public"
 queue_worker_logfile: "{{ application_path }}/storage/logs/worker.log"
+new_application_path: "{{ distribution_path }}/{{ application_version }}"

@@ -15,8 +15,8 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('email')->unique();
+            $table->string('name',50)->unique();
+            $table->string('email',50)->unique();
             $table->string('password');
             $table->string('avatar');
             $table->string('confirmation_token');
@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->integer('likes_count')->default(0);
             $table->integer('followers_count')->default(0);
             $table->integer('followings_count')->default(0);
-            $table->json('settings')->nullable();
+            $table->string('settings')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

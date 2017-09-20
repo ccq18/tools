@@ -4,12 +4,8 @@
    user: vagrant
    roles:
     - nginx
-    - itcraftsmanpl.php7
-    - geerlingguy.memcached
-    - geerlingguy.git
-    - geerlingguy.composer
+    - php
+    - git
     - redis
     - supervisor
     - webserver
-    #    部署
-

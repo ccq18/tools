@@ -23,6 +23,9 @@
     owner: "{{ application_user }}"
     group: "{{ application_group }}"
     mode: 0600
+- name: sshd reload
+  shell: sudo service ssh reload
+  sudo: true
 #
 #- name: add gitlab to known hosts
 #  known_hosts:
