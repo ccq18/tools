@@ -7,8 +7,15 @@
   shell: "mkdir -p {{ new_application_path }}"
   when: not code_stat.stat.exists
 - name: distribute code with git
-  shell: "cd {{ new_application_path }};git clone {{ repository }} ./"
+  git:
+   accept_hostkey=yes update=yes force=yes  dest={{ new_application_path }}   repo={{ repository }} update=yes version=master
   when: not code_stat.stat.exists
+
+#  git:
+#    repo: {{ repository }}
+#    dest: "{{ new_application_path }}"
+#    version: master
+#    accept_hostkey: true
 - name: chmod storage
   shell: chmod -R 777 storage
   args:

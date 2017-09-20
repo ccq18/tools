@@ -6,3 +6,8 @@ npm install
 # 开发
 npm run dev
 npm run watch
+
+##todo
+/provisioning/group_vars
+/provisioning/roles/distribution/files/id_rsa
+/provisioning/webservers
