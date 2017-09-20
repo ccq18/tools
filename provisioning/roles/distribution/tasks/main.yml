@@ -21,8 +21,7 @@
   args:
     chdir: "{{ new_application_path }}"
   when: not code_stat.stat.exists
-  become: true
-  become_user: "{{ application_user }}"
+  sudo: true
 - name: composer install
   shell: composer install
   args:
