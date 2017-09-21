@@ -1,6 +1,7 @@
 ---
  - hosts: webservers
    become: yes
+   user: root
    roles:
     - nginx
     - php

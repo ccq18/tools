@@ -10,7 +10,7 @@
 
 - name: ensure .ssh directory for application user
   file:
-    path: "/home/{{ application_user }}/.ssh"
+    path: "{{ application_user_home }}/.ssh"
     state: directory
     owner: "{{ application_user }}"
     group: "{{ application_group }}"
@@ -18,13 +18,13 @@
 
 - name: add id_rsa
   copy:
-    dest: "/home/{{ application_user }}/.ssh/id_rsa"
+    dest: "{{ application_user_home }}/.ssh/id_rsa"
     content: "{{ lookup('file', 'id_rsa') }}"
     owner: "{{ application_user }}"
     group: "{{ application_group }}"
     mode: 0600
 - name: git restart
-  shell:  eval `ssh-agent`;ssh-add ~/.ssh/id_rsa
+  shell:  eval `ssh-agent`;ssh-add {{ application_user_home }}/.ssh/id_rsa
   ignore_errors: yes
 
 #

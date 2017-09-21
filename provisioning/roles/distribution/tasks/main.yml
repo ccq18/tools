@@ -6,11 +6,14 @@
 - name: determine if code distributed
   shell: "mkdir -p {{ new_application_path }}"
   when: not code_stat.stat.exists
+  become: true
+  become_user: "{{ application_user }}"
 - name: distribute code with git
   git:
    accept_hostkey=yes update=yes force=yes  dest={{ new_application_path }}   repo={{ repository }} update=yes version=master
   when: not code_stat.stat.exists
-
+  become: true
+  become_user: "{{ application_user }}"
 #  git:
 #    repo: {{ repository }}
 #    dest: "{{ new_application_path }}"

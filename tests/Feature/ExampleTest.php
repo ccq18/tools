@@ -5,9 +5,24 @@ namespace Tests\Feature;
 use GuzzleHttp\Client;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+class Mcrypt{
+
+    public static function encrypt($code){
+        return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5(KEY), $code, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
+    }
+
+    public static function decrypt($code){
+        return mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(KEY), base64_decode($code), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND));
+    }
+
+}
 
 class ExampleTest extends TestCase
 {
+    public function test1()
+    {
+
+    }
     /**
      * A basic test example.
      *
