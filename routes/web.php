@@ -24,10 +24,16 @@ Route::group(['namespace' => 'Web',], function () {
     Route::post('password/update', 'PasswordController@update');
 
     Route::get('setting', 'SettingController@index');
+
+
     Route::post('setting', 'SettingController@store');
     Route::group(['middleware' => ['auth']], function () {
         Route::get('inbox', 'InboxController@index');
         Route::get('inbox/{dialogId}', 'InboxController@show');
         Route::post('inbox/{dialogId}/store', 'InboxController@store');
+
+        Route::group(['prefix' => 'account'], function () {
+            Route::get('/index', 'AccountController@index');
+        });
     });
 });

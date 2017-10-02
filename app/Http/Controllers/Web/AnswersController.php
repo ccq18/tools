@@ -37,7 +37,7 @@ class AnswersController extends Controller
     {
         $answer = $this->answer->create([
             'question_id' => $question,
-            'user_id'     => Auth::id(),
+            'uid'     => Auth::id(),
             'body'        => $request->get('body')
         ]);
         $answer->question()->increment('answers_count');

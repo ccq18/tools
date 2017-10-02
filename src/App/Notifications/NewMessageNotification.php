@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Message;
+use App\Model\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;

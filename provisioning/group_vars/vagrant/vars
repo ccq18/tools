@@ -1,9 +1,0 @@
-application_user: ubuntu
-application_group: ubuntu
-application_path: "/vagrant"
-nginx_root: "{{ application_path }}/public"
-queue_worker_logfile: "{{ application_path }}/storage/logs/worker.log"
-supervisor_path: /data/supervisor
-domain: localhost
-
-

@@ -69,7 +69,7 @@ class CommentsController extends Controller
         return $this->comment->create([
             'commentable_id'   => request('model'),
             'commentable_type' => $model,
-            'user_id'          => user('api')->id,
+            'uid'          => user('api')->id,
             'body'             => request('body')
         ]);
     }
@@ -80,6 +80,6 @@ class CommentsController extends Controller
      */
     private function getModelNameFromType($type)
     {
-        return $type === 'question' ? 'App\Question' : 'App\Answer';
+        return $type === 'question' ? 'App\Model\Question' : 'App\Model\Answer';
     }
 }

@@ -3,11 +3,12 @@
    become: yes
    user: root
    roles:
+    - git
+    - prepare
     - nginx
     - php
-    - git
     - redis
     - supervisor
     - webserver
-    - predistribution
-    - distribution
+#    - distribution
+#    - reload

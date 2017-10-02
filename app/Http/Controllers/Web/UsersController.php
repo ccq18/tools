@@ -13,6 +13,7 @@ class UsersController extends Controller
         return view('users.avatar');
     }
 
+
     public function changeAvatar(Request $request)
     {
         $file = $request->file('img');

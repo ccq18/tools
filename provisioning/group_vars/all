@@ -1,7 +1,15 @@
 php_version: 7.1
-sendfile: "on"
 jobserver: true
+sendfile: "off"
 
+domain: localhost
+application_user: ubuntu
+application_group: ubuntu
+application_path: "/vagrant"
+supervisor_path: /data/supervisor
+nginx_root: "{{ application_path }}/public"
+crontab_logfile: "{{ application_path }}/storage/logs/crontab.log"
+queue_worker_logfile: "{{ application_path }}/storage/logs/worker.log"
 
 
 env_app_name: questions
@@ -14,7 +22,7 @@ env_app_url: http://localhost
 env_db_connection: mysql
 env_db_port: 3306
 env_db_host: 120.27.102.93
-env_db_database: service
+env_db_database: service_test
 env_db_user_name: root
 env_db_password: anneng
 
@@ -25,7 +33,7 @@ env_queue_driver: sync
 
 env_redis_host: 127.0.0.1
 env_redis_password: null
-env_redis_port: 6379
+env_redis_port: 6377
 
 env_mail_driver: smtp
 env_mail_host: smtp.mailtrap.io

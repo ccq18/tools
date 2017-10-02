@@ -1,0 +1,6 @@
+---
+- hosts: webservers
+  user: root
+  roles:
+    - distribution
+    - reload

@@ -3,7 +3,7 @@
 if (!function_exists('user')) {
     /**
      * @param null $driver
-     * @return App\User
+     * @return \App\Model\User
      */
     function user($driver = null)
     {

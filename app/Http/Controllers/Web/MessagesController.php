@@ -34,8 +34,8 @@ class MessagesController extends Controller
     {
 
         $message = $this->message->create([
-            'to_user_id'   => request('user'),
-            'from_user_id' => user('api')->id,
+            'to_uid'   => request('user'),
+            'from_uid' => user('api')->id,
             'body'         => request('body'),
             'dialog_id'         => time().Auth::id(),
         ]);

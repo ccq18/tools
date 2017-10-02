@@ -64,7 +64,7 @@ class QuestionsController extends Controller
         $data = [
             'title'   => $request->get('title'),
             'body'    => $request->get('body'),
-            'user_id' => Auth::id()
+            'uid' => Auth::id()
         ];
 
         $question = $this->questionRepository->create($data);

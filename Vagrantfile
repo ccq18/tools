@@ -12,18 +12,33 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.network "forwarded_port", guest: 80, host: 8001
-  config.vm.network "forwarded_port", guest: 6379, host: 6377
-    config.vm.network "private_network", ip: "192.168.2.233"
-  config.vm.synced_folder ".", "/vagrant", type: "nfs"
+    config.ssh.insert_key = false
+    config.vm.define "vagrant1"do |vagrant1|
+        vagrant1.vm.box = "ubuntu/trusty64"
+        vagrant1.vm.network "forwarded_port", guest: 80, host: 8081
+    end
+    config.vm.define "vagrant2"do |vagrant2|
+        vagrant2.vm.box = "ubuntu/trusty64"
+        vagrant2.vm.network "forwarded_port", guest: 80, host: 8082
+    end
+    config.vm.define "vagrant3"do |vagrant3|
+        vagrant3.vm.box = "ubuntu/trusty64"
+        vagrant3.vm.network "forwarded_port", guest: 80, host: 8083
+    end
 
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = "provisioning/vagrant.yml"
-    ansible.groups = {
-          "vagrant" => ["default"]
-        }
-  end
+  #config.vm.box = "ubuntu/trusty64"
+  #config.vm.network "forwarded_port", guest: 80, host: 8080
+  #  config.vm.network "forwarded_port", guest: 443, host: 8443
+  #config.vm.network "forwarded_port", guest: 6377, host: 6377
+  #  config.vm.network "private_network", ip: "192.168.2.233"
+  #config.vm.synced_folder ".", "/vagrant", type: "nfs"
+
+  #config.vm.provision :ansible do |ansible|
+  #  ansible.playbook = "provisioning/vagrant.yml"
+  #  ansible.groups = {
+  #        "vagrant" => ["default"]
+  #      }
+  #end
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -56,7 +71,7 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
 
   # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
+  # backing providers for Vagrant. These  expose provider-specific options.
   # Example for VirtualBox:
   #
   # config.vm.provider "virtualbox" do |vb|

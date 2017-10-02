@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('body');
-            $table->integer('user_id')->unsigned();
+            $table->integer('uid')->unsigned();
             $table->integer('comments_count')->default(0);
             $table->integer('followers_count')->default(1);
             $table->integer('answers_count')->default(0);

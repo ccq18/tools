@@ -1,11 +1,11 @@
 ---
  - hosts: vagrant
-   become: yes
-   user: vagrant
+   sudo: True
    roles:
-#    - nginx
-#    - php
-#    - git
-#    - redis
-#    - supervisor
-#    - webserver
+    - git
+    - nginx
+    - php
+    - redis
+    - webserver
+    - supervisor
+#    - reload

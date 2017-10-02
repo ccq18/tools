@@ -11,7 +11,7 @@
                             <div class="media {{ $messageGroup->first()->shouldAddUnreadClass() ? 'unread' : '' }}">
                                 <div class="media-left">
                                     <a href="#">
-                                        @if(Auth::id() == $messageGroup->last()->from_user_id)
+                                        @if(Auth::id() == $messageGroup->last()->from_uid)
                                         <img src="{{ $messageGroup->last()->toUser->avatar }}" alt="">
                                         @else
                                         <img src="{{ $messageGroup->last()->fromUser->avatar }}" alt="">
@@ -21,7 +21,7 @@
                                 <div class="media-body">
                                     <h4 class="media-heading">
                                         <a href="#">
-                                            @if(Auth::id() == $messageGroup->last()->from_user_id)
+                                            @if(Auth::id() == $messageGroup->last()->from_uid)
                                                 {{ $messageGroup->last()->toUser->name }}
                                             @else
                                                 {{ $messageGroup->last()->fromUser->name }}

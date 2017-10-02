@@ -1,5 +1,7 @@
-domain: localhost
+new_application_path: "{{ distribution_path }}/{{ application_version }}"
 distribution_path: /data/www
+domain: localhost
+
 application_user: www-data
 application_group: www-data
 application_user_home: "/var/www"
@@ -8,6 +10,10 @@ application_path: "{{ distribution_path }}/release"
 repository: "git@gitee.com:ccq18/service.git"
 supervisor_path: /data/supervisor
 nginx_root: "{{ application_path }}/public"
-new_application_path: "{{ distribution_path }}/{{ application_version }}"
 crontab_logfile: "{{ application_path }}/storage/logs/crontab.log"
 queue_worker_logfile: "{{ application_path }}/storage/logs/worker.log"
+
+env_db_database: service
+sendfile: "on"
+env_redis_port: 6377
+

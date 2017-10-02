@@ -56,30 +56,3 @@
     owner: "{{ application_user }}"
     group: "{{ application_group }}"
   register: release_stat
-
-- name: restart php-fpm service if release version is changed
-  shell: sudo service php{{ php_version }}-fpm restart
-  sudo: true
-  when: release_stat.changed
-
-- name: restart jobs gracefully if release version is changed
-  shell: php artisan queue:restart
-  args:
-    chdir: "{{ application_path }}"
-  become: true
-  become_user: "{{ application_user }}"
-  when: release_stat.changed
-
-- name: add Kernel into crontab
-  cron:
-    name:  "add laravel into crontab"
-    user: "{{ application_user }}"
-    job: "/usr/bin/php {{ application_path }}/artisan schedule:run 1>> {{ crontab_logfile }} 2>&1"
-  when: jobserver
-- name: ensure supervisord
-  shell: . {{ supervisor_path }}/venv/bin/activate && supervisord -c {{ supervisor_path }}/supervisord.conf
-  args:
-    chdir: "{{ supervisor_path }}"
-    creates: "{{ supervisor_path }}/supervisord.pid"
-  sudo: true
-

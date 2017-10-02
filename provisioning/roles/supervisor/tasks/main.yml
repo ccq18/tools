@@ -1,3 +1,4 @@
+#安装 supervisord 并配置
 ---
 - name: install pip
   apt:

@@ -1,5 +1,0 @@
----
-- hosts: webservers
-  user: root
-  roles:
-    - role: predistribution
