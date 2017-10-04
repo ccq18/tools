@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Comment whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Comment whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Comment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Comment whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Comment whereUid($value)
  * @mixin \Eloquent
  */
 class Comment extends Model

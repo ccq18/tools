@@ -34,6 +34,10 @@ Route::group(['namespace' => 'Web',], function () {
 
         Route::group(['prefix' => 'account'], function () {
             Route::get('/index', 'AccountController@index');
+            Route::post('/recharge', 'AccountController@recharge');
+            Route::post('/transfer', 'AccountController@transfer');
+
+
         });
     });
 });

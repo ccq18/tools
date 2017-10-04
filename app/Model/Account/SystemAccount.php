@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\SystemAccount whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\SystemAccount whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\SystemAccount whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\SystemAccount whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\SystemAccount whereUid($value)
  * @mixin \Eloquent
  */
 class SystemAccount extends Model

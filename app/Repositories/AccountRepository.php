@@ -56,40 +56,33 @@ class AccountRepository extends BaseRepository
 
     public function transfer(Account $fromAcccount, Account $toAccount, $amount, $bizId, $bizType, $title)
     {
-        $sysRechargeAccount = $this->user->getSystemRechargeAccount();
-        $sysRechargeAccount->increment('amount', $amount);
+
+        $fromAcccount->decrement('amount', $amount);
+        $fromAcccount->save();
+        $toAccount->increment('amount', $amount);
+        $toAccount->save();
         $transfer = new AccountTransfer();
         $transfer->amount = $amount;
-        $transfer->to_uid = $fromAcccount->uid;
-        $transfer->to_uid = $fromAcccount->uid;
+        $transfer->from_uid = $fromAcccount->uid;
+        $transfer->to_uid = $toAccount->uid;
         $transfer->from_account_id = $fromAcccount->id;
         $transfer->to_account_id = $toAccount->id;
         $transfer->biz_id = $bizId;
         $transfer->biz_type = $bizType;
         $transfer->title = $title;
+        $transfer->status = AccountTransfer::STATUS_SUCCESS;
         $transfer->save();
+        $this->addLog($fromAcccount, '转出', $transfer);
+        $this->addLog($toAccount, '转入', $transfer);
 
+        return $transfer;
     }
 
-    public function addTransfer($fromAcccount, $toAccount, $amount, $bizId, $bizType, $title)
+
+    public function recharge($toAccount, $amount, $bizId, $bizType, $title)
     {
+        $sysRechargeAccount = $this->user->getSystemRechargeAccount();
 
-        //     * @property int $id
-        // * @property int $from_uid 转出人
-        // * @property int $to_uid 转入人
-        // * @property int $from_account_id 转出账户
-        // * @property int $to_account_id 转入账户
-        // * @property string $biz_id 业务订单号
-        // * @property int $biz_type 业务类型
-        // * @property string $title
-        // * @property int $status 1 成功 2 失败 3 撤回
-        // * @property float $amount
-
-    }
-
-    public function recharge($amount, $bizId, $bizType, $toAccount)
-    {
-        // $this->account->transfer($amount,uniqid(),Account::TYPE_TRANSFER,Auth::user()->account,$toUser->account) ;
-
+        return $this->transfer($sysRechargeAccount, $toAccount, $amount, $bizId, $bizType, $title);
     }
 }

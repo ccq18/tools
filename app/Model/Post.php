@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post whereUid($value)
  * @mixin \Eloquent
  */
 class Post extends Model

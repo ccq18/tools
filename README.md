@@ -12,6 +12,12 @@ npm run dev
 npm run watch
 
 ##todo
+composer 镜像
+apt 镜像
+pip配置
 /provisioning/group_vars
 /provisioning/roles/distribution/files/id_rsa
 /provisioning/webservers
+
+# 发布代码
+ansible-playbook provisioning/prod.yml  --extra-vars "application_version=1.5" 

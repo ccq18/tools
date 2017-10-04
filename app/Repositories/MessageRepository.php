@@ -62,13 +62,13 @@ class MessageRepository extends BaseRepository
         return Message::where('dialog_id', $dialogId)->first();
     }
 
-    // public function sendMessageByDialogId( $fromUserId, $toUserId, $body)
+    // public function sendMessageByDialogId( $fromUid, $toUid, $body)
     // {
     //     $message = $this->getSingleMessageBy($dialogId);
-    //     $toUserId = $message->from_uid === user()->id ? $message->to_uid : $message->from_uid;
+    //     $toUid = $message->from_uid === user()->id ? $message->to_uid : $message->from_uid;
     //     $newMessage = $this->create([
     //         'from_uid' => user()->id,
-    //         'to_uid'   => $toUserId,
+    //         'to_uid'   => $toUid,
     //         'body'         => $body,
     //         'dialog_id'    => $dialogId
     //     ]);
@@ -76,27 +76,27 @@ class MessageRepository extends BaseRepository
     //     $newMessage->toUser->notify(new NewMessageNotification($newMessage));
     // }
 
-    public function getDiglogId($fromUserId, $toUserId)
+    public function getDiglogId($fromUid, $toUid)
     {
-        $m = Message::whereToUserId($toUserId)
-                    ->whereFromUserId($fromUserId)
+        $m = Message::whereToUid($toUid)
+                    ->whereFromUid($fromUid)
                     ->first();
         if (empty($m)) {
-            return $fromUserId.time();
+            return $fromUid.time();
         }
 
         return $m->dialog_id;
 
     }
 
-    public function sendMessage($dialogId = null,$fromUserId, $toUserId, $message)
+    public function sendMessage($dialogId = null,$fromUid, $toUid, $message)
     {
         if(empty($dialogId)){
-            $dialogId = $this->getDiglogId($fromUserId, $toUserId);
+            $dialogId = $this->getDiglogId($fromUid, $toUid);
         }
         $newMessage = $this->create([
-            'from_uid' => $fromUserId,
-            'to_uid'   => $toUserId,
+            'from_uid' => $fromUid,
+            'to_uid'   => $toUid,
             'body'         => $message,
             'dialog_id'    => $dialogId
         ]);

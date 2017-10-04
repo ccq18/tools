@@ -1,6 +1,7 @@
 <?php
 
 use App\Model\User;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -37,19 +38,17 @@ class CreateSystemAccountsTable extends Migration
     public function seed()
     {
 
+        $user = new User([
+            'name'      => 'admin',
+            'email'     => '348578429@qq.com',
+            'avatar'    => '/images/avatars/default.png',
+            'password'  => bcrypt('123456'),
+            'api_token' => str_random(60),
+            'settings'  => ['city' => ''],
+        ]);
+        $user->id = \App\Model\SystemUser::SYSTEM_UID;
         //创建系统账户
-        $user = resolve(\App\Repositories\UserRepository::class)->create(
-            new User([
-                'id' => 1,
-                'name' => 'admin',
-                'email' => '348578429@qq.com',
-                'avatar' => '/images/avatars/default.png',
-                'password' => bcrypt('123456'),
-                'api_token' => str_random(60),
-                'settings' => ['city' => ''],
-            ]),
-            User::USER_SYSTEM
-        );
+        $user = resolve(UserRepository::class)->create($user, User::USER_SYSTEM);
 
 
     }

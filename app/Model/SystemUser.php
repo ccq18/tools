@@ -12,6 +12,7 @@ use App\Model\Account\Account;
  */
 class SystemUser extends User
 {
+    const SYSTEM_UID = 10;
     public function accounts()
     {
         return $this->hasMany(Account::class, 'uid', 'id');

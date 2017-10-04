@@ -17,14 +17,14 @@ Vagrant.configure("2") do |config|
         vagrant1.vm.box = "ubuntu/trusty64"
         vagrant1.vm.network "forwarded_port", guest: 80, host: 8081
     end
-    config.vm.define "vagrant2"do |vagrant2|
-        vagrant2.vm.box = "ubuntu/trusty64"
-        vagrant2.vm.network "forwarded_port", guest: 80, host: 8082
-    end
-    config.vm.define "vagrant3"do |vagrant3|
-        vagrant3.vm.box = "ubuntu/trusty64"
-        vagrant3.vm.network "forwarded_port", guest: 80, host: 8083
-    end
+#    config.vm.define "vagrant2"do |vagrant2|
+#        vagrant2.vm.box = "ubuntu/trusty64"
+#        vagrant2.vm.network "forwarded_port", guest: 80, host: 8082
+#    end
+#    config.vm.define "vagrant3"do |vagrant3|
+#        vagrant3.vm.box = "ubuntu/trusty64"
+#        vagrant3.vm.network "forwarded_port", guest: 80, host: 8083
+#    end
 
   #config.vm.box = "ubuntu/trusty64"
   #config.vm.network "forwarded_port", guest: 80, host: 8080

@@ -38,7 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question whereIsHidden($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question whereUid($value)
  * @mixin \Eloquent
  */
 class Question extends Model

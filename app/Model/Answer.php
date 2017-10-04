@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereIsHidden($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereQuestionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereVotesCount($value)
  * @mixin \Eloquent
  */

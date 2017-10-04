@@ -17,7 +17,7 @@
                            id="amount">
 
                     <button class="btn btn-success pull-right" type="submit">转账</button>
-
+                    {{ csrf_field() }}
                 </form>
             </div>
             <div class="col-md-8 col-md-offset-2">
@@ -27,7 +27,7 @@
                     <input type="text" value="{{ old('amount') }}" name="amount" class="form-control" placeholder="充值金额"
                            id="amount">
                     <button class="btn btn-success pull-right" type="submit">充值</button>
-
+                    {{ csrf_field() }}
                 </form>
             </div>
             <div class="col-md-8 col-md-offset-2">
@@ -37,8 +37,8 @@
                         <div class="media-body">
                             <h4 class="media-heading">
                                 {{ $transfer->title }}
-                                {{ $transfer->amount }}
-
+                                {{ $transfer->amount }}¥
+                                {{ $transfer->created_at->format('Y.m.d H:i')}}
                             </h4>
                         </div>
                     </div>

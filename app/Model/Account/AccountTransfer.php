@@ -25,15 +25,20 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereBizType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereFromAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereFromUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereFromUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereToAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereToUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereToUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereUpdatedAt($value)
  */
 class AccountTransfer extends Model
 {
-    //
+    /*1 成功 2 失败 3 撤回*/
+    const STATUS_SUCCESS = 1;
+    const STATUS_FAIL = 2;
+    const STATUS_CANCEL = 3;
+
+    const BIZ_TYPE_RECHARGE = 1;
 }

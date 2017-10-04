@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereUid($value)
  */
 class Loan extends Model
 {

@@ -24,11 +24,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereBody($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereDialogId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereFromUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereFromUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereHasRead($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereReadAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereToUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereToUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereUpdatedAt($value)
  * @mixin \Eloquent
  */

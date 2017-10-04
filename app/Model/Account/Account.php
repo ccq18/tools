@@ -32,4 +32,6 @@ class Account extends Model
     const TYPE_RECHARGE = 1;
     const TYPE_TRANSFER = 2;
 
+
+
 }

@@ -1,14 +1,16 @@
 ---
  - hosts: webservers
    become: yes
+#   user: vagrant
+
    user: root
    roles:
-    - git
     - prepare
+    - git
     - nginx
     - php
     - redis
     - supervisor
     - webserver
-#    - distribution
-#    - reload
+    - distribution
+    - reload

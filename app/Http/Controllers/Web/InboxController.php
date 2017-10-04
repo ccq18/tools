@@ -59,8 +59,8 @@ class InboxController extends Controller
         //todo 数据权限
 
         $message = $this->message->getSingleMessageBy($dialogId);
-        $toUserId = $message->from_uid === user()->id ? $message->to_uid : $message->from_uid;
-        $this->message->sendMessage($dialogId, user()->id, $toUserId, request('body'));
+        $toUid = $message->from_uid === user()->id ? $message->to_uid : $message->from_uid;
+        $this->message->sendMessage($dialogId, user()->id, $toUid, request('body'));
 
         return back();
     }

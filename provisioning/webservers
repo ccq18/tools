@@ -1,5 +1,7 @@
 [webservers]
 118.190.140.103
+#vagrant ansible_ssh_host=127.0.0.1  ansible_ssh_port=2222
+
 [vagrant0]
 vagrant ansible_ssh_host=127.0.0.1  ansible_ssh_port=2222
 [vagrants]

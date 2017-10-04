@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Model\Account\Account;
 use App\Model\Account\AccountTransfer;
 use App\Model\Account\SystemAccount;
+use App\Model\SystemUser;
 use App\Model\User;
 
 /**
@@ -32,7 +33,7 @@ class UserRepository extends BaseRepository
      */
     public function byUserNameOrFail($userName)
     {
-        return User::whereName($userName)->firstOrFail();
+        return User::whereName($userName)->where('type',User::USER_NORMAL)->firstOrFail();
 
     }
 
@@ -88,8 +89,7 @@ class UserRepository extends BaseRepository
      */
     public function getSystemRechargeAccount()
     {
-        $accounts = SystemAccount::whereUserId(1)->first()->accounts;
-
-        return collect($accounts)->random(1);
+        $accounts = SystemUser::whereId( SystemUser::SYSTEM_UID)->first()->accounts;
+        return collect($accounts)->random(1)->first();
     }
 }

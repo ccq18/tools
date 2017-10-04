@@ -24,10 +24,6 @@
     owner: "{{ application_user }}"
     group: "{{ application_group }}"
     mode: 0600
-- name: git restart
-  shell:  eval `ssh-agent`;ssh-add {{ application_user_home }}/.ssh/id_rsa
-  ignore_errors: yes
-
 #
 #- name: add gitlab to known hosts
 #  known_hosts:

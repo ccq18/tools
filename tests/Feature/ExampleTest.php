@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Model\User;
 use GuzzleHttp\Client;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Util\Reflection;
 
 class Mcrypt

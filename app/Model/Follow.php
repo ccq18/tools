@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow whereQuestionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow whereUid($value)
  * @mixin \Eloquent
  */
 class Follow extends Model

@@ -77,7 +77,7 @@ class User extends Authenticatable
     const USER_SYSTEM = 2;
     const USER_NORMAL = 1;
     use Notifiable;
-    protected $table='users';
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -243,8 +243,9 @@ class User extends Authenticatable
 
     public function transfers()
     {
-        return AccountTransfer::whereFromUserId($this->id)
+        return AccountTransfer::whereFromUid($this->id)
                               ->orWhere('to_uid', $this->id)
+                              ->orderByDesc('id')
                               ->get();
 
     }
