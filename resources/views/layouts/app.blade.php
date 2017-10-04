@@ -80,6 +80,12 @@
 
                                     </li>
                                     <li>
+                                        <a href="{{ url('/account/index') }}" >
+                                            资金
+                                        </a>
+
+                                    </li>
+                                    <li>
                                         <a href="{{ url('/inbox') }}" >
                                             私信列表
                                         </a>
