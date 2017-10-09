@@ -5,6 +5,7 @@ sendfile: "off"
 domain: localhost
 application_user: ubuntu
 application_group: ubuntu
+application_user_home: /root
 application_path: "/vagrant"
 supervisor_path: /data/supervisor
 nginx_root: "{{ application_path }}/public"

@@ -36,3 +36,11 @@
 - name: install PHP FPM
   apt:
     name: php{{ php_version}}-fpm
+- name: install PHP pear
+  apt:
+    name: php-pear
+  sudo: true
+- name: install PHP dev
+  apt:
+    name: php{{ php_version}}-dev
+  sudo: true

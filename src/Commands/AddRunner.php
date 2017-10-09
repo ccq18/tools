@@ -21,8 +21,7 @@ class AddRunner implements ShouldQueue
     public function handle()
     {
 
-        $this->i++;
         Post::addPost(1,'title'.$this->i,'content'.$this->i);
-        dispatch(new AddRunner($this->i));
+
     }
 }

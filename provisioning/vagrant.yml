@@ -2,10 +2,10 @@
  - hosts: vagrant
    sudo: True
    roles:
-    - git
-    - nginx
-    - php
-    - redis
-    - webserver
-    - supervisor
-#    - reload
+#    - git
+#    - nginx
+#    - php
+#    - redis
+#    - webserver
+#    - supervisor
+    - reload

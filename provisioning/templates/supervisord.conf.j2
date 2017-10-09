@@ -1,6 +1,7 @@
 [unix_http_server]
 file={{ supervisor_path }}/supervisor.sock
-
+[inet_http_server]
+port = 127.0.0.1:9001
 [supervisord]
 logfile={{ supervisor_path }}/supervisord.log
 pidfile={{ supervisor_path }}/supervisord.pid
@@ -19,7 +20,7 @@ autorestart=true
 stdout_logfile={{ queue_worker_logfile }}
 stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
-numprocs=1
+numprocs=5
 
 [program:queue-worker-high]
 process_name=%(program_name)s_%(process_num)02d
@@ -49,4 +50,4 @@ autorestart=true
 stdout_logfile={{ queue_worker_logfile }}
 stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
-numprocs=1
+numprocs=10

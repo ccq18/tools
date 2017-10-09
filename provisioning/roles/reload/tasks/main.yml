@@ -34,15 +34,41 @@
     owner: "{{ application_user }}"
     group: "{{ application_group }}"
   sudo: true
-
+#- name: conf supervisord
+#  supervisorctl:
+#    name: my_app
+#    state: restarted
+#    config: "{{ supervisor_path }}/supervisord.conf"
+#  args:
+#    chdir: "{{ supervisor_path }}"
 - name: conf supervisord
-  shell: "{{ supervisor_path }}/venv/bin/supervisorctl -c {{ supervisor_path }}/supervisord.conf"
+  shell: " {{ supervisor_path }}/venv/bin/supervisord -c {{ supervisor_path }}/supervisord.conf"
   args:
     chdir: "{{ supervisor_path }}"
   sudo: true
-
+  ignore_errors: true
+- name: stop supervisord
+  shell: "{{ supervisor_path }}/venv/bin/supervisorctl  -c {{ supervisor_path }}/supervisord.conf  stop all"
+  args:
+    chdir: "{{ supervisor_path }}"
+  sudo: true
 - name: reload supervisord
-  shell: "{{ supervisor_path }}/venv/bin/supervisorctl restart all"
+  shell: "{{ supervisor_path }}/venv/bin/supervisorctl  -c {{ supervisor_path }}/supervisord.conf  reload"
   args:
     chdir: "{{ supervisor_path }}"
   sudo: true
+- name: start supervisord
+  shell: "{{ supervisor_path }}/venv/bin/supervisorctl  -c {{ supervisor_path }}/supervisord.conf  start all"
+  args:
+    chdir: "{{ supervisor_path }}"
+  sudo: true
+#- name: reload supervisord
+#  shell: "sudo ps aux|grep supervisord|awk {'print $2'} | sed -e 's/^/kill -9 /g'|sudo sh"
+# shell: "sudo ps aux|grep artisan|awk {'print $2'} | sed -e 's/^/kill -9 /g'|sudo sh"
+#  args:
+#    chdir: "{{ supervisor_path }}"
+#  sudo: true
+#  ignore_errors: true
+
+
+

@@ -13,10 +13,10 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
     config.ssh.insert_key = false
-    config.vm.define "vagrant1"do |vagrant1|
-        vagrant1.vm.box = "ubuntu/trusty64"
-        vagrant1.vm.network "forwarded_port", guest: 80, host: 8081
-    end
+#    config.vm.define "vagrant1"do |vagrant1|
+#        vagrant1.vm.box = "ubuntu/trusty64"
+#        vagrant1.vm.network "forwarded_port", guest: 80, host: 8081
+#    end
 #    config.vm.define "vagrant2"do |vagrant2|
 #        vagrant2.vm.box = "ubuntu/trusty64"
 #        vagrant2.vm.network "forwarded_port", guest: 80, host: 8082
@@ -26,19 +26,19 @@ Vagrant.configure("2") do |config|
 #        vagrant3.vm.network "forwarded_port", guest: 80, host: 8083
 #    end
 
-  #config.vm.box = "ubuntu/trusty64"
-  #config.vm.network "forwarded_port", guest: 80, host: 8080
-  #  config.vm.network "forwarded_port", guest: 443, host: 8443
-  #config.vm.network "forwarded_port", guest: 6377, host: 6377
-  #  config.vm.network "private_network", ip: "192.168.2.233"
-  #config.vm.synced_folder ".", "/vagrant", type: "nfs"
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 443, host: 8443
+  config.vm.network "forwarded_port", guest: 6377, host: 6377
+  config.vm.network "private_network", ip: "192.168.2.233"
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
 
-  #config.vm.provision :ansible do |ansible|
-  #  ansible.playbook = "provisioning/vagrant.yml"
-  #  ansible.groups = {
-  #        "vagrant" => ["default"]
-  #      }
-  #end
+  config.vm.provision :ansible do |ansible|
+     ansible.playbook = "provisioning/vagrant.yml"
+     ansible.groups = {
+       "vagrant" => ["default"]
+     }
+  end
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.

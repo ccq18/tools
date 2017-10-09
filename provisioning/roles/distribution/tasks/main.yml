@@ -1,4 +1,7 @@
 ---
+- name: git restart
+  shell:  eval `ssh-agent`;ssh-add {{ application_user_home }}/.ssh/id_rsa
+  ignore_errors: yes
 - name: determine if code distributed
   stat:
     path: "{{ new_application_path }}"
