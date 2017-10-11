@@ -58,6 +58,7 @@ class GithubCommand extends SpiderBase
                 $i = $this->parseUserStars($str, $task->task_url);
                 break;
         }
+        $this->info('add:'.$i);
 
         return $i > 0;
     }

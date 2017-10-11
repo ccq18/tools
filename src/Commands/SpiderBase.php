@@ -39,11 +39,12 @@ abstract class SpiderBase extends Command
     public function runnerParser()
     {
         while (true) {
-            $task = Task::whereStatus(Task::STATUS_SUCCESS)->where('parse_status', Task::PARSE_STATUS_SUCCESS)->first();
+            $task = Task::whereStatus(Task::STATUS_SUCCESS)->where('parse_status', Task::PARSE_STATUS_INIT)->first();
             if (empty($task)) {
                 echo 'END' . PHP_EOL;
                 break;
             }
+            $this->info("parse:{$task->id},{$task->task_url}");
             $task->parse_status = Task::PARSE_STATUS_RUNNING;
             $task->save();
             $rs = false;
@@ -55,8 +56,10 @@ abstract class SpiderBase extends Command
                 echo $e->getMessage() . PHP_EOL;
             }
             if ($rs) {
+                $this->info("parse:success");
                 $task->status = Task::PARSE_STATUS_SUCCESS;
             } else {
+                $this->info("parse:error");
                 $task->status = Task::PARSE_STATUS_NONE;
             }
             $task->save();

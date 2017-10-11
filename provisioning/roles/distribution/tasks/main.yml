@@ -2,15 +2,13 @@
 - name: git restart
   shell:  eval `ssh-agent`;ssh-add {{ application_user_home }}/.ssh/id_rsa
   ignore_errors: yes
-- name: determine if code distributed
+- name: check application path exist
   stat:
     path: "{{ new_application_path }}"
   register: code_stat
-- name: determine if code distributed
-  shell: "mkdir -p {{ new_application_path }}"
-  when: not code_stat.stat.exists
-  become: true
-  become_user: "{{ application_user }}"
+- name: make new application path
+  file: "dest={{ new_application_path }} state=directory owner={{ application_user }} group={{ application_group }}"
+  sudo: true
 - name: distribute code with git
   git:
    accept_hostkey=yes update=yes force=yes  dest={{ new_application_path }}   repo={{ repository }} update=yes version=master
