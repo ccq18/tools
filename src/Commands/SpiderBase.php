@@ -36,50 +36,18 @@ abstract class SpiderBase extends Command
         sleep(60);
     }
 
-    public function runnerParser()
-    {
-        while (true) {
-            $task = Task::whereStatus(Task::STATUS_SUCCESS)->where('parse_status', Task::PARSE_STATUS_INIT)->first();
-            if (empty($task)) {
-                echo 'END' . PHP_EOL;
-                break;
-            }
-            $this->info("parse:{$task->id},{$task->task_url}");
-            $task->parse_status = Task::PARSE_STATUS_RUNNING;
-            $task->save();
-            $rs = false;
-            //根据页面类型解析
-            try {
-                $rs = $this->parse($task);
-            } catch (\Exception $e) {
-                \Log::error($e->getMessage());
-                echo $e->getMessage() . PHP_EOL;
-            }
-            if ($rs) {
-                $this->info("parse:success");
-                $task->status = Task::PARSE_STATUS_SUCCESS;
-            } else {
-                $this->info("parse:error");
-                $task->status = Task::PARSE_STATUS_NONE;
-            }
-            $task->save();
-        }
-    }
-
-
-    /**
-     * @param Task $task
-     * @return boolean
-     */
-    public abstract function parse(Task $task);
-
     public function runnerTask()
     {
+        if (Task::whereDomain($this->domain)->count() <= 0) {
+            $this->runnerTaskInit();
+        }
 
         $http = new \Util\SpiderHttp();
 
         while (true) {
-            $task = Task::whereStatus(Task::STATUS_INIT)->where('domain', $this->domain)->first();
+            $task = Task::whereStatus(Task::STATUS_INIT)
+                        ->whereDomain($this->domain)
+                        ->first();
             if (empty($task)) {
                 $this->info('END');
                 break;
@@ -90,9 +58,13 @@ abstract class SpiderBase extends Command
             //根据页面类型解析
             try {
                 $pageContent = $http->get($task->task_url);
-                dump(strlen($pageContent));
-                $this->setPageContent($task,$pageContent);
-                $this->info(strlen($pageContent)>5?"success":"fail");
+                preg_match('/\<meta.*?charset\=(.*?)\'.*?\>/is',$pageContent,$match);
+                if(isset($match[1]) && strtolower($match[1]) != 'utf-8'){
+                    $pageContent = iconv(strtolower($match[1]),"utf-8//IGNORE",$pageContent);
+                }
+
+                $this->setPageContent($task, $pageContent);
+                $this->info(strlen($pageContent) > 5 ? "success" : "fail");
             } catch (\Exception $e) {
                 \Log::error($e->getMessage());
                 echo $e->getMessage() . PHP_EOL;
@@ -101,10 +73,63 @@ abstract class SpiderBase extends Command
 
     }
 
+    public function runnerParser()
+    {
+        while (true) {
+            /**
+             * @var Task $task
+             */
+            $task = Task::whereDomain($this->domain)
+                        ->whereStatus(Task::STATUS_SUCCESS)
+                        ->where('parse_status', Task::PARSE_STATUS_INIT)
+                        ->first();
+            if (empty($task)) {
+                echo 'END' . PHP_EOL;
+                break;
+            }
+            $this->info("parse:{$task->id},{$task->task_url}");
+            $task->parse_status = Task::PARSE_STATUS_RUNNING;
+            $task->save();
+            $rs = false;
+            //根据页面类型解析
+            try {
+                if (empty($task->taskDocument)) {
+                    $rs = false;
+                } else {
+                    $rs = $this->parse($task);
+                }
+            } catch (\Exception $e) {
+                \Log::error($e->getMessage());
+                echo $e->getMessage() . PHP_EOL;
+            }
+            if ($rs) {
+                $this->info("parse:success");
+                $task->parse_status = Task::PARSE_STATUS_SUCCESS;
+            } else {
+                $this->info("parse:error");
+                $task->parse_status = Task::PARSE_STATUS_NONE;
+            }
+            $task->save();
+        }
+    }
+
+
+    public function runnerTaskInit()
+    {
+    }
+
+    /**
+     * @param Task $task
+     * @return boolean
+     */
+    public function parse(Task $task)
+    {
+    }
+
 
     public function setPageContent(Task $task, $content)
     {
-        if (strlen($content)>0) {
+        if (strlen($content) > 0) {
             $task->status = Task::PARSE_STATUS_SUCCESS;
             $doc = new TaskDocument();
             $doc->task_id = $task->id;

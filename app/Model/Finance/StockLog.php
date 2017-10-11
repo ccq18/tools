@@ -26,6 +26,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereCirculation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereMarketValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereTurnover($value)
+ * @property float|null $open_price 开盘价
+ * @property float|null $close_price 收盘价
+ * @property float|null $high_price 最高价
+ * @property float|null $low_price 最低价
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereClosePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereHighPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereLowPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereOpenPrice($value)
  */
 class StockLog extends Model
 {

@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Model\TaskDocument;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\Yaml\Yaml;
@@ -15,6 +17,8 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
+        dump(PHP_INT_MAX);
+       // print_r(TaskDocument::find(26)->page_content);
         // $rs = Yaml::parse(file_get_contents(__DIR__.'/validation.yml'));
         // ksort($rs,false);
         // var_export($rs) ;  // $rs = Yaml::parse(file_get_contents(__DIR__.'/validation.yml'));

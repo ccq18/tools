@@ -8,40 +8,31 @@ use App\Model\Task;
 
 class GithubCommand extends SpiderBase
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    //http://img1.money.126.net/data/hs/kline/day/history/2015/0000842.json
+    //开盘价	收盘价	最高价	最低价	成交量	涨跌幅
+    //0代表sh，1代表sz
     protected $signature = 'github-spider {runner}';
-
     protected $baseUrl = 'https://github.com';
     protected $domain = 'github.com';
 
 
-    public function runnerTask()
+    public function runnerTaskInit()
     {
         $http = new \Util\SpiderHttp();
-        if (Task::count() == 0) {
-            $starturls = ['https://github.com/search?utf8=%E2%9C%93&q=php'];
-            foreach ($starturls as $v) {
-                $str = $http->get($v);
-                $dom = new \HtmlParser\ParserDom($str);
-                $r = $dom->find('[class="filter-item"]');
-                foreach ($r as $res) {
-                    $this->addTask($res->getAttr('href'), 'search');
-                }
+        $starturls = ['https://github.com/search?utf8=%E2%9C%93&q=php'];
+        foreach ($starturls as $v) {
+            $str = $http->get($v);
+            $dom = new \HtmlParser\ParserDom($str);
+            $r = $dom->find('[class="filter-item"]');
+            foreach ($r as $res) {
+                $this->addTask($res->getAttr('href'), 'search');
             }
         }
 
-        parent::runnerTask();
     }
 
     public function parse(Task $task)
     {
-        if(empty($task->taskDocument)){
-            return false;
-        }
         $str = $task->taskDocument->page_content;
         $i = 0;
         switch ($task->type) {
@@ -58,7 +49,7 @@ class GithubCommand extends SpiderBase
                 $i = $this->parseUserStars($str, $task->task_url);
                 break;
         }
-        $this->info('add:'.$i);
+        $this->info('add:' . $i);
 
         return $i > 0;
     }

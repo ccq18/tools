@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $code
  * @property string $title
  * @property string $unit 计价单位 美元 人民币
- * @property int $type 类型 1 A股 2 美股 3 港股  4 比特币
+ * @property int $type 类型 1 A股 2 深圳 3 美股 4 港股  5 比特币
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\Stock whereCode($value)
@@ -25,5 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Stock extends Model
 {
+    const TYPE_SH = 1;
+    const TYPE_SZ = 2;
+
     //
 }

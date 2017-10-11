@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-        \Commands\Runner::class,
         \Commands\GithubCommand::class,
+        \Commands\HsStock::class,
     ];
 
     /**
