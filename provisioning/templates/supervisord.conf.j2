@@ -42,12 +42,22 @@ stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
 numprocs=1
 
-[program:github-spider]
+[program:github-spider-task]
 process_name=%(program_name)s_%(process_num)02d
 directory={{ application_path }}
-command=php artisan github_spider
+command=php artisan github-spider task
 autorestart=true
 stdout_logfile={{ queue_worker_logfile }}
 stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
-numprocs=10
+numprocs=20
+
+[program:github-spider-parse]
+process_name=%(program_name)s_%(process_num)02d
+directory={{ application_path }}
+command=php artisan github-spider parse
+autorestart=true
+stdout_logfile={{ queue_worker_logfile }}
+stderr_logfile={{ queue_worker_logfile }}
+user={{ application_user }}
+numprocs=20

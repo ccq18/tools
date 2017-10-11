@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $parse_status 解析状态 1 未解析 2 已解析
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereParseStatus($value)
+ * @property-read \App\Model\TaskDocument $taskDocument
  */
 class Task extends Model
 {
@@ -30,6 +33,10 @@ class Task extends Model
     const STATUS_SUCCESS = 1;
     const STATUS_ERROR = 3;
 
+    const PARSE_STATUS_INIT = 0;
+    const PARSE_STATUS_RUNNING = 2;
+    const PARSE_STATUS_SUCCESS = 1;
+    const PARSE_STATUS_NONE = 3;
 
     public static function add($data){
         if(Task::whereTaskUrl($data['task_url'])->first()){
@@ -40,7 +47,15 @@ class Task extends Model
         $task->task_url = $data['task_url'];
         $task->type = $data['type'];
         $task->status = 0;//0 未处理 1 已处理 2 处理中
+        $task->parse_status = 0;//0 未处理 1 已处理 2 处理中
+
         $task->save();
+
+    }
+
+    public function taskDocument()
+    {
+        return $this->hasOne(TaskDocument::class,'task_id','id');
 
     }
 }

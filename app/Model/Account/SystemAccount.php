@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\SystemAccount whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\SystemAccount whereUid($value)
  * @mixin \Eloquent
+ * @property-read \App\Model\Account\Account $account
  */
 class SystemAccount extends Model
 {
