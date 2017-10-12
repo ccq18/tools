@@ -38,11 +38,11 @@ class HsStock extends SpiderBase
         switch ($task->type) {
             case static::TYPE_SH_STOCK_CODE:
             case static::TYPE_SZ_STOCK_CODE:
-                $r = $this->parseStock($str, $task->type);
+                $r = $this->parseStock($str, $task);
                 break;
             case static::TYPE_SH_STOCK_DETAIL:
             case static::TYPE_SZ_STOCK_DETAIL:
-                $r = $this->parseStockDetail($str, $task->type);
+                $r = $this->parseStockDetail($str, $task);
                 break;
 
         }
@@ -50,10 +50,10 @@ class HsStock extends SpiderBase
         return $r;
     }
 
-    public function parseStock($str, $type)
+    public function parseStock($str, Task $task)
     {
-         $this->dom->load($str);
-        $r =  $this->dom->find("[class=TextBody]");
+        $this->dom->load($str);
+        $r = $this->dom->find("[class=TextBody]");
         /**
          * @var AbstractNode $r
          * @var AbstractNode[] $as
@@ -61,9 +61,9 @@ class HsStock extends SpiderBase
         $as = $r->find('a');
         foreach ($as as $v) {
             if (trim($v->text()) == '下一页') {
-                $this->addTask($v->getAttribute('href'), $type);
+                $this->addTask($this->filterRelativeUrl($v->getAttribute('href'), $task->task_url), $task->type);
             } elseif (intval($v->text()) > 0) {
-                $this->addStockTasksByCode(trim($v->text()), $type);
+                $this->addStockTasksByCode(trim($v->text()), $task);
 
             }
         }
@@ -71,13 +71,14 @@ class HsStock extends SpiderBase
         return true;
     }
 
-    public function addStockTasksByCode($code, $type)
+
+    public function addStockTasksByCode($code, Task $task)
     {
         for ($y = 2015; $y <= intval(date('Y')); $y++) {
-            if ($type == static::TYPE_SH_STOCK_CODE) {
+            if ($task->type == static::TYPE_SH_STOCK_CODE) {
                 $this->addTask("http://img1.money.126.net/data/hs/kline/day/history/{$y}/0{$code}.json",
                     static::TYPE_SH_STOCK_DETAIL);
-            } elseif ($type == static::TYPE_SZ_STOCK_CODE) {
+            } elseif ($task->type == static::TYPE_SZ_STOCK_CODE) {
                 $this->addTask("http://img1.money.126.net/data/hs/kline/day/history/{$y}/1{$code}.json",
                     static::TYPE_SZ_STOCK_DETAIL);
 
@@ -88,7 +89,7 @@ class HsStock extends SpiderBase
 
     public function parseStockDetail(
         $str,
-        $type
+        Task $task
     ) {
         try {
             $rs = json_decode($str, true);
@@ -96,9 +97,9 @@ class HsStock extends SpiderBase
                 return false;
             }
 
-            if ($type == static::TYPE_SH_STOCK_DETAIL) {
+            if ($task->type == static::TYPE_SH_STOCK_DETAIL) {
                 $type = Stock::TYPE_SH;
-            } elseif ($type == static::TYPE_SZ_STOCK_DETAIL) {
+            } elseif ($task->type == static::TYPE_SZ_STOCK_DETAIL) {
                 $type = Stock::TYPE_SZ;
             } else {
                 return false;
@@ -132,6 +133,7 @@ class HsStock extends SpiderBase
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             $this->info($e->getMessage());
+
             return false;
         }
 
