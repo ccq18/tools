@@ -50,7 +50,7 @@ autorestart=true
 stdout_logfile={{ queue_worker_logfile }}
 stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
-numprocs=2
+numprocs=1
 
 [program:hs-stock-spider-parse]
 process_name=%(program_name)s_%(process_num)02d
