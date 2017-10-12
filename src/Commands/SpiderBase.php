@@ -22,6 +22,13 @@ abstract class SpiderBase extends Command
 
     protected $baseUrl = null;
     protected $domain = null;
+    protected $dom = null;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->dom = new \PHPHtmlParser\Dom();
+        $this->dom->setOptions(['enforceEncoding'=>'utf-8']);
+    }
 
     public function handle()
     {

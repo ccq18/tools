@@ -42,22 +42,22 @@ stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
 numprocs=1
 
-[program:github-spider-task]
+[program:hs-stock-spider-task]
 process_name=%(program_name)s_%(process_num)02d
 directory={{ application_path }}
-command=php artisan github-spider task
+command=php artisan hs-stock-spider task
 autorestart=true
 stdout_logfile={{ queue_worker_logfile }}
 stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
-numprocs=20
+numprocs=2
 
-[program:github-spider-parse]
+[program:hs-stock-spider-parse]
 process_name=%(program_name)s_%(process_num)02d
 directory={{ application_path }}
-command=php artisan github-spider parse
+command=php artisan hs-stock-spider parse
 autorestart=true
 stdout_logfile={{ queue_worker_logfile }}
 stderr_logfile={{ queue_worker_logfile }}
 user={{ application_user }}
-numprocs=20
+numprocs=1

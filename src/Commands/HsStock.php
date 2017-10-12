@@ -52,9 +52,8 @@ class HsStock extends SpiderBase
 
     public function parseStock($str, $type)
     {
-        $dom = new \PHPHtmlParser\Dom();
-        $dom->load($str);
-        $r = $dom->find("[class=TextBody]");
+         $this->dom->load($str);
+        $r =  $this->dom->find("[class=TextBody]");
         /**
          * @var AbstractNode $r
          * @var AbstractNode[] $as
@@ -93,7 +92,6 @@ class HsStock extends SpiderBase
     ) {
         try {
             $rs = json_decode($str, true);
-            dump($type);
             if (empty($rs)) {
                 return false;
             }
