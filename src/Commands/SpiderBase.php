@@ -195,11 +195,11 @@ abstract class SpiderBase extends Command
     public function addTask($taskUrl, $type, $domain = null)
     {
         $domain = $domain ?: $this->domain ?: "";
-        $task = new Task();
-        $task->domain = $domain;
-        $task->task_url = static::getUrl($taskUrl);
-        $task->type = $type;
-        $task->save();
+        Task::add([
+            'domain'   => $domain,
+            'task_url' => static::getUrl($taskUrl),
+            'type'     => $type
+        ]);
     }
 
     /**
