@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $domain
+ * @property string $hash
  * @property string $task_url
  * @property string $type
  * @property int $status
@@ -37,6 +38,11 @@ class Task extends Model
     const PARSE_STATUS_RUNNING = 2;
     const PARSE_STATUS_SUCCESS = 1;
     const PARSE_STATUS_NONE = 3;
+    public function save(array $options = [])
+    {
+        $this->hash = md5($this->task_url.$this->type);
+        return parent::save($options);
+    }
 
     public static function add($data){
         if(Task::whereTaskUrl($data['task_url'])->first()){

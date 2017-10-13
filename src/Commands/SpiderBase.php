@@ -59,11 +59,12 @@ abstract class SpiderBase extends Command
         return Task::find(object_get($nowData, '@running_task_id'));
     }
 
-    public function upOneTaskByParseStatus($domain) {
+    public function upOneTaskByParseStatus($domain)
+    {
         $num = \DB::update("UPDATE tasks set parse_status=:to_parse_status,id=(select @running_parse_task_id:=id) WHERE parse_status=:from_parse_status  and domain=:domain  LIMIT 1",
             [
                 ':domain'            => $domain,
-                ':status'           => Task::STATUS_SUCCESS,
+                ':status'            => Task::STATUS_SUCCESS,
                 ':from_parse_status' => Task::PARSE_STATUS_INIT,
                 ':to_parse_status'   => Task::PARSE_STATUS_RUNNING
             ]
@@ -194,11 +195,11 @@ abstract class SpiderBase extends Command
     public function addTask($taskUrl, $type, $domain = null)
     {
         $domain = $domain ?: $this->domain ?: "";
-        Task::add([
-            'domain'   => $domain,
-            'task_url' => static::getUrl($taskUrl),
-            'type'     => $type
-        ]);
+        $task = new Task();
+        $task->domain = $domain;
+        $task->task_url = static::getUrl($taskUrl);
+        $task->type = $type;
+        $task->save();
     }
 
     /**

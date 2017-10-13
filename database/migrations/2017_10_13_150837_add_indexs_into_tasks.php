@@ -14,8 +14,14 @@ class AddIndexsIntoTasks extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->unique([DB::raw('`domain`(40)'),DB::raw('`task_url`(150)')],'index_unique_code');
+            $table->string('hash',32)->comment('MD5(domain,task_url)');
         });
+        \DB::update("update tasks set hash=md5(concat(domain,task_url))");
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->unique(['hash'],'tasks_index_unique_hash');
+        });
+
+
     }
 
     /**
@@ -26,7 +32,8 @@ class AddIndexsIntoTasks extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropIndex('index_unique_task');
+            $table->dropIndex('tasks_index_unique_hash');
+            $table->dropColumn('hash');
         });
     }
 }
