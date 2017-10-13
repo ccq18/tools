@@ -5,7 +5,6 @@ namespace Commands;
 
 use App\Model\Task;
 use App\Model\TaskDocument;
-use function GuzzleHttp\Psr7\str;
 use Illuminate\Console\Command;
 
 /**
@@ -23,11 +22,12 @@ abstract class SpiderBase extends Command
     protected $baseUrl = null;
     protected $domain = null;
     protected $dom = null;
+
     public function __construct()
     {
         parent::__construct();
         $this->dom = new \PHPHtmlParser\Dom();
-        $this->dom->setOptions(['enforceEncoding'=>'utf-8']);
+        $this->dom->setOptions(['enforceEncoding' => 'utf-8']);
     }
 
     public function handle()
@@ -43,6 +43,39 @@ abstract class SpiderBase extends Command
         sleep(60);
     }
 
+    public function upOneTask($domain)
+    {
+        $num = \DB::update("UPDATE tasks set status=:to_status,id=(select @running_task_id:=id) WHERE status=:from_status  and domain=:domain  LIMIT 1",
+            [
+                ':domain'      => $domain,
+                ':from_status' => Task::STATUS_INIT,
+                ':to_status'   => Task::STATUS_RUNNING
+            ]);
+        if ($num <= 0) {
+            return null;
+        }
+        $nowData = \DB::selectOne("select @running_task_id");
+
+        return Task::find(object_get($nowData, '@running_task_id'));
+    }
+
+    public function upOneTaskByParseStatus($domain) {
+        $num = \DB::update("UPDATE tasks set parse_status=:to_parse_status,id=(select @running_parse_task_id:=id) WHERE parse_status=:from_parse_status  and domain=:domain  LIMIT 1",
+            [
+                ':domain'            => $domain,
+                ':status'           => Task::STATUS_SUCCESS,
+                ':from_parse_status' => Task::PARSE_STATUS_INIT,
+                ':to_parse_status'   => Task::PARSE_STATUS_RUNNING
+            ]
+        );
+        if ($num <= 0) {
+            return null;
+        }
+        $nowData = \DB::selectOne("select @running_parse_task_id");
+
+        return Task::find(object_get($nowData, '@running_parse_task_id'));
+    }
+
     public function runnerTask()
     {
         if (Task::whereDomain($this->domain)->count() <= 0) {
@@ -52,9 +85,7 @@ abstract class SpiderBase extends Command
         $http = new \Util\SpiderHttp();
 
         while (true) {
-            $task = Task::whereStatus(Task::STATUS_INIT)
-                        ->whereDomain($this->domain)
-                        ->first();
+            $task = $this->upOneTask($this->domain);
             if (empty($task)) {
                 $this->info('END');
                 break;
@@ -65,9 +96,9 @@ abstract class SpiderBase extends Command
             //根据页面类型解析
             try {
                 $pageContent = $http->get($task->task_url);
-                preg_match('/\<meta.*?charset\=(.*?)\'.*?\>/is',$pageContent,$match);
-                if(isset($match[1]) && strtolower($match[1]) != 'utf-8'){
-                    $pageContent = iconv(strtolower($match[1]),"utf-8//IGNORE",$pageContent);
+                preg_match('/\<meta.*?charset\=(.*?)\'.*?\>/is', $pageContent, $match);
+                if (isset($match[1]) && strtolower($match[1]) != 'utf-8') {
+                    $pageContent = iconv(strtolower($match[1]), "utf-8//IGNORE", $pageContent);
                 }
 
                 $this->setPageContent($task, $pageContent);
@@ -80,16 +111,14 @@ abstract class SpiderBase extends Command
 
     }
 
+
     public function runnerParser()
     {
         while (true) {
             /**
              * @var Task $task
              */
-            $task = Task::whereDomain($this->domain)
-                        ->whereStatus(Task::STATUS_SUCCESS)
-                        ->where('parse_status', Task::PARSE_STATUS_INIT)
-                        ->first();
+            $task = $this->upOneTaskByParseStatus($this->domain);
             if (empty($task)) {
                 echo 'END' . PHP_EOL;
                 break;

@@ -8,6 +8,7 @@ use App\Model\Finance\StockLog;
 use App\Model\Task;
 use Carbon\Carbon;
 use PHPHtmlParser\Dom\AbstractNode;
+use Util\Db;
 
 class HsStock extends SpiderBase
 {

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Model\Task;
 use App\Model\TaskDocument;
 use Carbon\Carbon;
 use Commands\HsStock;
@@ -12,6 +13,32 @@ use Symfony\Component\Yaml\Yaml;
 
 class ExampleTest extends TestCase
 {
+
+    public function upAndGetFirstTaskByParseStatus(
+        $domain,
+        $fromParseStatus = Task::PARSE_STATUS_INIT,
+        $toParseStatus = Task::PARSE_STATUS_RUNNING
+    ) {
+        $num = \DB::update("UPDATE tasks set parse_status=:to_parse_status,id=(select @running_parse_task_id:=id) WHERE parse_status=:from_parse_status  and domain=:domain  LIMIT 1",
+            [
+                ':domain'            => $domain,
+                ':from_parse_status' => $fromParseStatus,
+                ':to_parse_status'   => $toParseStatus
+            ]
+        );
+        if ($num <= 0) {
+            return null;
+        }
+        $nowData = \DB::selectOne("select @running_parse_task_id");
+
+        return Task::find(object_get($nowData, '@running_parse_task_id'));
+    }
+
+    public function testGetTask()
+    {
+        dump($this->upAndGetFirstTaskByParseStatus('github.net'));
+
+    }
     /**
      * A basic test example.
      *
@@ -19,22 +46,22 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        $URI_1 = 'https://www.abc.com/a/b/c/d.html';
+        $URI_1 = 'http://www.wstock.net/wstock/market/shcode1.htm';
         $URI_2 = 'https://www.abc.com';
-        $URI_3 = '/banner.jpg';
+        $URI_3 = 'http://www.wstock.net/wstock/market/shcode1.htm';
 
         $test [] = 'http://www.abc.com/css/style.css';
-        $test [] = '/img/banner.jpg';
+        $test [] = 'szcode2.htm';
         $test [] = 'images/res_03.png';
         $test [] = '../../js/jquery.min.js';
         $test [] = './../res/js/../jquery/./1.8.3/jquery.js';
         $obj = new HsStock();
-        foreach ($test as $val) {
-            echo $obj->filterRelativeUrl($val, $URI_1) . PHP_EOL;
-        }
-        foreach ($test as $val) {
-            echo $obj->filterRelativeUrl($val, $URI_2) . PHP_EOL;;
-        }
+        // foreach ($test as $val) {
+        //     echo $obj->filterRelativeUrl($val, $URI_1) . PHP_EOL;
+        // }
+        // foreach ($test as $val) {
+        //     echo $obj->filterRelativeUrl($val, $URI_2) . PHP_EOL;;
+        // }
 
         foreach ($test as $val) {
             echo $obj->filterRelativeUrl($val, $URI_3) . PHP_EOL;;
