@@ -13,6 +13,7 @@ class AddIndexsIntoTasks extends Migration
      */
     public function up()
     {
+        //delete from tasks where  id not in (select id from (select id  from tasks group by hash) as tmp_task_ids)
         Schema::table('tasks', function (Blueprint $table) {
             $table->string('hash',32)->comment('MD5(domain,task_url)');
         });

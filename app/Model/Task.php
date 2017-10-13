@@ -45,17 +45,21 @@ class Task extends Model
     }
 
     public static function add($data){
-        if(Task::whereTaskUrl($data['task_url'])->first()){
+        if(Task::whereTaskUrl($data['task_url'])->whereDomain($data['domain'])->first()){
             return false;
         }
+
         $task = new Task();
         $task->domain =  $data['domain'];
         $task->task_url = $data['task_url'];
         $task->type = $data['type'];
         $task->status = 0;//0 未处理 1 已处理 2 处理中
         $task->parse_status = 0;//0 未处理 1 已处理 2 处理中
+        try{
+            $task->save();
+        }catch (\Exception $e){
+        }
 
-        $task->save();
 
     }
 
