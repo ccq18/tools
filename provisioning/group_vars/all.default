@@ -22,10 +22,10 @@ env_app_url: http://localhost
 
 env_db_connection: mysql
 env_db_port: 3306
-env_db_host: 120.27.102.93
+env_db_host:
 env_db_database: service_test
 env_db_user_name: root
-env_db_password: anneng
+env_db_password:
 
 env_broadcast_driver: log
 env_cache_driver: file
