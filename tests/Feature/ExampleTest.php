@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Model\Banner;
 use App\Model\User;
 use GuzzleHttp\Client;
 use Tests\TestCase;
+use Util\FileBrowser;
 use Util\Reflection;
 
 class Mcrypt
@@ -29,9 +31,51 @@ class ExampleTest extends TestCase
 {
     public function test1()
     {
-        $this->assertEquals(2, count(Reflection::getConstants(User::class, 'user')));
-        $this->assertEquals(2, count(Reflection::getConstants(User::class, 'USER')));
+        // dump( (new FileBrowser())->getExt('/Users/mac/phpcode/service/vendor/predis/predis/bin/create-command-test'));
+        // $this->assertEquals(2, count(Reflection::getConstants(User::class, 'user')));
+        // $this->assertEquals(2, count(Reflection::getConstants(User::class, 'USER')));
     }
+
+    public function testsql()
+    {
+        $arr1 = [];
+        $arr2= [];
+        $arr3= [];
+        $arr4 = [];
+        $arr5 = [];
+        $arr6 = [];
+        for($i=1;$i<3200;$i++){
+            if($i<100){
+                $arr1[] = $i;
+            }
+            if($i<200){
+                $arr2[] = $i;
+            }
+            if($i<400){
+                $arr3[] = $i;
+            }
+            if($i<800){
+                $arr4[] = $i;
+            }
+            if($i<1600){
+                $arr5[] = $i;
+            }
+            if($i<3200){
+                $arr6[] = $i;
+            }
+
+        }
+
+        $sql =  "select id from testpaper_member_item where id in (".implode(',',$arr1).");".PHP_EOL;
+        $sql .= "select id from testpaper_member_item where id in (".implode(',',$arr2).");".PHP_EOL;
+        $sql .= "select id from testpaper_member_item where id in (".implode(',',$arr3).");".PHP_EOL;
+        $sql .= "select id from testpaper_member_item where id in (".implode(',',$arr4).");".PHP_EOL;
+        $sql .= "select id from testpaper_member_item where id in (".implode(',',$arr5).");".PHP_EOL;
+        $sql .= "select id from testpaper_member_item where id in (".implode(',',$arr6).");".PHP_EOL;
+        file_put_contents(__DIR__.'/aaa.sql',$sql);
+
+    }
+
 
     /**
      * A basic test example.

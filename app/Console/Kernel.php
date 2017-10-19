@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
         //
         \Commands\GithubCommand::class,
         \Commands\HsStock::class,
+        \Commands\CodeLine::class,
+        \Commands\UpHsStock::class,
     ];
 
     /**
@@ -26,8 +28,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('up-hs-stock')
+                 ->dailyAt('16:00');
     }
 
     /**

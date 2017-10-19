@@ -6,6 +6,7 @@ namespace Commands;
 use App\Model\Finance\Stock;
 use App\Model\Finance\StockLog;
 use App\Model\Task;
+use App\Repositories\StockRepository;
 use Carbon\Carbon;
 use PHPHtmlParser\Dom\AbstractNode;
 use Util\Db;
@@ -117,17 +118,7 @@ class HsStock extends SpiderBase
 
 
             foreach ($rs['data'] as $v) {
-                $stockLog = new StockLog();
-                $stockLog->stock_id = $stock->id;
-                $stockLog->open_price = $v[1];
-                $stockLog->close_price = $v[2];
-                $stockLog->high_price = $v[3];
-                $stockLog->low_price = $v[4];
-                $stockLog->price_change = $v[6];
-                $stockLog->turnover = $v[5];
-                $stockLog->price = $v[2];
-                $stockLog->created_at = Carbon::parse($v[0]);
-                $stockLog->save();
+                resolve(StockRepository::class)->addStockLogFromWy($stock->id,$v);
 
             }
 

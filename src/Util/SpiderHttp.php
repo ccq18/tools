@@ -122,7 +122,7 @@ class SpiderHttp
         return $this->client->post($this->url, $options)->getBody()->getContents();
     }
 
-    function getApi($url, $params = [], $headers = [], $timeout = 10)
+    function getJson($url, $params = [], $headers = [], $timeout = 10)
     {
         try {
             return json_decode($this->get($url, $params, $headers, $timeout), true);
@@ -132,7 +132,7 @@ class SpiderHttp
 
     }
 
-    function postApi($url, $data = [], $params = [], $headers = [], $timeout = 10)
+    function postJson($url, $data = [], $params = [], $headers = [], $timeout = 10)
     {
         try {
             return json_decode($this->post($url, $data, $params, $headers, $timeout), true);

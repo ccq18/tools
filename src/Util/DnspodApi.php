@@ -35,7 +35,7 @@ class DnspodApi
      */
     public function getRecord($domain_id, $record_id)
     {
-        return $this->http->postApi('https://dnsapi.cn/Record.Info',
+        return $this->http->postJson('https://dnsapi.cn/Record.Info',
             array_merge($this->base_params, [
                 'domain_id' => $domain_id,
                 'record_id' => $record_id
@@ -48,7 +48,7 @@ class DnspodApi
      */
     public function getDomains()
     {
-        return $this->http->postApi('https://dnsapi.cn/Domain.List',
+        return $this->http->postJson('https://dnsapi.cn/Domain.List',
             array_merge($this->base_params, [
 
             ])
@@ -61,7 +61,7 @@ class DnspodApi
      */
     public function getRecords($domain_id)
     {
-        return $this->http->postApi('https://dnsapi.cn/Record.List',
+        return $this->http->postJson('https://dnsapi.cn/Record.List',
             array_merge($this->base_params, [
                 'domain_id' => $domain_id,
             ])
@@ -76,7 +76,7 @@ class DnspodApi
      */
     public function setRecord($domain_id, $record, $value)
     {
-        return $this->http->postApi('https://dnsapi.cn/Record.Modify',
+        return $this->http->postJson('https://dnsapi.cn/Record.Modify',
             array_merge($this->base_params, [
                 'domain_id' => $domain_id,
                 'record_id' => $record['id'],
