@@ -54,8 +54,9 @@ class HsStock extends SpiderBase
 
     public function parseStock($str, Task $task)
     {
-        $this->dom->load($str);
-        $r = $this->dom->find("[class=TextBody]");
+        $dom =  $this->dom($str);
+        // $this->dom->load($str);
+        $r = $dom->find("[class=TextBody]");
         /**
          * @var AbstractNode $r
          * @var AbstractNode[] $as

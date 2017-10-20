@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $parse_status 解析状态 1 未解析 2 已解析
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereParseStatus($value)
  * @property-read \App\Model\TaskDocument $taskDocument
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereHash($value)
  */
 class Task extends Model
 {

@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         \Commands\HsStock::class,
         \Commands\CodeLine::class,
         \Commands\UpHsStock::class,
+        \Commands\VagrantCommand::class,
     ];
 
     /**

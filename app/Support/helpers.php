@@ -27,3 +27,11 @@ if (!function_exists('flash')) {
     }
 
 }
+if (!function_exists('generate_path')) {
+
+    function generate_path($base, $path)
+    {
+       return rtrim($base,'\/').'/'.ltrim($path,'\/');
+    }
+
+}

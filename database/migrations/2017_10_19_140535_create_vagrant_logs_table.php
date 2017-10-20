@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIndexsIntoStocks extends Migration
+class CreateVagrantLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddIndexsIntoStocks extends Migration
      */
     public function up()
     {
-        Schema::table('stocks', function (Blueprint $table) {
-            $table->unique(['code','type'],'index_unique_code');
+        Schema::create('vagrant_logs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('vagrant_id');
+            $table->text('content');
+            $table->tinyInteger('status');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddIndexsIntoStocks extends Migration
      */
     public function down()
     {
-        Schema::table('stocks', function (Blueprint $table) {
-            $table->dropIndex('index_unique_code');
-        });
+        Schema::dropIfExists('vagrant_logs');
     }
 }
