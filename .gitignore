@@ -6,7 +6,4 @@ Homestead.yaml
 .env
 .vagrant/
 provisioning/*.retry
-provisioning/group_vars/webservers/vars
-provisioning/group_vars/all
-provisioning/files/ssh/*
 data/datas
