@@ -9,6 +9,13 @@
 - name: make new application path
   file: "dest={{ new_application_path }} state=directory owner={{ application_user }} group={{ application_group }}"
   sudo: true
+
+- name: git conifg
+  shell: "git config --add core.compression -1 & git config --global core.packedGitLimit 512m & git config --global core.packedGitWindowSize 512m & git config --global pack.deltaCacheSize 512m & git config  --global pack.packSizeLimit 512m & git config --global pack.windowMemory 512m  "
+  sudo: true
+
+
+
 - name: distribute code with git
   git:
    accept_hostkey=yes update=yes force=yes  dest={{ new_application_path }}   repo={{ repository }} update=yes version=master
