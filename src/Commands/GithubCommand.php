@@ -18,7 +18,7 @@ class GithubCommand extends SpiderBase
 
     public function runnerTaskInit()
     {
-        $http = new \Util\SpiderHttp();
+        $http = new \Util\Http();
         $starturls = ['https://github.com/search?utf8=%E2%9C%93&q=php'];
         foreach ($starturls as $v) {
             $str = $http->get($v);

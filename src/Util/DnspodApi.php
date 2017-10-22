@@ -24,7 +24,7 @@ class DnspodApi
     public function __construct($base_params)
     {
         $this->base_params = $base_params;
-        $this->http = new \Util\SpiderHttp();
+        $this->http = new \Util\Http();
 
     }
 

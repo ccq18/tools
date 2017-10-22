@@ -93,7 +93,7 @@ abstract class SpiderBase extends Command
             $this->runnerTaskInit();
         }
 
-        $http = new \Util\SpiderHttp();
+        $http = new \Util\Http();
 
         while (true) {
             $task = $this->upOneTask($this->domain);

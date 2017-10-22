@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         \Commands\CodeLine::class,
         \Commands\UpHsStock::class,
         \Commands\VagrantCommand::class,
+        \Commands\GetWords::class,
     ];
 
     /**

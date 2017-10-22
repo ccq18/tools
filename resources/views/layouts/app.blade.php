@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cn">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -80,8 +79,8 @@
 
                                     </li>
                                     <li>
-                                        <a href="{{ url('/account/index') }}" >
-                                            资金
+                                        <a href="{{ url('/questions/create') }}" >
+                                            发布问题
                                         </a>
 
                                     </li>
@@ -91,6 +90,21 @@
                                         </a>
 
                                     </li>
+                                    <li>
+                                        <a href="{{ url('/words/index') }}" >
+                                            背单词
+                                        </a>
+
+                                    </li>
+                                    @if(!is_production())
+                                    <li>
+                                        <a href="{{ url('/account/index') }}" >
+                                            资金
+                                        </a>
+
+                                    </li>
+
+                                    @endif
                                     <li>
                                         <a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();

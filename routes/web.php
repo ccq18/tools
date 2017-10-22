@@ -24,6 +24,7 @@ Route::group(['namespace' => 'Web',], function () {
     Route::post('password/update', 'PasswordController@update');
 
     Route::get('setting', 'SettingController@index');
+    Route::get('words/index', 'WordController@index');
 
 
     Route::post('setting', 'SettingController@store');

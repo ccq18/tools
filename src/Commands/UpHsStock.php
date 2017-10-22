@@ -24,7 +24,7 @@ class UpHsStock extends Command
 
     public function upStocks($stocks)
     {
-        $http = new \Util\SpiderHttp();
+        $http = new \Util\Http();
         collect($stocks)->map(function(Stock $stock)use($http){
             $y = date('Y');
             if ($stock->type == Stock::TYPE_SH) {
