@@ -9,14 +9,14 @@
         </div>
         @foreach($word['symbols'] as $symbol)
             <div class="row">
-                英
+                英 [{{$symbol['ph_en']}}]
 
                 <div style="width: 25px;height: 25px;overflow:hidden;display: inline-block;">
                     <audio src="{{$symbol['ph_en_mp3']}}" controls></audio>
                 </div>
 
 
-                美
+                美 [{{$symbol['ph_am']}}]
                 <div style="width: 25px;height: 25px;overflow:hidden;display: inline-block;">
                     <audio src="{{$symbol['ph_am_mp3']}}" controls id="ph_am_mp3"></audio>
                 </div>
