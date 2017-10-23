@@ -9,16 +9,12 @@
 - name: make new application path
   file: "dest={{ new_application_path }} state=directory owner={{ application_user }} group={{ application_group }}"
   sudo: true
-
 - name: drop_caches 1
   shell: "echo 3 > /proc/sys/vm/drop_caches "
   sudo: true
 - name: git conifg
   shell: "git config --global core.compression 0 & git config --global core.packedGitLimit 768m & git config --global core.packedGitWindowSize 768m & git config --global pack.deltaCacheSize 768m & git config  --global pack.packSizeLimit 768m & git config --global pack.windowMemory 768m  "
   sudo: true
-
-
-
 - name: distribute code with git
   git:
    accept_hostkey=yes update=yes force=yes  dest={{ new_application_path }}   repo={{ repository }} update=yes version=master depth=1
@@ -35,9 +31,6 @@
   args:
     chdir: "{{ new_application_path }}"
   when: not code_stat.stat.exists
-  sudo: true
-- name: drop_caches 1
-  shell: "echo 3 > /proc/sys/vm/drop_caches "
   sudo: true
 - name: composer install
   shell: "php -d memory_limit=1G  /usr/local/bin/composer install"
