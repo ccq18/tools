@@ -18,7 +18,7 @@ class WordController
         }
         switch (request('action')) {
             case "last":
-                $w = Word::where('id', '<', $now)->first();
+                $w = Word::where('id', '<', $now)->orderByDesc('id')->first();
                 break;
             case "next":
                 $w = Word::where('id', '>', $now)->first();
