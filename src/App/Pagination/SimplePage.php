@@ -33,7 +33,7 @@ class SimplePage  extends UrlWindow
      * @param  int  $onEachSide
      * @return array
      */
-    public static function make(PaginatorContract $paginator, $onEachSide = 3)
+    public static function make(PaginatorContract $paginator, $onEachSide = 2)
     {
         return (new static($paginator))->get($onEachSide);
     }
@@ -44,7 +44,7 @@ class SimplePage  extends UrlWindow
      * @param  int  $onEachSide
      * @return array
      */
-    public function get($onEachSide = 3)
+    public function get($onEachSide = 2)
     {
         if ($this->paginator->lastPage() < ($onEachSide * 2) + 6) {
             return $this->getSmallSlider();
