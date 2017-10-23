@@ -17,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
 
     }
 
+
+
     /**
      * Register any application services.
      *
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() !== 'production') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
+        $this->app->alias(\App\Pagination\LengthAwarePaginator::class,\Illuminate\Pagination\LengthAwarePaginator::class);
 
     }
 }

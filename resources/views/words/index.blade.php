@@ -9,25 +9,23 @@
         </div>
         @foreach($word['symbols'] as $symbol)
             <div class="row">
-                英 [{{$symbol['ph_en']}}]
+                {{--英 [{{$symbol['ph_en']}}]--}}
 
-                <div style="width: 25px;height: 25px;overflow:hidden;display: inline-block;">
-                    <audio src="{{$symbol['ph_en_mp3']}}" controls></audio>
+                {{--<div class="glyphicon glyphicon-play word-play">--}}
+                    {{--<audio src="{{$symbol['ph_en_mp3']}}" ></audio>--}}
+                {{--</div>--}}
+
+
+                {{--美 --}}
+                [{{$symbol['ph_am']}}]
+                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}" >
+                    <audio ></audio>
                 </div>
 
 
-                美 [{{$symbol['ph_am']}}]
-                <div style="width: 25px;height: 25px;overflow:hidden;display: inline-block;">
-                    <audio src="{{$symbol['ph_am_mp3']}}" controls id="ph_am_mp3"></audio>
-                </div>
-
-                {{--<audio controls="controls" height="100" width="10">--}}
-                {{--<source src="{{$symbol['ph_am_mp3']}}" type="audio/mp3" />--}}
-                {{--</audio>--}}
 
             </div>
             <div class="row">
-                {{--                <a href="{{$symbol['ph_tts_mp3']}}"></a>--}}
 
                 @foreach($symbol['parts'] as $v)
                     {{$v['part']}}  {{implode(' ',$v['means'])}}<br>
@@ -40,14 +38,19 @@
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
-                    <a style="font-size: 4em" href="{{build_url('/words/index',['action'=>'last'])}}"
-                       class="glyphicon glyphicon-arrow-left"
+                <div class="col-md-1 col-xs-1  ">
+                    <a style="font-size: 3em" href="{{build_url('/words')}}"
+                    class="glyphicon glyphicon-remove" aria-hidden="true"></a>
+                </div>
+                <div class="col-md-1 col-xs-1 col-md-offset-1 col-xs-offset-1 ">
+
+                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'last'])}}"
+                       class="glyphicon glyphicon-chevron-left"
                        aria-hidden="true"></a>
                 </div>
                 <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-4">
-                    <a style="font-size: 4em" href="{{build_url('/words/index',['action'=>'next'])}}"
-                       class="glyphicon glyphicon-arrow-right "
+                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'next'])}}"
+                       class="glyphicon glyphicon-chevron-right"
                        aria-hidden="true"></a>
                 </div>
             </div>
@@ -57,13 +60,15 @@
 @section('js')
     <script>
         $(function () {
-            $.wait = function (ms) {
-                var defer = $.Deferred();
+            $('.word-play').click(function () {
+                $(this).removeClass('glyphicon-play').addClass('glyphicon-pause');
+                $(this).find('audio').attr('src',$(this).attr('data-src'));
+                $(this).find('audio')[0].play();
+                var that = $(this);
                 setTimeout(function () {
-                    defer.resolve();
-                }, ms);
-                return defer;
-            };
+                    $(that).addClass('glyphicon-play').removeClass('glyphicon-pause');
+                },1000)
+            });
             $('nav.navbar-static-top').hide();
             //3
             var wait = function (t) {
@@ -78,13 +83,13 @@
 //            var heavyWork = doHeavyWork();
             var defer = $.Deferred();
             defer.then(function () {
-                $('#ph_am_mp3')[0].play();
+                $('#ph_am_mp3').click();
                 return wait(2000)
             }).then(function () {
-                $('#ph_am_mp3')[0].play();
+                $('#ph_am_mp3').click();
                 return wait(2000)
             }).then(function () {
-                $('#ph_am_mp3')[0].play();
+                $('#ph_am_mp3').click();
             });
             defer.resolve();
 

@@ -8,9 +8,9 @@
             <div class="row">
                <a href="{{build_url('/words/index',['word_id'=>$word->id])}}">{{$word->translate['word_name']}}
                 [{{$word->getPham()}}]</a>
-                <div style="width: 25px;height: 25px;overflow:hidden;display: inline-block;">
-                    <audio src="{{$word->getAudio()}}" controls id="ph_am_mp3"></audio>
-                </div>
+                <span class="glyphicon glyphicon-play word-play" style="height: 25px"  data-src="{{$word->getAudio()}}">
+                    <audio ></audio>
+                </span>
                 {{$word->getFirstTranslate()}}
             </div>
         @endforeach
@@ -29,4 +29,23 @@
 
 
 
+@endsection
+
+@section('js')
+    <script>
+        $(function () {
+            $('.word-play').click(function () {
+                $(this).removeClass('glyphicon-play').addClass('glyphicon-pause');
+                $(this).find('audio').attr('src',$(this).attr('data-src'));
+                $(this).find('audio')[0].play();
+                var that = $(this);
+                setTimeout(function () {
+                    $(that).addClass('glyphicon-play').removeClass('glyphicon-pause');
+                },1000)
+            });
+
+
+
+        })
+    </script>
 @endsection
