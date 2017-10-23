@@ -25,6 +25,7 @@ Route::group(['namespace' => 'Web',], function () {
 
     Route::get('setting', 'SettingController@index');
     Route::get('words/index', 'WordController@index');
+    Route::get('words', 'WordController@listWord');
 
 
     Route::post('setting', 'SettingController@store');

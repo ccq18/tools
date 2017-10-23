@@ -2,6 +2,7 @@
 
 namespace Commands;
 
+use App\Model\Lang\Word;
 use Illuminate\Console\Command;
 
 class GetWords  extends Command
@@ -34,10 +35,24 @@ class GetWords  extends Command
                     return;
                 }
                 $this->info($lines[0]);
-                $words[$n] = ['word' => trim($word[1]), 'number' => $n, 'str' => $line,'translate'=>$translate];
+                try{
+                    $w = new Word();
+                    $w->book_id = 1;
+                    $w->word = trim($word[1]);
+                    $w->number = trim($word[0]);
+                    $w->base_str = $line;
+                    $w->translate = $translate;
+                    $w->save();
+                }catch (\Exception $e){
+                    if($e->getCode() != 23000){
+                        throw  $e;
+                    }
+                }
+
+                // $words[$n] = ['word' => trim($word[1]), 'number' => $n, 'str' => $line,'translate'=>$translate];
                 $n++;
             });
-        file_put_contents(config_path('/words.php'), '<?php return ' . var_export($words, true) . ';');
+        // file_put_contents(resource_path('data/words.php'), '<?php return ' . var_export($words, true) . ';');
 
 
         // $lineSatrtPattern = '/\[\d+-\d+-\w+:\d+:\d+\+\d+:\d+]\s"\w+\s.*/s';

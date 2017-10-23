@@ -96,6 +96,12 @@
                                         </a>
 
                                     </li>
+                                    <li>
+                                        <a href="{{ url('/words') }}" >
+                                            单词表
+                                        </a>
+
+                                    </li>
                                     @if(!is_production())
                                     <li>
                                         <a href="{{ url('/account/index') }}" >

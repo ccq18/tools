@@ -41,11 +41,13 @@
         <div class="container">
             <div class="row center-block">
                 <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
-                    <a style="font-size: 4em" href="{{build_url('/words/index',['word_id'=>$last])}}" class="glyphicon glyphicon-arrow-left"
+                    <a style="font-size: 4em" href="{{build_url('/words/index',['action'=>'last'])}}"
+                       class="glyphicon glyphicon-arrow-left"
                        aria-hidden="true"></a>
                 </div>
                 <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-4">
-                    <a style="font-size: 4em" href="{{build_url('/words/index',['word_id'=>$next])}}" class="glyphicon glyphicon-arrow-right "
+                    <a style="font-size: 4em" href="{{build_url('/words/index',['action'=>'next'])}}"
+                       class="glyphicon glyphicon-arrow-right "
                        aria-hidden="true"></a>
                 </div>
             </div>
@@ -64,28 +66,27 @@
             };
             $('nav.navbar-static-top').hide();
             //3
-            var wait = function(t){
+            var wait = function (t) {
                 var $d = $.Deferred();
-                setTimeout(function(){
+                setTimeout(function () {
                     $d.resolve();
-                },t);
+                }, t);
                 return $d.promise();
             }
 
 
 //            var heavyWork = doHeavyWork();
             var defer = $.Deferred();
-            defer.then(function(){
+            defer.then(function () {
                 $('#ph_am_mp3')[0].play();
                 return wait(2000)
-            }).then(function(){
+            }).then(function () {
                 $('#ph_am_mp3')[0].play();
                 return wait(2000)
-            }).then(function(){
+            }).then(function () {
                 $('#ph_am_mp3')[0].play();
             });
             defer.resolve();
-
 
 
         })
