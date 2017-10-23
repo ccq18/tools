@@ -40,7 +40,7 @@
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-2 ">
+                <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
                     <a style="font-size: 4em" href="{{build_url('/words/index',['word_id'=>$last])}}" class="glyphicon glyphicon-arrow-left"
                        aria-hidden="true"></a>
                 </div>
