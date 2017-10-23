@@ -7,7 +7,7 @@ use App\Model\Lang\Word;
 
 class WordController
 {
-    const PAGE_SIZE= 25;
+    const PAGE_SIZE= 18;
     public function index()
     {
         // $words = require resource_path('data/words.php');//config('words');
@@ -39,7 +39,7 @@ class WordController
     public function listWord()
     {
         $this->defaultOrPage();
-        $words = Word::where('book_id', 1)->paginate(25);
+        $words = Word::where('book_id', 1)->paginate(static::PAGE_SIZE);
 
         return view('words.list', ['words' => $words]);
     }
