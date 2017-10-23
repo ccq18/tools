@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container" style="margin-left: 10px">
 
         @foreach($words as $word)
             <div class="row">

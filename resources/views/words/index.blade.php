@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container" style="margin-left: 10px">
         <div class="row">
             <h3>{{$now}}</h3>
             <h1>{{$word['word_name']}}</h1>
