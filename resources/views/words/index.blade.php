@@ -19,7 +19,7 @@
                 {{--美 --}}
                 [{{$symbol['ph_am']}}]
                 <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}" >
-                    <audio ></audio>
+                    <audio src="{{$symbol['ph_am_mp3']}}"></audio>
                 </div>
 
 
