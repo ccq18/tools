@@ -42,7 +42,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        首页1.1
+                        首页
                     </a>
                 </div>
 
