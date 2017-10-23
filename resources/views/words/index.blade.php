@@ -40,11 +40,11 @@
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                <div class="col-md-4 .col-xs-4">
+                <div class="col-md-4 col-xs-4">
                     <a style="font-size: 3.5em" href="{{build_url('/words/index',['word_id'=>$last])}}" class="glyphicon glyphicon-arrow-left"
                        aria-hidden="true"></a>
                 </div>
-                <div class="col-md-4 .col-xs-4">
+                <div class="col-md-4 col-xs-4">
                     <a style="font-size: 3.5em" href="{{build_url('/words/index',['word_id'=>$next])}}" class="glyphicon glyphicon-arrow-right "
                        aria-hidden="true"></a>
                 </div>
