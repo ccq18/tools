@@ -44,3 +44,6 @@
   apt:
     name: php{{ php_version}}-dev
   sudo: true
+- name: up php.ini
+  shell: "echo \"memory_limit = 256M ;\" >> /etc/php/{{ php_version}}/cli/php.ini"
+  sudo: true

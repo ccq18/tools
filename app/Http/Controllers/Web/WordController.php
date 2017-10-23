@@ -7,7 +7,7 @@ class WordController
 {
     public function index()
     {
-        $words = config('words');
+        $words = require resource_path('data/words.php');//config('words');
         $now = request('word_id');
         $k = 'word7000' . auth()->id();
         if (empty($now)) {
@@ -16,7 +16,6 @@ class WordController
         $now = max(min($now,count($words)-1),0);
         $w = array_get($words, $now, []);
         $word = $w['translate'];
-
         $next = $now+1;
         $last = $now == 1 ? 1 : $now-1;
 

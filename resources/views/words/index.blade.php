@@ -41,11 +41,11 @@
         <div class="container">
             <div class="row center-block">
                 <div class="col-md-4 col-md-offset-2">
-                    <a style="font-size: 5em" href="{{build_url('/words/index',['word_id'=>$last])}}" class="glyphicon glyphicon-arrow-left"
+                    <a style="font-size: 3em" href="{{build_url('/words/index',['word_id'=>$last])}}" class="glyphicon glyphicon-arrow-left"
                        aria-hidden="true"></a>
                 </div>
                 <div class="col-md-4 col-md-offset-2">
-                    <a style="font-size: 5em" href="{{build_url('/words/index',['word_id'=>$next])}}" class="glyphicon glyphicon-arrow-right "
+                    <a style="font-size: 3em" href="{{build_url('/words/index',['word_id'=>$next])}}" class="glyphicon glyphicon-arrow-right "
                        aria-hidden="true"></a>
                 </div>
             </div>
