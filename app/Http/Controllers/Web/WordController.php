@@ -7,7 +7,7 @@ use App\Model\Lang\Word;
 
 class WordController
 {
-    const PAGE_SIZE= 18;
+    const PAGE_SIZE= 12;
     public function index()
     {
         // $words = require resource_path('data/words.php');//config('words');
