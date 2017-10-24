@@ -109,7 +109,7 @@ class WordController
             if(isset($readList['days'][$lastKey]['read-list'])){
                 $today['want-read-list'] = collect($readList['days'][$lastKey]['want-read-list'])->map(function($v)use($now){
                      $v['at'] -= $now;
-                     return $now;
+                     return $v;
                 })->all();
                 //初始化基础数据
             }else if(empty($readList['now'])){
