@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-4">
                     <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'next'])}}"
-                       class="glyphicon glyphicon-chevron-right"
+                       class="glyphicon glyphicon-chevron-right" id="next_page"
                        aria-hidden="true"></a>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                     $d.resolve();
                 }, t);
                 return $d.promise();
-            }
+            };
 
 
 //            var heavyWork = doHeavyWork();
@@ -90,6 +90,9 @@
                 return wait(2000)
             }).then(function () {
                 $('#ph_am_mp3').click();
+                return wait(4000)
+            }).then(function () {
+                $('#next_page').click();
             });
             defer.resolve();
 
