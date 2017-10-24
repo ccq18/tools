@@ -24,12 +24,13 @@ Route::group(['namespace' => 'Web',], function () {
     Route::post('password/update', 'PasswordController@update');
 
     Route::get('setting', 'SettingController@index');
-    Route::get('words/index', 'WordController@index');
-    Route::get('words', 'WordController@listWord');
-    Route::get('words/read-word', 'WordController@readWord');
-
     Route::post('setting', 'SettingController@store');
     Route::group(['middleware' => ['auth']], function () {
+        //单词
+        Route::get('words/index', 'WordController@index');
+        Route::get('words', 'WordController@listWord');
+        Route::get('words/read-word', 'WordController@readWord');
+
         Route::get('inbox', 'InboxController@index');
         Route::get('inbox/{dialogId}', 'InboxController@show');
         Route::post('inbox/{dialogId}/store', 'InboxController@store');
