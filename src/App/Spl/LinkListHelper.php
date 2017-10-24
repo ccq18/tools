@@ -46,11 +46,22 @@ class LinkListHelper
 
     public function addOrReplace(SplDoublyLinkedList $doubly,$index,$v)
     {
+
         if($doubly->offsetExists($index) && is_null($doubly->offsetGet($index))){
             $doubly->offsetUnset($index);
         }
         $doubly->add($index,$v);
         return $doubly;
+    }
+
+    public function findFirst(SplDoublyLinkedList $doubly,$callback)
+    {
+        foreach ($doubly as $k => $v){
+            if($callback($v,$k)){
+                return $k;
+            }
+        }
+
     }
 
 }

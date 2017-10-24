@@ -97,13 +97,16 @@ class WordController
             $linkHelper = new LinkListHelper();
             $doubly = $linkHelper->getByPad($readWordIds->count() * 6, $readWordIds->all());
             foreach ($readWordIds->all() as $k => $id) {
-                $linkHelper->addOrReplace($doubly,$k + 4, $id);
-                $linkHelper->addOrReplace($doubly,$k + 8, $id);
-                $linkHelper->addOrReplace($doubly,$k + 16, $id);
-                $linkHelper->addOrReplace($doubly,$k + 32, $id);
-                $linkHelper->addOrReplace($doubly,$k + 64, $id);
-                $linkHelper->addOrReplace($doubly,$k + 256, $id);
-                $linkHelper->addOrReplace($doubly,$k + 1024, $id);
+                $first = $linkHelper->findFirst($doubly,function ($v)use($id){
+                    return $id == $v;
+                });
+                $linkHelper->addOrReplace($doubly,$first + 4, $id);
+                $linkHelper->addOrReplace($doubly,$first + 8, $id);
+                $linkHelper->addOrReplace($doubly,$first + 16, $id);
+                $linkHelper->addOrReplace($doubly,$first + 32, $id);
+                $linkHelper->addOrReplace($doubly,$first + 64, $id);
+                $linkHelper->addOrReplace($doubly,$first + 256, $id);
+                $linkHelper->addOrReplace($doubly,$first + 1024, $id);
 
             }
             $this->cacheNow(0, 'read-now');
