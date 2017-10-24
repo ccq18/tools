@@ -17,5 +17,9 @@ env_app_env: production
 env_db_host: 10.129.51.146
 env_db_database: service
 sendfile: "on"
+env_cache_driver: redis
+env_session_driver: redis
+env_queue_driver: redis
 env_redis_port: 6377
-
+env_redis_host: 10.129.51.146
+env_redis_password: "env_redis_password"
