@@ -107,7 +107,7 @@ class WordController
             $today['today-start-id'] = $nowReadId;
             //今日复习列表由昨日的复习列表决定
             if(isset($readList['days'][$lastKey]['read-list'])){
-                $today['want-read-list'] = collect($readList['days'][$lastKey]['read-list'])->map(function($v)use($now){
+                $today['want-read-list'] = collect($readList['days'][$lastKey]['want-read-list'])->map(function($v)use($now){
                      $v['at'] -= $now;
                      return $now;
                 })->all();
