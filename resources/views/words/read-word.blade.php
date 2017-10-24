@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.full')
 
 @section('content')
 
@@ -76,18 +76,8 @@
                     $(that).addClass('glyphicon-play').removeClass('glyphicon-pause');
                 },1000)
             });
-            $('nav.navbar-static-top').hide();
-            //3
-            var wait = function (t) {
-                var $d = $.Deferred();
-                setTimeout(function () {
-                    $d.resolve();
-                }, t);
-                return $d.promise();
-            };
 
-
-//            var heavyWork = doHeavyWork();
+            
             var defer = $.Deferred();
             defer.then(function () {
                 $('#ph_am_mp3').click();
