@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web;
 
 
 use App\Model\Lang\Word;
-use App\Spl\LinkListHelper;
+use Carbon\Carbon;
 
 class WordController
 {
@@ -18,30 +18,30 @@ class WordController
         switch (request('action')) {
             case "last":
                 $now = $this->getNow();
-                $w = Word::where('id', '<', $now)->orderByDesc('id')->first();
+                $w = Word::where('book_id', 1)->where('id', '<', $now)->orderByDesc('id')->first();
                 $now = $w->id;
                 $this->cacheNow($now);
                 break;
             case "next":
                 $isAuto = true;
                 $now = $this->getNow();
-                $w = Word::where('id', '>', $now)->first();
+                $w = Word::where('book_id', 1)->where('id', '>', $now)->first();
                 $now = $w->id;
                 $this->cacheNow($now);
                 break;
             default:
                 $now = request('word_id');
-                if(empty($now)){
+                if (empty($now)) {
                     $now = $this->getNow();
                 }
-                $w = Word::where('id', '>=', $now)->first();
+                $w = Word::where('book_id', 1)->where('id', '>=', $now)->first();
                 $this->cacheNow($now);
                 break;
         }
         $word = $w->translate;
 
         // dump($word);
-        return view('words.index', compact('w','word', 'next', 'now', 'isAuto'));
+        return view('words.index', compact('w', 'word', 'next', 'now', 'isAuto'));
     }
 
     protected function getNow($prefix = '', $default = 0)
@@ -84,60 +84,105 @@ class WordController
         \Request::merge(['page' => $p]);
     }
 
+    protected function getNextWordId($increment)
+    {
+        $nowKey = date('Y-m-d');
+        $lastKey = Carbon::yesterday()->format('Y-m-d');
+        $readList = $this->getNow('word-data1',
+            [
+                'now'            => 0,
+                'now-read-id'    => 1,
+                'days'=>[],
+            ]);
+        $now = $readList['now'];
+        $nowReadId = $readList['now-read-id'];
+        $now += $increment;
+        $now = max(0, $now);
+        //初始化今日数据
+        if (!isset($readList['days'][$nowKey])) {
+            $today = [];
+            $today['want-read-list'] = [];
+            $today['read-list'] = [];
+            $today['have-read-list'] = [];
+            $today['today-study-list'] = [];
+            $today['today-start-id'] = $readList['now-read-id'];
+            //今日复习列表由昨日的复习列表决定
+            if(isset($readList['days'][$lastKey]['read-list'])){
+                $today['want-read-list'] = collect($readList['days'][$lastKey]['read-list'])->map(function($v)use($now){
+                     $v['at'] -= $now;
+                     return $now;
+                })->all();
+            }
+            $now = 0;
+        }else{
+            $today = $readList['days'][$nowKey];
+        }
+
+        if (count($today['read-list']) < $now) {
+            $want = collect($today['want-read-list']);
+            $wanted = $want->filter(function ($v) use ($now) {
+                return $v['at'] <= $now;
+            });
+            $wanted->map(function ($v) use ($now) {
+                $v['increment'] *= 4;
+                $v['at'] = $now + $v['increment'];
+                return $v;
+            });
+            $want = $want->filter(function ($v) use ($now) {
+                return $v['at'] > $now;
+            })->merge($wanted)->all();
+            $today['read-list'] = array_merge($today['read-list'], $wanted->pluck('id')->all());
+            $next = Word::where('book_id', 1)->where('id', '>', $nowReadId)->first();
+            if (!empty($next)) {
+                $nowReadId = $next->id;
+                $want[] = [
+                    'increment' => 4,
+                    'at'        => $now + 4,
+                    'id'        => $nowReadId
+                ];
+                $today['read-list'][] = $nowReadId;
+            }
+
+        }
+        $nextId =  isset($today['read-list'][$now])?$today['read-list'][$now]:$nowReadId;
+        if($today['today-start-id'] <= $nextId && !in_array($nextId,$today['today-study-list'])){
+            $today['today-study-list'][] = $nextId;
+        }
+        $today['have-read-list'][] = $nextId;
+
+
+        $readList['now'] = $now;
+        $readList['now-read-id'] = $nowReadId;
+        $readList['days'][$nowKey] = $today;
+
+        $this->cacheNow($readList, 'word-data1');
+
+        return $nextId;
+    }
 
     public function readWord()
     {
-        $pushList = $this->getNow('read-list');
-        if (empty($pushList)) {
-            $n = $this->getNow();
-            $words = Word::where('book_id', 1)->where('id','>',$n)->get();
-            $readWordIds = $words->map(function ($v) {
-                return $v->id;
-            });
-            $linkHelper = new LinkListHelper();
-            $doubly = $linkHelper->getByPad($readWordIds->count() * 6, $readWordIds->all());
-            foreach ($readWordIds->all() as $k => $id) {
-                $first = $linkHelper->findFirst($doubly,function ($v)use($id){
-                    return $id == $v;
-                });
-                $linkHelper->addOrReplace($doubly,$first + 4, $id);
-                $linkHelper->addOrReplace($doubly,$first + 8, $id);
-                $linkHelper->addOrReplace($doubly,$first + 16, $id);
-                $linkHelper->addOrReplace($doubly,$first + 32, $id);
-                $linkHelper->addOrReplace($doubly,$first + 64, $id);
-                $linkHelper->addOrReplace($doubly,$first + 256, $id);
-                $linkHelper->addOrReplace($doubly,$first + 1024, $id);
-
-            }
-            $this->cacheNow(0, 'read-now');
-            $this->cacheNow(array_values($linkHelper->getArrAndNotNull($doubly)), 'read-list');
-        }
-        $now = $this->getNow('read-now');
-        $readList = $this->getNow('read-list');
         $isAuto = false;
-
         switch (request('action')) {
             case "last":
-                $now--;
-
+                $nowId = $this->getNextWordId(-1);
                 break;
             case "next":
                 $isAuto = true;
-                $now++;
+                $nowId = $this->getNextWordId(1);
 
                 break;
             default:
+                $nowId = $this->getNextWordId(0);
                 break;
         }
-        $maxNum = count($readList) - 1;
-        $apr = number_format($now/$maxNum*100,2);
-        $now = max(min($maxNum, $now), 0);
-        $this->cacheNow($now, 'read-now');
-        $nowId = $readList[$now];
+        $allNum = Word::where('book_id',1)->where('id','>', $nowId)->count();
+        $nowNum = Word::where('book_id',1)->where('id','<=', $nowId)->count();
+        $apr = number_format($nowNum / $allNum * 100, 2);
         $w = Word::where('id', '=', $nowId)->first();
         $word = $w->translate;
 
-        return view('words.read-word', compact('w','word', 'next', 'now', 'isAuto','apr'));
+        return view('words.read-word', compact('w', 'word', 'next', 'now', 'isAuto', 'apr'));
     }
 
 

@@ -33,7 +33,8 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-default  navbar-fixed-top" >
+            {{--navbar-static-top--}}
             <div class="container">
                 <div class="navbar-header">
 
@@ -46,93 +47,11 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        首页
-                    </a>
+                    {{--<a class="navbar-brand" href="{{ url('/') }}">--}}
+                        {{--首页--}}
+                    {{--</a>--}}
                 </div>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">登 录</a></li>
-                            <li><a href="{{ url('/register') }}">注 册</a></li>
-                        @else
-                            <li>
-                                <a href="{{ url('/words/read-word') }}" >
-                                    背单词
-                                </a>
-
-                            </li>
-                            <li>
-                                <a href="{{ url('/words') }}" >
-                                    单词表
-                                </a>
-
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-
-                                    <li>
-                                        <a href="{{ url('/questions/create') }}" >
-                                            发布问题
-                                        </a>
-
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('/notifications') }}" >
-                                            消息通知
-                                        </a>
-
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('/questions/create') }}" >
-                                            发布问题
-                                        </a>
-
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('/inbox') }}" >
-                                            私信列表
-                                        </a>
-
-                                    </li>
-
-                                    @if(!is_production())
-                                    <li>
-                                        <a href="{{ url('/account/index') }}" >
-                                            资金
-                                        </a>
-
-                                    </li>
-
-                                    @endif
-                                    <li>
-                                        <a href="{{ url('/logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            退出登录
-                                        </a>
-
-                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
+                @include("layouts.nav")
             </div>
         </nav>
 
