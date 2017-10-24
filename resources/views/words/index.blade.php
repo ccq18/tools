@@ -92,8 +92,9 @@
                 $('#ph_am_mp3').click();
                 return wait(4000)
             }).then(function () {
-                $('#next_page').click();
+                window.location.href=$('#next_page').attr('href');
             });
+
             defer.resolve();
 
 
