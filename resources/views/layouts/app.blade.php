@@ -27,6 +27,8 @@
                 avatar:"{{Auth::user()->avatar}}"
         }
         @endif
+
+
     </script>
 </head>
 <body>
@@ -63,7 +65,7 @@
                             <li><a href="{{ url('/register') }}">注 册</a></li>
                         @else
                             <li>
-                                <a href="{{ url('/words/index') }}" >
+                                <a href="{{ url('/words/read-word') }}" >
                                     背单词
                                 </a>
 

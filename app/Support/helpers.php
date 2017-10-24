@@ -37,7 +37,6 @@ if (!function_exists('generate_path')) {
 }
 
 
-
 if (!function_exists('str_translate')) {
 
     function str_translate($key)
@@ -103,14 +102,13 @@ if (!function_exists('str_translate')) {
         }
 
         return $http->getJson("http://dict-co.iciba.com/api/dictionary.php", [
-            'key'     => '6741D17CDADF4293923EC7D0583E9463',
-            'type'    => 'json',
-            'w'       => $key,
+            'key'  => '6741D17CDADF4293923EC7D0583E9463',
+            'type' => 'json',
+            'w'    => $key,
         ]);
     }
     //http://dict-co.iciba.com/api/dictionary.php?w=go&key=6741D17CDADF4293923EC7D0583E9463&type=json
 }
-
 
 
 if (!function_exists('build_url')) {
@@ -119,6 +117,7 @@ if (!function_exists('build_url')) {
 
         $output = get_url_params($path);
         $parm_str = http_build_query(array_merge($output, $parameters));
+
         return rtrim($host, '\/') . '/' . ltrim(clear_urlcan($path), '\/') . (empty($parm_str) ? "" : '?' . $parm_str);
     }
 }
@@ -128,6 +127,7 @@ if (!function_exists('get_url_params')) {
         $info = parse_url($path);
         $params = isset($info['query']) ? $info['query'] : "";
         parse_str($params, $output);
+
         return $output;
     }
 }
@@ -145,8 +145,6 @@ if (!function_exists('clear_urlcan')) {
 if (!function_exists('is_production')) {
     function is_production()
     {
-        return env('APP_ENV') =='production';
+        return env('APP_ENV') == 'production';
     }
 }
-
-

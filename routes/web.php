@@ -26,7 +26,7 @@ Route::group(['namespace' => 'Web',], function () {
     Route::get('setting', 'SettingController@index');
     Route::get('words/index', 'WordController@index');
     Route::get('words', 'WordController@listWord');
-
+    Route::get('words/read-word', 'WordController@readWord');
 
     Route::post('setting', 'SettingController@store');
     Route::group(['middleware' => ['auth']], function () {

@@ -4,7 +4,7 @@
 
     <div class="container" style="margin-left: 10px">
         <div class="row">
-            <h3>{{$now}}</h3>
+            <h3>{{$apr}}%</h3>
             <h1>{{$word['word_name']}}</h1>
         </div>
         @foreach($word['symbols'] as $symbol)
@@ -44,12 +44,12 @@
                 </div>
                 <div class="col-md-1 col-xs-1 col-md-offset-1 col-xs-offset-1 ">
 
-                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'last'])}}"
+                    <a style="font-size: 3em" href="{{build_url('/words/read-word',['action'=>'last'])}}"
                        class="glyphicon glyphicon-chevron-left"
                        aria-hidden="true"></a>
                 </div>
                 <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-4">
-                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'next'])}}"
+                    <a style="font-size: 3em" href="{{build_url('/words/read-word',['action'=>'next'])}}"
                        class="glyphicon glyphicon-chevron-right" id="next_page"
                        aria-hidden="true"></a>
                 </div>
