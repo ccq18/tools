@@ -98,7 +98,9 @@ class WordController
             $doubly = $linkHelper->getByPad($readWordIds->count() * 6, $readWordIds->all());
             foreach ($readWordIds->all() as $k => $id) {
                 $doubly->add($k + 4, $id);
+                $doubly->add($k + 8, $id);
                 $doubly->add($k + 16, $id);
+                $doubly->add($k + 32, $id);
                 $doubly->add($k + 64, $id);
                 $doubly->add($k + 256, $id);
                 $doubly->add($k + 1024, $id);
