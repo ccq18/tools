@@ -135,7 +135,7 @@ class WordController
                 return $v['at'] <= $now;
             });
             $wanted->map(function ($v) use ($now) {
-                $v['increment'] *= 16;
+                $v['increment'] *= 10;
                 $v['at'] = $now + $v['increment'];
                 return $v;
             });
