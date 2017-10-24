@@ -50,8 +50,7 @@ class LinkListHelper
             $doubly->offsetUnset($index);
         }
         $doubly->add($index,$v);
-
-
+        return $doubly;
     }
 
 }
