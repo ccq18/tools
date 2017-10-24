@@ -97,13 +97,13 @@ class WordController
             $linkHelper = new LinkListHelper();
             $doubly = $linkHelper->getByPad($readWordIds->count() * 6, $readWordIds->all());
             foreach ($readWordIds->all() as $k => $id) {
-                $doubly->add($k + 4, $id);
-                $doubly->add($k + 8, $id);
-                $doubly->add($k + 16, $id);
-                $doubly->add($k + 32, $id);
-                $doubly->add($k + 64, $id);
-                $doubly->add($k + 256, $id);
-                $doubly->add($k + 1024, $id);
+                $linkHelper->addOrReplace($doubly,$k + 4, $id);
+                $linkHelper->addOrReplace($doubly,$k + 8, $id);
+                $linkHelper->addOrReplace($doubly,$k + 16, $id);
+                $linkHelper->addOrReplace($doubly,$k + 32, $id);
+                $linkHelper->addOrReplace($doubly,$k + 64, $id);
+                $linkHelper->addOrReplace($doubly,$k + 256, $id);
+                $linkHelper->addOrReplace($doubly,$k + 1024, $id);
 
             }
             $this->cacheNow(0, 'read-now');

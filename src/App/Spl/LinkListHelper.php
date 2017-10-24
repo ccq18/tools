@@ -3,6 +3,8 @@
 namespace App\Spl;
 
 
+use SplDoublyLinkedList;
+
 class LinkListHelper
 {
     public function getByPad($len, $base = [])
@@ -40,6 +42,16 @@ class LinkListHelper
         }
 
         return $rs;
+    }
+
+    public function addOrReplace(SplDoublyLinkedList $doubly,$index,$v)
+    {
+        if($doubly->offsetExists($index) && is_null($doubly->offsetGet($index))){
+            $doubly->offsetUnset($index);
+        }
+        $doubly->add($index,$v);
+
+
     }
 
 }
