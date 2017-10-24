@@ -38,10 +38,14 @@ class Word extends Model
     {
         $s = '';
         $s.= isset($this->translate['symbols'][0]['parts'][0]['part'])?$this->translate['symbols'][0]['parts'][0]['part']:"";
-        $s.= isset($this->translate['symbols'][0]['parts'][0]['means'][0])?$this->translate['symbols'][0]['parts'][0]['means'][0]:"";
+        $s.= $this->getFirstTranslateText();
         return $s;
     }
 
+    public function getFirstTranslateText()
+    {
+        return isset($this->translate['symbols'][0]['parts'][0]['means'][0])?$this->translate['symbols'][0]['parts'][0]['means'][0]:"";
+    }
     public function getPham()
     {
      return isset($this->translate['symbols'][0]['ph_am'])?$this->translate['symbols'][0]['ph_am']:"";

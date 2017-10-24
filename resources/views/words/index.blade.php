@@ -1,6 +1,6 @@
 @extends('layouts.full')
 @section('title')
-    {{$word['word_name']}}:{{$w->getFirstTranslate()}}
+    {{$word['word_name']}}:{{$w->getFirstTranslateText()}}
 @endsection
 @section('content')
 
