@@ -134,8 +134,8 @@ class WordController
             $wanted = $want->filter(function ($v) use ($now) {
                 return $v['at'] <= $now;
             });
-            $wanted->map(function ($v) use ($now) {
-                $v['increment'] *= 10;
+            $wanted = $wanted->map(function ($v) use ($now) {
+                $v['increment'] *= 4;
                 $v['at'] = $now + $v['increment'];
                 return $v;
             });
