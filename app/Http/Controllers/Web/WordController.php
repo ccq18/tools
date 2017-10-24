@@ -139,14 +139,14 @@ class WordController
                 $v['at'] = $now + $v['increment'];
                 return $v;
             });
-            $want = $want->filter(function ($v) use ($now) {
+            $today['want-read-list'] = $want->filter(function ($v) use ($now) {
                 return $v['at'] > $now;
             })->merge($wanted)->all();
             $today['read-list'] = array_merge($today['read-list'], $wanted->pluck('id')->all());
             $next = Word::where('book_id', 1)->where('id', '>', $nowReadId)->first();
             if (!empty($next)) {
                 $nowReadId = $next->id;
-                $want[] = [
+                $today['want-read-list'][] = [
                     'increment' => 4,
                     'at'        => $now + 4,
                     'id'        => $nowReadId
