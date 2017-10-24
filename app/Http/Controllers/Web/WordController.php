@@ -40,7 +40,6 @@ class WordController
         }
         $word = $w->translate;
 
-        // dump($word);
         return view('words.index', compact('w', 'word', 'next', 'now', 'isAuto'));
     }
 
@@ -105,14 +104,26 @@ class WordController
             $today['read-list'] = [];
             $today['have-read-list'] = [];
             $today['today-study-list'] = [];
-            $today['today-start-id'] = $readList['now-read-id'];
+            $today['today-start-id'] = $nowReadId;
             //今日复习列表由昨日的复习列表决定
             if(isset($readList['days'][$lastKey]['read-list'])){
                 $today['want-read-list'] = collect($readList['days'][$lastKey]['read-list'])->map(function($v)use($now){
                      $v['at'] -= $now;
                      return $now;
                 })->all();
+                //初始化基础数据
+            }else if(empty($readList['now'])){
+                $nowReadId = $this->getNow();
+                $readeds = Word::where('book_id',1)->where('id','<', $nowReadId)->get();
+                $today['want-read-list']  =  $readeds->map(function($vv){
+                    $v['at'] = $vv->id*10+1000;
+                    $v['increment'] = 256;
+                    $v['id'] = $vv->id;
+                    return $v;
+
+                })->all();
             }
+
             $now = 0;
         }else{
             $today = $readList['days'][$nowKey];
