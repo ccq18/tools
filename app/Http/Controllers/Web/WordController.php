@@ -41,7 +41,7 @@ class WordController
         $word = $w->translate;
 
         // dump($word);
-        return view('words.index', compact('word', 'next', 'now', 'isAuto'));
+        return view('words.index', compact('w','word', 'next', 'now', 'isAuto'));
     }
 
     protected function getNow($prefix = '', $default = 0)
@@ -132,7 +132,7 @@ class WordController
         $w = Word::where('id', '=', $nowId)->first();
         $word = $w->translate;
 
-        return view('words.read-word', compact('word', 'next', 'now', 'isAuto','apr'));
+        return view('words.read-word', compact('w','word', 'next', 'now', 'isAuto','apr'));
     }
 
 

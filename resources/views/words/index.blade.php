@@ -1,5 +1,7 @@
 @extends('layouts.full')
-
+@section('title')
+    {{$word['word_name']}}:{{$w->getFirstTranslate()}}
+@endsection
 @section('content')
 
     <div class="container" style="margin-left: 10px">
