@@ -71,7 +71,7 @@ class Word extends Model
     public function lastSent()
     {
         $detail = $this->getDetail();
-        return collect($detail['sent'])->last();
+        return collect($detail['sent']?:[])->last();
 
     }
 
