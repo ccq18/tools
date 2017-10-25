@@ -198,7 +198,7 @@ class WordController
         $w = Word::where('id', '=', $nowId)->first();
         $word = $w->translate;
         //例句
-        $sent = $w->lastSent();
+        $sent = $w->lastSent()?:[];
 
         return view('words.read-word', compact('w', 'word', 'next', 'now', 'isAuto', 'apr','sent'));
     }

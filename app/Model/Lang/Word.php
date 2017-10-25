@@ -58,10 +58,13 @@ class Word extends Model
     public function getDetail()
     {
         $detail = str_translate($this->word,'str_translate_diver_jinshan_detail');
-        foreach ($detail['sent'] as $k => $v){
-            $detail['sent'][$k]['orig'] = trim($v['orig']);
-            $detail['sent'][$k]['trans'] = trim($v['trans']);
+        if(!empty($detail['sent'])){
+            foreach ($detail['sent'] as $k => $v){
+                $detail['sent'][$k]['orig'] = trim($v['orig']);
+                $detail['sent'][$k]['trans'] = trim($v['trans']);
+            }
         }
+
         return $detail;
     }
 
