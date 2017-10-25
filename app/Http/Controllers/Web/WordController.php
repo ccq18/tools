@@ -136,6 +136,9 @@ class WordController
             });
             $wanted = $wanted->map(function ($v) use ($now) {
                 $v['increment'] *= 4;
+                if($v['increment']>=256){
+                    $v['increment'] *= 3;
+                }
                 $v['at'] = $now + $v['increment'];
                 return $v;
             });
@@ -148,7 +151,7 @@ class WordController
                 $nowReadId = $next->id;
                 $today['want-read-list'][] = [
                     'increment' => 4,
-                    'at'        => $now + 4,
+                    'at'        => $now + 8,
                     'id'        => $nowReadId
                 ];
                 $today['read-list'][] = $nowReadId;
@@ -196,5 +199,11 @@ class WordController
         return view('words.read-word', compact('w', 'word', 'next', 'now', 'isAuto', 'apr'));
     }
 
+
+    public function config()
+    {
+        return view('words.config', []);
+
+    }
 
 }

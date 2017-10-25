@@ -19,7 +19,7 @@ class WordTest extends TestCase
             // });
             $first = $linkHelper->findFirst($doubly, null);
             $linkHelper->addOrReplace($doubly,$first, $id);
-            $doubly->add($index,$v);
+            // $doubly->add($index,$v);
             $linkHelper->addOrReplace($doubly,$first + 4, $id);
             $linkHelper->addOrReplace($doubly,$first + 8, $id);
             $linkHelper->addOrReplace($doubly,$first + 16, $id);
