@@ -129,7 +129,7 @@ class WordController
             $today = $readList['days'][$nowKey];
         }
 
-        if (count($today['read-list']) < $now) {
+        if (count($today['read-list']) <= $now) {
             $want = collect($today['want-read-list']);
             $wanted = $want->filter(function ($v) use ($now) {
                 return $v['at'] <= $now;
