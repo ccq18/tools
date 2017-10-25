@@ -56,11 +56,11 @@ class UserRepository extends BaseRepository
 
     }
 
-    public function createSimple($qq,$pwd='123456')
+    public function createSimple($email,$pwd='123456')
     {
        return $this->create(
-            new User(['name' =>  $qq.'@qq.com',
-                      'email' => $qq.'@qq.com',
+            new User(['name' =>  $email,
+                      'email' => $email,
                       'avatar' => '/images/avatars/default.png',
                       'password' => bcrypt($pwd),
                       'api_token' => str_random(60),
