@@ -3,6 +3,7 @@
 namespace Tests;
 
 
+use App\Model\Lang\Word;
 use App\Spl\LinkListHelper;
 use Ddc\CoreBundle\Service\Express\SfExpress\XmlHelper;
 use Util\Parser;
@@ -106,5 +107,145 @@ class WordTest extends TestCase
         dump($goods);
         print_r( xml_to_array($str));
 
+    }
+
+    public function testVerifyFile()
+    {
+        $s = file_get_contents(resource_path('/data/8.txt'));
+
+        $lines = explode("\n", $s);
+        // dd($this->isEnglish('Victory won\'t come to me unless I go to it.'));
+        $rs = [];
+        $en = 0;
+        $cn = 0;
+        foreach ($lines as $line){
+            if($this->isEnglish($line)){
+                $rs[] = ['en',$line];
+                $en++;
+            }else if($this->isChinese($line)){
+                $rs[] = ['cn',$line];
+                $cn++;
+            }
+        }
+
+
+        foreach ($rs as $k=>$v){
+            if($k%2==0 && $v[0] != 'en'){
+                dd($k%2==0 ,$k,'not en',$v);
+            }
+            if($k%2==1 && $v[0] != 'cn'){
+                dd($k%2==1,$k,'not cn',$v);
+            }
+        }
+        $this->assertEquals($en,$cn);
+    }
+
+    public function testParse()
+    {
+        $s1 = $this->getSentByFile(resource_path('/data/1.txt'));
+        $s2 = $this->getSentByFile(resource_path('/data/2.txt'));
+        $s3 = $this->getSentByFile(resource_path('/data/3.txt'));
+        $s4 = $this->getSentByFile(resource_path('/data/4.txt'));
+        $s5 = $this->getSentByFile(resource_path('/data/5.txt'));
+        $s6 = $this->getSentByFile(resource_path('/data/6.txt'));
+        $s7 = $this->getSentByFile(resource_path('/data/7.txt'));
+        $s9 = $this->getSentByFile(resource_path('/data/9.txt'));
+        $s8 = $this->getSentByFile(resource_path('/data/8.txt'));
+
+        $s = array_merge($s1,$s2,$s3,$s4,$s5,$s6,$s7,$s9);
+        $words = [];
+        $wn = 0;
+        $ss = [];
+        foreach ($s as $k=>$v){
+            $ss[$v['orig'][1]] = $v;
+            try{
+                $nws = $this->parseWords($v['orig'][1]);
+                $wn+=count($nws);
+                $words = $this->uniqueMerge($words,$nws);
+            }catch (\Exception $e){
+                dd($v,$k);
+            }
+
+        }
+        dump(count($s),count($ss),count($words));
+        $allwords = Word::get()->pluck('word');
+        dump($allwords->count());
+        dump(count($allwords->intersect($words)));
+
+    }
+
+    public function parseWords($sent)
+    {
+        $words = explode(" ", $sent);
+        $rs = [];
+        foreach ($words as $word){
+            $word = trim($word,'-.s,!()\/“”\'‘’"?%;:[]£°$');
+            if(!preg_match('/[a-zA-Z]+/',$word)||empty($word)|| in_array($word,$rs)){
+                continue;
+            }
+            $rs[] = $word;
+        }
+        return $rs;
+    }
+
+    public function uniqueMerge($uniqueAr, $words2)
+    {
+        foreach ($words2 as $word){
+            if(empty($word)|| in_array($word,$uniqueAr)){
+                continue;
+            }
+            $uniqueAr[] = $word;
+        }
+        return $uniqueAr;
+    }
+
+    public function getSentByFile($file)
+    {
+        $s = file_get_contents($file);
+        $lines = explode("\n", $s);
+        // dd($this->isEnglish(' I\'ve made a mistake.'));
+        $rs = [];
+        $en = 0;
+        $cn = 0;
+        foreach ($lines as $line){
+            if($this->isEnglish($line)){
+                $rs[] = ['en',$line];
+                $en++;
+            }else if($this->isChinese($line)){
+                $rs[] = ['cn',$line];
+                $cn++;
+            }
+        }
+
+
+        foreach ($rs as $k=>$v){
+            if($k%2==0 && $v[0] != 'en'){
+                throw new \Exception('not en:'.$v);
+            }
+            if($k%2==1 && $v[0] != 'cn'){
+                throw new \Exception('not cn:'.$v);
+            }
+        }
+        $sents = [];
+        for($i=0;$i<count($rs);$i++){
+            $sents[] = ['orig'=>$rs[$i],'trans'=>$rs[$i+1]];
+            $i++;
+        }
+        return $sents;
+    }
+    public function isEnglish($str)
+    {
+        if(empty(trim($str))){
+            return false;
+        }
+      return preg_match('/^[a-zA-Z0-9\-\.\s,! \(\)\/\“\”\'‘’\"\?\%\;\:\[\]\£°\$，——、]+$/',$str);
+    }
+
+    public function isChinese($str)
+    {
+        if(empty(trim($str))){
+            return false;
+        }
+        return !$this->isEnglish($str);
     }
 }

@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereWord($value)
  * @mixin \Eloquent
+ * @property array|null $sent 例句id数组
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereSent($value)
  */
 class Word extends Model
 {
@@ -31,35 +33,39 @@ class Word extends Model
      * @var array
      */
     protected $casts = [
-        'translate' => 'array'
+        'translate' => 'array',
+        'sent'      => 'array'
     ];
 
     public function getFirstTranslate()
     {
         $s = '';
-        $s.= isset($this->translate['symbols'][0]['parts'][0]['part'])?$this->translate['symbols'][0]['parts'][0]['part']:"";
-        $s.= $this->getFirstTranslateText();
+        $s .= isset($this->translate['symbols'][0]['parts'][0]['part']) ? $this->translate['symbols'][0]['parts'][0]['part'] : "";
+        $s .= $this->getFirstTranslateText();
+
         return $s;
     }
 
     public function getFirstTranslateText()
     {
-        return isset($this->translate['symbols'][0]['parts'][0]['means'][0])?$this->translate['symbols'][0]['parts'][0]['means'][0]:"";
+        return isset($this->translate['symbols'][0]['parts'][0]['means'][0]) ? $this->translate['symbols'][0]['parts'][0]['means'][0] : "";
     }
+
     public function getPham()
     {
-     return isset($this->translate['symbols'][0]['ph_am'])?$this->translate['symbols'][0]['ph_am']:"";
+        return isset($this->translate['symbols'][0]['ph_am']) ? $this->translate['symbols'][0]['ph_am'] : "";
     }
+
     public function getAudio()
     {
-        return isset($this->translate['symbols'][0]['ph_am_mp3'])?$this->translate['symbols'][0]['ph_am_mp3']:"";
+        return isset($this->translate['symbols'][0]['ph_am_mp3']) ? $this->translate['symbols'][0]['ph_am_mp3'] : "";
     }
 
     public function getDetail()
     {
-        $detail = str_translate($this->word,'str_translate_diver_jinshan_detail');
-        if(!empty($detail['sent'])){
-            foreach ($detail['sent'] as $k => $v){
+        $detail = str_translate($this->word, 'str_translate_diver_jinshan_detail');
+        if (!empty($detail['sent'])) {
+            foreach ($detail['sent'] as $k => $v) {
                 $detail['sent'][$k]['orig'] = trim($v['orig']);
                 $detail['sent'][$k]['trans'] = trim($v['trans']);
             }
@@ -71,14 +77,16 @@ class Word extends Model
     public function lastSent()
     {
         $detail = $this->getDetail();
-        return collect(isset($detail['sent'])?$detail['sent']:[])->last();
+
+        return collect(isset($detail['sent']) ? $detail['sent'] : [])->last();
 
     }
 
     public function sents()
     {
         $detail = $this->getDetail();
-        return isset($detail['sent'])?$detail['sent']:[];
+
+        return isset($detail['sent']) ? $detail['sent'] : [];
 
     }
 }

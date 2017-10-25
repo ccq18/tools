@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         \Commands\UpHsStock::class,
         \Commands\VagrantCommand::class,
         \Commands\GetWords::class,
+        \App\Console\Commands\BuildSent::class,
     ];
 
     /**
