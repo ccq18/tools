@@ -14,16 +14,15 @@
                 {{--英 [{{$symbol['ph_en']}}]--}}
 
                 {{--<div class="glyphicon glyphicon-play word-play">--}}
-                    {{--<audio src="{{$symbol['ph_en_mp3']}}" ></audio>--}}
+                {{--<audio src="{{$symbol['ph_en_mp3']}}" ></audio>--}}
                 {{--</div>--}}
 
 
                 {{--美 --}}
                 [{{$symbol['ph_am']}}]
-                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}" >
+                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}">
                     <audio src="{{$symbol['ph_am_mp3']}}"></audio>
                 </div>
-
 
 
             </div>
@@ -32,6 +31,11 @@
                 @foreach($symbol['parts'] as $v)
                     {{$v['part']}}  {{implode(' ',$v['means'])}}<br>
                 @endforeach
+                <br>
+                @if(!empty($sent))
+                    {{$sent['orig']}} <br>
+                    {{$sent['trans']}} <br>
+                @endif
             </div>
         @endforeach
 
@@ -67,15 +71,15 @@
         $(function () {
             $('.word-play').click(function () {
                 $(this).removeClass('glyphicon-play').addClass('glyphicon-pause');
-                $(this).find('audio').attr('src',$(this).attr('data-src'));
+                $(this).find('audio').attr('src', $(this).attr('data-src'));
                 $(this).find('audio')[0].play();
                 var that = $(this);
                 setTimeout(function () {
                     $(that).addClass('glyphicon-play').removeClass('glyphicon-pause');
-                },1000)
+                }, 1000)
             });
 
-            
+
             var defer = $.Deferred();
             defer.then(function () {
                 $('#ph_am_mp3').click();
@@ -100,7 +104,7 @@
                 defer.then(function () {
                     return wait(8000)
                 }).then(function () {
-                    window.location.href=$('#next_page').attr('href');
+                    window.location.href = $('#next_page').attr('href');
                 });
                 defer.resolve();
             })

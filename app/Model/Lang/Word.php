@@ -54,4 +54,28 @@ class Word extends Model
     {
         return isset($this->translate['symbols'][0]['ph_am_mp3'])?$this->translate['symbols'][0]['ph_am_mp3']:"";
     }
+
+    public function getDetail()
+    {
+        $detail = str_translate($this->word,'str_translate_diver_jinshan_detail');
+        foreach ($detail['sent'] as $k => $v){
+            $detail['sent'][$k]['orig'] = trim($v['orig']);
+            $detail['sent'][$k]['trans'] = trim($v['trans']);
+        }
+        return $detail;
+    }
+
+    public function lastSent()
+    {
+        $detail = $this->getDetail();
+        return collect($detail['sent'])->last();
+
+    }
+
+    public function sents()
+    {
+        $detail = $this->getDetail();
+        return isset($detail['sent'])?$detail['sent']:[];
+
+    }
 }

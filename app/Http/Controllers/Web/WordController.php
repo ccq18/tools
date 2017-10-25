@@ -197,8 +197,10 @@ class WordController
         $apr = number_format($nowNum / $allNum * 100, 2);
         $w = Word::where('id', '=', $nowId)->first();
         $word = $w->translate;
+        //例句
+        $sent = $w->lastSent();
 
-        return view('words.read-word', compact('w', 'word', 'next', 'now', 'isAuto', 'apr'));
+        return view('words.read-word', compact('w', 'word', 'next', 'now', 'isAuto', 'apr','sent'));
     }
 
 

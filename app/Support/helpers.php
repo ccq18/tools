@@ -39,10 +39,10 @@ if (!function_exists('generate_path')) {
 
 if (!function_exists('str_translate')) {
 
-    function str_translate($key)
+    function str_translate($key, $diver = 'str_translate_diver_jinshan')
     {
         static $qs = null;
-        $diver = 'str_translate_diver_jinshan';//str_translate_diver_youdao
+        // $diver = 'str_translate_diver_jinshan';//str_translate_diver_youdao  str_translate_diver_jinshan_detail
         if (empty($qs)) {
             $qs = \Cache::get($diver, []);
         }
@@ -101,11 +101,25 @@ if (!function_exists('str_translate')) {
             $http = new Util\Http();
         }
 
-        return $http->getJson("http://dict-co.iciba.com/api/dictionary.php", [
+        return $http->get("http://dict-co.iciba.com/api/dictionary.php", [
             'key'  => '6741D17CDADF4293923EC7D0583E9463',
             'type' => 'json',
             'w'    => $key,
         ]);
+    }
+
+    function str_translate_diver_jinshan_detail($key){
+        static $http = null;
+        if (empty($http)) {
+            $http = new Util\Http();
+        }
+
+        $str = $http->get("http://dict-co.iciba.com/api/dictionary.php", [
+            'key'  => '6741D17CDADF4293923EC7D0583E9463',
+            'w'    => $key,
+        ]);
+
+        return xml_to_array($str);
     }
     //http://dict-co.iciba.com/api/dictionary.php?w=go&key=6741D17CDADF4293923EC7D0583E9463&type=json
 }
@@ -147,4 +161,43 @@ if (!function_exists('is_production')) {
     {
         return env('APP_ENV') == 'production';
     }
+}
+
+/**
+ * xml转化为数组
+ * @param  [type] $xml [description]
+ * <xml>
+ *     <appid><![CDATA[wx495813085bb41c7a]]></appid>
+ *     <attach><![CDATA[4757,10]]></attach>
+ * </xml>
+ * @return [type]      [description]
+ *Array
+ * (
+ * [0] => Array
+ * (
+ * [tag] => APPID
+ * [attributes] =>
+ * [val] => wx495813085bb41c7a
+ * [level] => 2
+ * )
+ *
+ * [1] => Array
+ * (
+ * [tag] => ATTACH
+ * [attributes] =>
+ * [val] => 4757,10
+ * [level] => 2
+ * )
+ * )
+ *
+ */
+function xml_to_array($xml)
+{
+
+    //禁止引用外部xml实体
+    libxml_disable_entity_loader(true);
+    $values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
+    return $values;
+
 }
