@@ -40,7 +40,7 @@
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                <div class="col-md-1 col-xs-1 col-md-offset-1 col-xs-offset-1 ">
+                <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
 
                     <a style="font-size: 3em" href="{{build_url('/words/read-word',['action'=>'last'])}}"
                        class="glyphicon glyphicon-chevron-left"
