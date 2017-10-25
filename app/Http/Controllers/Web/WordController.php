@@ -134,6 +134,8 @@ class WordController
             $wanted = $want->filter(function ($v) use ($now) {
                 return $v['at'] <= $now;
             });
+            $noWanted = $wanted->slice(5);
+            $wanted = $wanted->slice(0,5);
             $wanted = $wanted->map(function ($v) use ($now) {
                 $v['increment'] *= 4;
                 if($v['increment']>=256){
@@ -144,7 +146,7 @@ class WordController
             });
             $today['want-read-list'] = $want->filter(function ($v) use ($now) {
                 return $v['at'] > $now;
-            })->merge($wanted)->all();
+            })->merge($wanted)->merge($noWanted)->all();
             $today['read-list'] = array_merge($today['read-list'], $wanted->pluck('id')->all());
             $next = Word::where('book_id', 1)->where('id', '>', $nowReadId)->first();
             if (!empty($next)) {
