@@ -14,16 +14,15 @@
                 {{--英 [{{$symbol['ph_en']}}]--}}
 
                 {{--<div class="glyphicon glyphicon-play word-play">--}}
-                    {{--<audio src="{{$symbol['ph_en_mp3']}}" ></audio>--}}
+                {{--<audio src="{{$symbol['ph_en_mp3']}}" ></audio>--}}
                 {{--</div>--}}
 
 
                 {{--美 --}}
                 [{{$symbol['ph_am']}}]
-                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}" >
+                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}">
                     <audio src="{{$symbol['ph_am_mp3']}}"></audio>
                 </div>
-
 
 
             </div>
@@ -33,6 +32,13 @@
                     {{$v['part']}}  {{implode(' ',$v['means'])}}<br>
                 @endforeach
             </div>
+            <br><br>
+            @foreach($w->sents() as $sent)
+                <div class="row">
+                    {{$sent['orig']}} <br>
+                    {{$sent['trans']}} <br>
+                </div>
+            @endforeach
         @endforeach
 
 
@@ -42,19 +48,19 @@
             <div class="row center-block">
                 <div class="col-md-1 col-xs-1  ">
 
-                <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
+                    <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
 
-                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'last'])}}"
-                       class="glyphicon glyphicon-chevron-left"
-                       aria-hidden="true"></a>
-                </div>
-                <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-4">
-                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'next'])}}"
-                       class="glyphicon glyphicon-chevron-right" id="next_page"
-                       aria-hidden="true"></a>
+                        <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'last'])}}"
+                           class="glyphicon glyphicon-chevron-left"
+                           aria-hidden="true"></a>
+                    </div>
+                    <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-4">
+                        <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'next'])}}"
+                           class="glyphicon glyphicon-chevron-right" id="next_page"
+                           aria-hidden="true"></a>
+                    </div>
                 </div>
             </div>
-        </div>
     </nav>
 @endsection
 @section('js')
@@ -69,12 +75,12 @@
         $(function () {
             $('.word-play').click(function () {
                 $(this).removeClass('glyphicon-play').addClass('glyphicon-pause');
-                $(this).find('audio').attr('src',$(this).attr('data-src'));
+                $(this).find('audio').attr('src', $(this).attr('data-src'));
                 $(this).find('audio')[0].play();
                 var that = $(this);
                 setTimeout(function () {
                     $(that).addClass('glyphicon-play').removeClass('glyphicon-pause');
-                },1000)
+                }, 1000)
             });
 
             var defer = $.Deferred();
@@ -101,7 +107,7 @@
                 defer.then(function () {
                     return wait(8000)
                 }).then(function () {
-                    window.location.href=$('#next_page').attr('href');
+                    window.location.href = $('#next_page').attr('href');
                 });
                 defer.resolve();
             })
