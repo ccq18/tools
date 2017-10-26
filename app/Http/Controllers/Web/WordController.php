@@ -41,8 +41,8 @@ class WordController
                 break;
         }
         $word = $w->translate;
-
-        return view('words.index', compact('w', 'word', 'next', 'now', 'isAuto'));
+        $notCollect = !$this->isCollect($w->id);
+        return view('words.index', compact('w', 'word', 'next', 'now', 'isAuto','notCollect'));
     }
 
     protected function getNow($prefix = '', $default = 0)
@@ -65,7 +65,7 @@ class WordController
         $this->defaultOrPage();
         $words = Word::where('book_id', 1)->paginate(static::PAGE_SIZE);
 
-        return view('words.list', ['words' => $words,'paginate'=>$words->links()]);
+        return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
     }
 
     protected function defaultOrPage()
@@ -211,6 +211,7 @@ class WordController
         //例句
         $sent = $w->lastSent() ?: [];
 
+        $notCollect = !$this->isCollect($w->id);
 
         return view('words.read-word', [
             'w'      => $w,
@@ -219,6 +220,7 @@ class WordController
             'apr'    => $apr,
             'sent'   => $sent,
             'delay'  => 1,
+            'notCollect' => $notCollect,
         ]);
     }
 
@@ -282,7 +284,12 @@ class WordController
         $collectIds = $this->getNow('collect', []);
         $words = Word::where('book_id', 1)->whereIn('id', $collectIds)->paginate(static::PAGE_SIZE);
 
-        return view('words.list', ['words' => $words,'paginate'=>$words->links()]);
+        return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
     }
 
+    protected function isCollect($wordId)
+    {
+        $collectIds = $this->getNow('collect', []);
+        return in_array($wordId, $collectIds);
+    }
 }

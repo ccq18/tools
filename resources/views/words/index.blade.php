@@ -58,9 +58,11 @@
                        class="glyphicon glyphicon-chevron-right" id="next_page"
                        aria-hidden="true"></a>
                 </div>
-                <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2">
-                    <span class="glyphicon glyphicon-plus" id="follow" style="font-size: 3em"></span>
-                </div>
+                @if($notCollect)
+                    <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2">
+                        <span class="glyphicon glyphicon-plus" id="follow" style="font-size: 3em"></span>
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -77,7 +79,10 @@
         };
         $(function () {
             $('#follow').click(function () {
-                $.post('/words/add-collect', {'word_id': "{{$w->id}}"})
+                $.post('/words/add-collect', {'word_id': "{{$w->id}}"},function () {
+                    $('#follow').hide();
+                });
+
             });
             $('.word-play').click(function () {
                 $(this).removeClass('glyphicon-play').addClass('glyphicon-pause');
