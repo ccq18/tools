@@ -20,10 +20,10 @@
 
                 {{--美 --}}
                 <div class="delay">
-                [{{$symbol['ph_am']}}]
-                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}">
-                    <audio src="{{$symbol['ph_am_mp3']}}"></audio>
-                </div>
+                    [{{$symbol['ph_am']}}]
+                    <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}">
+                        <audio src="{{$symbol['ph_am_mp3']}}"></audio>
+                    </div>
                 </div>
 
 
@@ -52,10 +52,13 @@
                        class="glyphicon glyphicon-chevron-left"
                        aria-hidden="true"></a>
                 </div>
-                <div class="col-md-1 col-xs-1 col-md-offset-4 col-xs-offset-4">
+                <div class="col-md-1 col-xs-1 col-md-offset-3 col-xs-offset-3">
                     <a style="font-size: 3em" href="{{build_url('/words/read-word',['action'=>'next'])}}"
                        class="glyphicon glyphicon-chevron-right" id="next_page"
                        aria-hidden="true"></a>
+                </div>
+                <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2">
+                    <span class="glyphicon glyphicon-plus" id="follow" style="font-size: 3em"></span>
                 </div>
             </div>
         </div>
@@ -64,18 +67,18 @@
 @section('js')
     <script>
         $('.delay').hide();
-        setTimeout(function(){
+        setTimeout(function () {
             $('.delay').show();
-        }, parseFloat("{{$delay or 0}}")*1000)
+        }, parseFloat("{{$delay or 0}}") * 1000)
         var play = parseInt("{{$playNum or 0}}");
         var nowPlay = 0;
         function autoPlay() {
-            if(play>0){
+            if (play > 0) {
                 $('#ph_am_mp3').click();
             }
             nowPlay++;
-            if(nowPlay<play){
-                setTimeout('autoPlay',2000);
+            if (nowPlay < play) {
+                setTimeout('autoPlay', 2000);
             }
 
         }
@@ -87,6 +90,9 @@
             return $d.promise();
         };
         $(function () {
+            $('#follow').click(function () {
+                $.post('/words/add-collect', {'word_id': "{{$w->id}}"})
+            });
             $('.word-play').click(function () {
                 $(this).removeClass('glyphicon-play').addClass('glyphicon-pause');
                 $(this).find('audio').attr('src', $(this).attr('data-src'));
