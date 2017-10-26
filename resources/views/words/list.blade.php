@@ -16,15 +16,15 @@
         @endforeach
 
     </div>
-
+@if(isset($paginate))
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                {{$words->links()}}
+                {{$paginate}}
             </div>
         </div>
     </nav>
-
+@endif
 @endsection
 
 @section('js')

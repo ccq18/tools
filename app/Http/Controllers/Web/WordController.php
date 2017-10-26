@@ -65,7 +65,7 @@ class WordController
         $this->defaultOrPage();
         $words = Word::where('book_id', 1)->paginate(static::PAGE_SIZE);
 
-        return view('words.list', ['words' => $words]);
+        return view('words.list', ['words' => $words,'paginate'=>$words->links()]);
     }
 
     protected function defaultOrPage()
@@ -238,19 +238,20 @@ class WordController
                            ->groupBy('unit_id');
 
         return view('words.read-groups', [
-            'listId' => $listId,
-            'groups' => $groups,
+            'listId'  => $listId,
+            'groups'  => $groups,
             'backUrl' => url('words/read-list'),
         ]);
     }
 
-    public function readWordGroupList($listId,$groupId)
+    public function readWordGroupList($listId, $groupId)
     {
         $words = WordGroup::where('group_id', $groupId)
                           ->with('word')
                           ->get()->pluck('word');
+
         return view('words.read-group-list', [
-            'words' => $words,
+            'words'   => $words,
             'backUrl' => url("words/read-list/$listId"),
         ]);
     }
@@ -259,6 +260,29 @@ class WordController
     {
         return view('words.config', []);
 
+    }
+
+    public function addCollect()
+    {
+        $wordId = request('word_id');
+        $collectIds = $this->getNow('collect', []);
+        if (!empty($wordId) && !in_array($wordId, $collectIds)) {
+            if (Word::where('id', $wordId)->exists()) {
+                $collectIds[] = $wordId;
+                $this->cacheNow($collectIds, 'collect');
+            }
+
+        }
+
+        return $collectIds;
+    }
+
+    public function collectList()
+    {
+        $collectIds = $this->getNow('collect', []);
+        $words = Word::where('book_id', 1)->whereIn('id', $collectIds)->paginate(static::PAGE_SIZE);
+
+        return view('words.list', ['words' => $words,'paginate'=>$words->links()]);
     }
 
 }

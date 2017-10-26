@@ -39,6 +39,12 @@
                         </a>
 
                     </li>
+                    <li>
+                        <a href="{{ url('/words/collects') }}" >
+                            收藏
+                        </a>
+
+                    </li>
 
                 </ul>
 

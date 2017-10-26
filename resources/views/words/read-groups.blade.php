@@ -8,7 +8,7 @@
             <div class="row" style="background-color: #ffffff;margin-top: 1rem;">
                 @foreach($groupArr as $k=>$group)
                     <a href="{{url("/words/read-list/{$listId}/{$group['group_id']}")}}">
-                        <div class="col-md-4 col-xs-4 text-center" style="background-color: #f5f8fa;margin: 0.5rem;padding-top: 1rem;padding-bottom: 1rem">
+                        <div class="col-md-5 col-xs-5 text-center" style="background-color: #f5f8fa;margin: 0.5rem;padding-top: 1rem;padding-bottom: 1rem">
                            group-{{$group['group_id']}}
                         </div>
                     </a>
