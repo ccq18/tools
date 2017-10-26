@@ -33,6 +33,13 @@ Route::group(['namespace' => 'Web',], function () {
         Route::get('words', 'WordController@listWord');
         Route::get('words/read-word', 'WordController@readWord');
 
+        Route::get('words/index', 'WordController@index');
+        Route::get('words', 'WordController@listWord');
+        Route::get('words/read-word', 'WordController@readWord');
+        Route::get('words/read-list', 'WordController@readWordLists');
+        Route::get('words/read-list/{listId}', 'WordController@readWordGroups');
+        Route::get('words/read-list/{listId}/{groupId}', 'WordController@readWordGroupList');
+
         Route::get('inbox', 'InboxController@index');
         Route::get('inbox/{dialogId}', 'InboxController@show');
         Route::post('inbox/{dialogId}/store', 'InboxController@store');

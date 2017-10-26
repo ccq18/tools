@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Web;
 
 
 use App\Model\Lang\Word;
+use App\Model\Lang\WordGroup;
 use Carbon\Carbon;
+use Word\WordListHelper;
 
 class WordController
 {
@@ -89,9 +91,9 @@ class WordController
         $lastKey = Carbon::yesterday()->format('Y-m-d');
         $readList = $this->getNow('word-data1',
             [
-                'now'            => 0,
-                'now-read-id'    => 1,
-                'days'=>[],
+                'now'         => 0,
+                'now-read-id' => 1,
+                'days'        => [],
             ]);
         $now = $readList['now'];
         $nowReadId = $readList['now-read-id'];
@@ -106,26 +108,33 @@ class WordController
             $today['today-study-list'] = [];
             $today['today-start-id'] = $nowReadId;
             //今日复习列表由昨日的复习列表决定
-            if(isset($readList['days'][$lastKey]['read-list'])){
-                $today['want-read-list'] = collect($readList['days'][$lastKey]['want-read-list'])->map(function($v)use($now){
-                     $v['at'] -= $now;
-                     return $v;
+            if (isset($readList['days'][$lastKey]['read-list'])) {
+                $today['want-read-list'] = collect($readList['days'][$lastKey]['want-read-list'])->map(function ($v) use
+                (
+                    $now
+                ) {
+                    $v['at'] -= $now;
+
+                    return $v;
                 })->all();
                 //初始化基础数据
-            }else if(empty($readList['now'])){
-                $nowReadId = $this->getNow();
-                $readeds = Word::where('book_id',1)->where('id','<', $nowReadId)->get();
-                $today['want-read-list']  =  $readeds->map(function($vv){
-                    $v['at'] = $vv->id*10+1000;
-                    $v['increment'] = 256;
-                    $v['id'] = $vv->id;
-                    return $v;
+            } else {
+                if (empty($readList['now'])) {
+                    $nowReadId = $this->getNow();
+                    $readeds = Word::where('book_id', 1)->where('id', '<', $nowReadId)->get();
+                    $today['want-read-list'] = $readeds->map(function ($vv) {
+                        $v['at'] = $vv->id * 10 + 1000;
+                        $v['increment'] = 256;
+                        $v['id'] = $vv->id;
 
-                })->all();
+                        return $v;
+
+                    })->all();
+                }
             }
 
             $now = 0;
-        }else{
+        } else {
             $today = $readList['days'][$nowKey];
         }
 
@@ -135,13 +144,14 @@ class WordController
                 return $v['at'] <= $now;
             });
             $noWanted = $wanted->slice(5);
-            $wanted = $wanted->slice(0,5);
+            $wanted = $wanted->slice(0, 5);
             $wanted = $wanted->map(function ($v) use ($now) {
                 $v['increment'] *= 4;
-                if($v['increment']>=256){
+                if ($v['increment'] >= 256) {
                     $v['increment'] *= 3;
                 }
                 $v['at'] = $now + $v['increment'];
+
                 return $v;
             });
             $today['want-read-list'] = $want->filter(function ($v) use ($now) {
@@ -160,8 +170,8 @@ class WordController
             }
 
         }
-        $nextId =  isset($today['read-list'][$now])?$today['read-list'][$now]:$nowReadId;
-        if($today['today-start-id'] <= $nextId && !in_array($nextId,$today['today-study-list'])){
+        $nextId = isset($today['read-list'][$now]) ? $today['read-list'][$now] : $nowReadId;
+        if ($today['today-start-id'] <= $nextId && !in_array($nextId, $today['today-study-list'])) {
             $today['today-study-list'][] = $nextId;
         }
         $today['have-read-list'][] = $nextId;
@@ -175,6 +185,7 @@ class WordController
 
         return $nextId;
     }
+
 
     public function readWord()
     {
@@ -192,17 +203,57 @@ class WordController
                 $nowId = $this->getNextWordId(0);
                 break;
         }
-        $allNum = Word::where('book_id',1)->where('id','>', $nowId)->count();
-        $nowNum = Word::where('book_id',1)->where('id','<=', $nowId)->count();
+        $allNum = Word::where('book_id', 1)->where('id', '>', $nowId)->count();
+        $nowNum = Word::where('book_id', 1)->where('id', '<=', $nowId)->count();
         $apr = number_format($nowNum / $allNum * 100, 2);
         $w = Word::where('id', '=', $nowId)->first();
         $word = $w->translate;
         //例句
-        $sent = $w->lastSent()?:[];
+        $sent = $w->lastSent() ?: [];
 
-        return view('words.read-word', compact('w', 'word', 'next', 'now', 'isAuto', 'apr','sent'));
+
+        return view('words.read-word', [
+            'w'      => $w,
+            'word'   => $word,
+            'isAuto' => $isAuto,
+            'apr'    => $apr,
+            'sent'   => $sent,
+            'delay'  => 1,
+        ]);
     }
 
+    public function readWordLists()
+    {
+        $listIds = WordGroup::groupBy('list_id')->get(['list_id'])->pluck('list_id')->all();
+
+        return view('words.read-lists', [
+            'listIds' => $listIds,
+        ]);
+    }
+
+    public function readWordGroups($listId)
+    {
+        $groups = WordGroup::where('list_id', $listId)
+                           ->get([\DB::raw("DISTINCT `group_id`"), 'unit_id'])
+                           ->groupBy('unit_id');
+
+        return view('words.read-groups', [
+            'listId' => $listId,
+            'groups' => $groups,
+            'backUrl' => url('words/read-list'),
+        ]);
+    }
+
+    public function readWordGroupList($listId,$groupId)
+    {
+        $words = WordGroup::where('group_id', $groupId)
+                          ->with('word')
+                          ->get()->pluck('word');
+        return view('words.read-group-list', [
+            'words' => $words,
+            'backUrl' => url("words/read-list/$listId"),
+        ]);
+    }
 
     public function config()
     {

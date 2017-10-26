@@ -248,4 +248,52 @@ class WordTest extends TestCase
         }
         return !$this->isEnglish($str);
     }
+
+
+    public function testGenerate()
+    {
+        dump($this->generateByWords([1,2,3,4,5,6,7,8,9,10],40));
+    }
+    public function generateByWords($wordIds,$max)
+    {
+
+        $today = [
+            'want-read-list'           => [],
+            'read-list'           => [],
+        ];
+        $nowReadId =0;
+        $now = 0;
+        while(count($today['read-list'])<$max){
+
+            $now = max(0, $now);
+            $want = collect($today['want-read-list']);
+            $wanted = $want->filter(function ($v) use ($now) {
+                return $v['at'] <= $now;
+            });
+            $noWanted = $wanted->slice(5);
+            $wanted = $wanted->slice(0,5);
+            $wanted = $wanted->map(function ($v) use ($now) {
+                $v['increment'] *= 4;
+                $v['at'] = $now + $v['increment'];
+                return $v;
+            });
+            $today['want-read-list'] = $want->filter(function ($v) use ($now) {
+                return $v['at'] > $now;
+            })->merge($wanted)->merge($noWanted)->all();
+            $today['read-list'] = array_merge($today['read-list'], $wanted->pluck('id')->all());
+            if (isset($wordIds[$now])) {
+                $nowReadId = $wordIds[$now];
+                $today['want-read-list'][] = [
+                    'increment' => 4,
+                    'at'        => $now + 4,
+                    'id'        => $nowReadId
+                ];
+                $today['read-list'][] = $nowReadId;
+            }
+            $now += 1;
+        }
+
+
+        return  $today['read-list'];
+    }
 }

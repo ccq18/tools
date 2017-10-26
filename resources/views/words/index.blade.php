@@ -46,8 +46,7 @@
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                <div class="col-md-1 col-xs-1  ">
-
+                {{--<div class="col-md-1 col-xs-1  "></div>--}}
                     <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
 
                         <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'last'])}}"
@@ -60,7 +59,8 @@
                            aria-hidden="true"></a>
                     </div>
                 </div>
-            </div>
+
+        </div>
     </nav>
 @endsection
 @section('js')

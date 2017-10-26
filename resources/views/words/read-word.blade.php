@@ -19,14 +19,16 @@
 
 
                 {{--美 --}}
+                <div class="delay">
                 [{{$symbol['ph_am']}}]
                 <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}">
                     <audio src="{{$symbol['ph_am_mp3']}}"></audio>
                 </div>
+                </div>
 
 
             </div>
-            <div class="row">
+            <div class="row delay">
 
                 @foreach($symbol['parts'] as $v)
                     {{$v['part']}}  {{implode(' ',$v['means'])}}<br>
@@ -61,6 +63,22 @@
 @endsection
 @section('js')
     <script>
+        $('.delay').hide();
+        setTimeout(function(){
+            $('.delay').show();
+        }, parseFloat("{{$delay or 0}}")*1000)
+        var play = parseInt("{{$playNum or 0}}");
+        var nowPlay = 0;
+        function autoPlay() {
+            if(play>0){
+                $('#ph_am_mp3').click();
+            }
+            nowPlay++;
+            if(nowPlay<play){
+                setTimeout('autoPlay',2000);
+            }
+
+        }
         var wait = function (t) {
             var $d = $.Deferred();
             setTimeout(function () {
@@ -78,23 +96,7 @@
                     $(that).addClass('glyphicon-play').removeClass('glyphicon-pause');
                 }, 1000)
             });
-
-
-            var defer = $.Deferred();
-            defer.then(function () {
-                $('#ph_am_mp3').click();
-                return wait(2000)
-            }).then(function () {
-                $('#ph_am_mp3').click();
-                return wait(2000)
-            }).then(function () {
-                $('#ph_am_mp3').click();
-                return wait(4000)
-            });
-
-            defer.resolve();
-
-
+            autoPlay();
         })
     </script>
     @if($isAuto)

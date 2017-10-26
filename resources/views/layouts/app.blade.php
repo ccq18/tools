@@ -15,7 +15,7 @@
     <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
 
 @yield('css')
-    <!-- Scripts -->
+<!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
@@ -23,8 +23,8 @@
         Laravel.apiToken = "{{ Auth::check() ? 'Bearer '.Auth::user()->api_token : 'Bearer ' }}";
         @if(Auth::check())
             window.Zhihu = {
-                name:"{{Auth::user()->name}}",
-                avatar:"{{Auth::user()->avatar}}"
+            name: "{{Auth::user()->name}}",
+            avatar: "{{Auth::user()->avatar}}"
         }
         @endif
 
@@ -32,47 +32,63 @@
     </script>
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-default  navbar-fixed-top" >
-            {{--navbar-static-top--}}
-            <div class="container">
-                <div class="navbar-header">
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                    <!-- Branding Image -->
-                    {{--<a class="navbar-brand" href="{{ url('/') }}">--}}
-                        {{--首页--}}
-                    {{--</a>--}}
-                </div>
-                @include("layouts.nav")
-            </div>
-        </nav>
-
+<div id="app">
+    <nav class="navbar navbar-default  navbar-static-top">
+        {{--navbar-static-top--}}
         <div class="container">
-            @if (session()->has('flash_notification.message'))
-                <div class="alert alert-{{ session('flash_notification.level') }}">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <div class="navbar-header">
 
-                    {!! session('flash_notification.message') !!}
-                </div>
-            @endif
+                <!-- Collapsed Hamburger -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#app-navbar-collapse">
+                </button>
+            </div>
+            @include("layouts.nav")
         </div>
+    </nav>
+    <nav class="navbar navbar-default  navbar-fixed-top">
+        {{--navbar-static-top--}}
+        <div class="container">
+            <div class="navbar-header">
 
-        @yield('content')
+                <!-- Collapsed Hamburger -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#app-navbar-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <!-- Branding Image -->
+                @if(!empty($backUrl))
+                    <a class="navbar-brand glyphicon glyphicon-menu-left" href="{{ url($backUrl) }}">
+                        {{--首页--}}
+                    </a>
+                @endif
+            </div>
+            @include("layouts.nav")
+        </div>
+    </nav>
+
+    <div class="container">
+        @if (session()->has('flash_notification.message'))
+            <div class="alert alert-{{ session('flash_notification.level') }}">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                {!! session('flash_notification.message') !!}
+            </div>
+        @endif
     </div>
 
-    <!-- Scripts -->
-    <script src="{{ elixir('js/app.js') }}"></script>
-    @yield('js')
-    <script>
-        $('#flash-overlay-modal').modal();
-    </script>
+    @yield('content')
+</div>
+
+<!-- Scripts -->
+<script src="{{ elixir('js/app.js') }}"></script>
+@yield('js')
+<script>
+    $('#flash-overlay-modal').modal();
+</script>
 </body>
 </html>

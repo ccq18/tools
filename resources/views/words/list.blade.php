@@ -15,8 +15,8 @@
             </div>
         @endforeach
 
-
     </div>
+
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
@@ -24,10 +24,6 @@
             </div>
         </div>
     </nav>
-
-
-
-
 
 @endsection
 

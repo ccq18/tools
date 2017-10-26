@@ -29,4 +29,4 @@ pip配置
 # 部署服务器
 ansible-playbook provisioning/prod.yml  --extra-vars "application_version=10.11.5"
 # 发布更新代码
-ansible-playbook provisioning/prod-distribution.yml  --extra-vars "application_version=10.19"
+ansible-playbook -i provisioning/webservers provisioning/prod-distribution.yml  --extra-vars "application_version=10.19"

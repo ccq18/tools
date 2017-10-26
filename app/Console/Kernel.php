@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         \Commands\VagrantCommand::class,
         \Commands\GetWords::class,
         \App\Console\Commands\BuildSent::class,
+        \App\Console\Commands\WordGroupGenerate::class
     ];
 
     /**

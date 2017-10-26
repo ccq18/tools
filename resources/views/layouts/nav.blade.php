@@ -17,10 +17,30 @@
                 </a>
 
             </li>
-            <li>
-                <a href="{{ url('/words') }}" >
-                    单词表
+            <li class="dropdown">
+                {{--<a href="{{ url('/words') }}" >--}}
+                    {{--单词表-顺序--}}
+                {{--</a>--}}
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    单词 <span class="caret"></span>
                 </a>
+
+                <ul class="dropdown-menu" role="menu">
+
+                    <li>
+                        <a href="{{ url('/words') }}" >
+                            顺序单词表
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ url('/words/read-list') }}" >
+                            分组单词表
+                        </a>
+
+                    </li>
+
+                </ul>
 
             </li>
             <li class="dropdown">
