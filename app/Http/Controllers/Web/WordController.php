@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Model\Lang\Word;
 use App\Model\Lang\WordGroup;
+use App\Repositories\WordRepositroy;
 use Carbon\Carbon;
 use Word\WordListHelper;
 
@@ -20,7 +21,11 @@ class WordController
         switch (request('action')) {
             case "last":
                 $now = $this->getNow();
+                $now = max($now, 1);
                 $w = Word::where('book_id', 1)->where('id', '<', $now)->orderByDesc('id')->first();
+                if (empty($w)) {
+                    $w = Word::first();
+                }
                 $now = $w->id;
                 $this->cacheNow($now);
                 break;
@@ -42,7 +47,18 @@ class WordController
         }
         $word = $w->translate;
         $notCollect = !$this->isCollect($w->id);
-        return view('words.index', compact('w', 'word', 'next', 'now', 'isAuto','notCollect'));
+
+        return view('words.index', [
+            'lastUrl'    => build_url('/words/index', ['action' => 'last']),
+            'next'       => build_url('/words/index', ['action' => 'next']),
+            'w'          => $w,
+            'isAuto'     => $isAuto,
+            'word'       => $word,
+            'notCollect' => $notCollect,
+            'progress' => $now
+
+
+        ]);
     }
 
     protected function getNow($prefix = '', $default = 0)
@@ -209,19 +225,24 @@ class WordController
         $w = Word::where('id', '=', $nowId)->first();
         $word = $w->translate;
         //例句
-        $sent = $w->lastSent() ?: [];
+        $sent = $w->firstSent() ?: [];
 
         $notCollect = !$this->isCollect($w->id);
 
         return view('words.read-word', [
-            'w'      => $w,
-            'word'   => $word,
-            'isAuto' => $isAuto,
-            'apr'    => $apr,
-            'sent'   => $sent,
-            'delay'  => 1,
+            'w'          => $w,
+            'word'       => $word,
+            'isAuto'     => $isAuto,
+            'progress'        => $apr,
+            'sent'       => $sent,
+            'delay'      => 1,
             'notCollect' => $notCollect,
         ]);
+    }
+
+    public function readWord2()
+    {
+
     }
 
     public function readWordLists()
@@ -240,29 +261,31 @@ class WordController
                            ->groupBy('unit_id');
 
         return view('words.read-groups', [
+            'lastUrl'    => url('words/read-list/'. ['word_id' => resolve(WordRepositroy::class)->latestId($nowId,$model)]),
+            'next'       => url('/words/collect/detail', ['word_id' => resolve(WordRepositroy::class)->nextId($nowId,$model )]),
             'listId'  => $listId,
             'groups'  => $groups,
             'backUrl' => url('words/read-list'),
         ]);
     }
 
+
     public function readWordGroupList($listId, $groupId)
     {
         $words = WordGroup::where('group_id', $groupId)
                           ->with('word')
                           ->get()->pluck('word');
+        $nextId = resolve(WordRepositroy::class)->getGroupId($groupId + 1);
+        $lastId = min($groupId - 1, 1);
 
         return view('words.read-group-list', [
             'words'   => $words,
             'backUrl' => url("words/read-list/$listId"),
+            'lastUrl' => build_url("words/read-list/0}/{$lastId}"),
+            'next'    => build_url("words/read-list/0}/{$nextId}"),
         ]);
     }
 
-    public function config()
-    {
-        return view('words.config', []);
-
-    }
 
     public function addCollect()
     {
@@ -270,7 +293,7 @@ class WordController
         $collectIds = $this->getNow('collect', []);
         if (!empty($wordId) && !in_array($wordId, $collectIds)) {
             if (Word::where('id', $wordId)->exists()) {
-                $collectIds[] = $wordId;
+                array_unshift($collectIds,$wordId);
                 $this->cacheNow($collectIds, 'collect');
             }
 
@@ -282,14 +305,46 @@ class WordController
     public function collectList()
     {
         $collectIds = $this->getNow('collect', []);
-        $words = Word::where('book_id', 1)->whereIn('id', $collectIds)->paginate(static::PAGE_SIZE);
+        $words = Word::where('book_id', 1)->whereIn('id', $collectIds)->orderByDesc('id')->paginate(static::PAGE_SIZE);
 
         return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
+    }
+
+    public function collectDetail()
+    {
+        $nowId= request('word_id');
+
+        $collectIds = $this->getNow('collect', []);
+        $model =  Word::where('book_id', 1)->whereIn('id', $collectIds)->orderByDesc('id');
+        $w = Word::where('id',$nowId)->orderByDesc('id')->first();
+        $word = $w->translate;
+        $notCollect = !$this->isCollect($w->id);
+
+        return view('words.index', [
+            'lastUrl'    => build_url('/words/collect/detail', ['word_id' => resolve(WordRepositroy::class)->latestId($nowId,$model)]),
+            'next'       => build_url('/words/collect/detail', ['word_id' => resolve(WordRepositroy::class)->nextId($nowId,$model )]),
+            'w'          => $w,
+            'isAuto'     => request('action')=='next'?true:false,
+            'word'       => $word,
+            'notCollect' => $notCollect,
+
+        ]);
     }
 
     protected function isCollect($wordId)
     {
         $collectIds = $this->getNow('collect', []);
+
         return in_array($wordId, $collectIds);
     }
+
+    public function config()
+    {
+        return view('words.config', []);
+
+    }
+
+
+
+
 }

@@ -1,35 +1,26 @@
 @extends('layouts.full')
 @section('title')
-    {{$word['word_name']}}:{{$w->getFirstTranslateText()}}
+    {{$w->word}}:{{$w->getFirstTranslateText()}}
 @endsection
 @section('content')
 
     <div class="container" style="margin-left: 10px">
         <div class="row">
-            <h3>{{$now}}</h3>
-            <h1>{{$word['word_name']}}</h1>
+            <h3>{{$progress}}</h3>
+            <h1>{{$w->word}}</h1>
         </div>
-        @foreach($word['symbols'] as $symbol)
             <div class="row">
-                {{--英 [{{$symbol['ph_en']}}]--}}
-
-                {{--<div class="glyphicon glyphicon-play word-play">--}}
-                {{--<audio src="{{$symbol['ph_en_mp3']}}" ></audio>--}}
-                {{--</div>--}}
-
-
                 {{--美 --}}
-                [{{$symbol['ph_am']}}]
-                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}">
-                    <audio src="{{$symbol['ph_am_mp3']}}"></audio>
+                [{{$w->getPham()}}]
+                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$w->getAmAudio()}}">
+                    <audio src="{{$w->getAmAudio()}}"></audio>
                 </div>
 
 
             </div>
             <div class="row">
-
-                @foreach($symbol['parts'] as $v)
-                    {{$v['part']}}  {{implode(' ',$v['means'])}}<br>
+                @foreach($w->getTranslateTexts() as $v)
+                    {{$v}}<br>
                 @endforeach
             </div>
             <br><br>
@@ -39,25 +30,26 @@
                     {{$sent['trans']}} <br>
                 </div>
             @endforeach
-        @endforeach
 
 
     </div>
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                {{--<div class="col-md-1 col-xs-1  "></div>--}}
-                <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
-
-                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'last'])}}"
-                       class="glyphicon glyphicon-chevron-left"
-                       aria-hidden="true"></a>
-                </div>
-                <div class="col-md-1 col-xs-1 col-md-offset-3 col-xs-offset-3">
-                    <a style="font-size: 3em" href="{{build_url('/words/index',['action'=>'next'])}}"
-                       class="glyphicon glyphicon-chevron-right" id="next_page"
-                       aria-hidden="true"></a>
-                </div>
+                @if(!empty($lastUrl))
+                    <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
+                        <a style="font-size: 3em" href="{{url($lastUrl)}}"
+                           class="glyphicon glyphicon-chevron-left"
+                           aria-hidden="true"></a>
+                    </div>
+                @endif
+                @if(!empty($nextUrl))
+                    <div class="col-md-1 col-xs-1 col-md-offset-3 col-xs-offset-3">
+                        <a style="font-size: 3em" href="{{url($nextUrl)}}"
+                           class="glyphicon glyphicon-chevron-right" id="next_page"
+                           aria-hidden="true"></a>
+                    </div>
+                @endif
                 @if($notCollect)
                     <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2">
                         <span class="glyphicon glyphicon-plus" id="follow" style="font-size: 3em"></span>
@@ -79,7 +71,7 @@
         };
         $(function () {
             $('#follow').click(function () {
-                $.post('/words/add-collect', {'word_id': "{{$w->id}}"},function () {
+                $.post('/words/add-collect', {'word_id': "{{$w->id}}"}, function () {
                     $('#follow').hide();
                 });
 

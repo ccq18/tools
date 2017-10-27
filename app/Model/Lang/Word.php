@@ -2,6 +2,8 @@
 
 namespace App\Model\Lang;
 
+use App\Model\Lang\Diver\ShanbayWord;
+use App\Model\Lang\Diver\YoudaoWord;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -26,67 +28,71 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property array|null $sent 例句id数组
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereSent($value)
+ * @property array $example
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereExample($value)
+ * @method getTranslateTexts()
+ * @method getPham()
+ * @method getAmAudio()
+ * @method sents()
+ * @property $type youdao shanbay
  */
 class Word extends Model
 {
+    // use YoudaoTrait;
     /**
      * @var array
      */
     protected $casts = [
         'translate' => 'array',
-        'sent'      => 'array'
+        'sent'      => 'array',
+        'example'   => 'array',
     ];
 
-    public function getFirstTranslate()
-    {
-        $s = '';
-        $s .= isset($this->translate['symbols'][0]['parts'][0]['part']) ? $this->translate['symbols'][0]['parts'][0]['part'] : "";
-        $s .= $this->getFirstTranslateText();
+    protected $_diver = null;
 
-        return $s;
+
+
+    public function _diver()
+    {
+        if (empty($this->_diver)) {
+            if ($this->type == 'youdao') {
+                $this->_diver = new YoudaoWord($this);
+            } else {
+                if ($this->type == 'shanbay') {
+                    $this->_diver = new ShanbayWord($this);
+                }
+            }
+        }
+
+        return $this->_diver;
+    }
+
+    public function __call($name, $arguments)
+    {
+        if (in_array($name, [
+            'getTranslateTexts',
+            'getPham',
+            'getAmAudio',
+            'sents',
+        ])) {
+            return call_user_func_array([$this->_diver(), $name], $arguments);
+        } else {
+            return parent::__call($name, $arguments);
+        }
     }
 
     public function getFirstTranslateText()
     {
-        return isset($this->translate['symbols'][0]['parts'][0]['means'][0]) ? $this->translate['symbols'][0]['parts'][0]['means'][0] : "";
+        $translates = $this->getTranslateTexts();
+        return isset($translates[0])?$translates[0]:"";
     }
 
-    public function getPham()
+    public function firstSent()
     {
-        return isset($this->translate['symbols'][0]['ph_am']) ? $this->translate['symbols'][0]['ph_am'] : "";
-    }
+        $sents = $this->sents();
 
-    public function getAudio()
-    {
-        return isset($this->translate['symbols'][0]['ph_am_mp3']) ? $this->translate['symbols'][0]['ph_am_mp3'] : "";
-    }
-
-    public function getDetail()
-    {
-        $detail = str_translate($this->word, 'str_translate_diver_jinshan_detail');
-        if (!empty($detail['sent'])) {
-            foreach ($detail['sent'] as $k => $v) {
-                $detail['sent'][$k]['orig'] = trim($v['orig']);
-                $detail['sent'][$k]['trans'] = trim($v['trans']);
-            }
-        }
-
-        return $detail;
-    }
-
-    public function lastSent()
-    {
-        $detail = $this->getDetail();
-
-        return collect(isset($detail['sent']) ? $detail['sent'] : [])->last();
+        return collect($sents)->first();
 
     }
 
-    public function sents()
-    {
-        $detail = $this->getDetail();
-
-        return isset($detail['sent']) ? $detail['sent'] : [];
-
-    }
 }

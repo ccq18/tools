@@ -8,10 +8,10 @@
             <div class="row">
                <a href="{{build_url('/words/index',['word_id'=>$word->id])}}">{{$word->translate['word_name']}}
                 [{{$word->getPham()}}]</a>
-                <span class="glyphicon glyphicon-play word-play" style="height: 25px"  data-src="{{$word->getAudio()}}">
+                <span class="glyphicon glyphicon-play word-play" style="height: 25px"  data-src="{{$word->getAmAudio()}}">
                     <audio ></audio>
                 </span>
-                {{$word->getFirstTranslate()}}
+                {{$word->getFirstTranslateText()}}
             </div>
         @endforeach
 

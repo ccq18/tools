@@ -21,7 +21,8 @@ class Kernel extends ConsoleKernel
         \Commands\VagrantCommand::class,
         \Commands\GetWords::class,
         \App\Console\Commands\BuildSent::class,
-        \App\Console\Commands\WordGroupGenerate::class
+        \App\Console\Commands\WordGroupGenerate::class,
+        \App\Console\Commands\InitWordByShanbay::class,
     ];
 
     /**
@@ -34,6 +35,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('up-hs-stock')
                  ->dailyAt('16:00');
+        $schedule->command('command:init-by-shanbay')
+                 ->hourly();
     }
 
     /**

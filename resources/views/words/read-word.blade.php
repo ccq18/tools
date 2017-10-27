@@ -1,15 +1,14 @@
 @extends('layouts.full')
 @section('title')
-    {{$word['word_name']}}:{{$w->getFirstTranslateText()}}
+    {{$w->word}}:{{$w->getFirstTranslateText()}}
 @endsection
 @section('content')
 
     <div class="container" style="margin-left: 10px">
         <div class="row">
-            <h3>{{$apr}}%</h3>
-            <h1>{{$word['word_name']}}</h1>
+            <h3>{{$progress}}%</h3>
+            <h1>{{$w->word}}</h1>
         </div>
-        @foreach($word['symbols'] as $symbol)
             <div class="row">
                 {{--英 [{{$symbol['ph_en']}}]--}}
 
@@ -20,9 +19,9 @@
 
                 {{--美 --}}
                 <div class="delay">
-                    [{{$symbol['ph_am']}}]
-                    <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$symbol['ph_am_mp3']}}">
-                        <audio src="{{$symbol['ph_am_mp3']}}"></audio>
+                    [{{$w->getPham()}}]
+                    <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$w->getAmAudio()}}">
+                        <audio src="{{$w->getAmAudio()}}"></audio>
                     </div>
                 </div>
 
@@ -30,7 +29,7 @@
             </div>
             <div class="row delay">
 
-                @foreach($symbol['parts'] as $v)
+                @foreach($w->getTranslateTexts() as $v)
                     {{$v['part']}}  {{implode(' ',$v['means'])}}<br>
                 @endforeach
                 <br>
@@ -39,7 +38,6 @@
                     {{$sent['trans']}} <br>
                 @endif
             </div>
-        @endforeach
 
 
     </div>

@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\WordGroup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\WordGroup whereWordId($value)
  * @mixin \Eloquent
+ * @property-read \App\Model\Lang\Word $word
  */
 class WordGroup extends Model
 {
@@ -32,4 +33,5 @@ class WordGroup extends Model
         return $this->hasOne(Word::class, 'id', 'word_id');
 
     }
+
 }
