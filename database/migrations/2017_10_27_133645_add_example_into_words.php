@@ -16,8 +16,8 @@ class AddExampleIntoWords extends Migration
         Schema::table('words', function (Blueprint $table) {
             //
             $table->text('example')->nullable();
+            $table->string('simple_trans')->nullable();
             $table->string('type')->default('youdao');
-
         });
     }
 
@@ -31,6 +31,9 @@ class AddExampleIntoWords extends Migration
         Schema::table('words', function (Blueprint $table) {
             //
             $table->dropColumn('example');
+            $table->dropColumn('simple_trans');
+            $table->dropColumn('type');
+
         });
     }
 }

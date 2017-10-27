@@ -7,7 +7,7 @@ interface WordInterface
 {
     public function __construct($obj);
 
-
+    public function getFirstTranslateText();
     public function getTranslateTexts();
 
     public function getPham();

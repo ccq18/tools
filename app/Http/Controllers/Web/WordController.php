@@ -55,7 +55,7 @@ class WordController
             'isAuto'     => $isAuto,
             'word'       => $word,
             'notCollect' => $notCollect,
-            'progress' => $now
+            'progress'   => $now
 
 
         ]);
@@ -233,7 +233,7 @@ class WordController
             'w'          => $w,
             'word'       => $word,
             'isAuto'     => $isAuto,
-            'progress'        => $apr,
+            'progress'   => $apr,
             'sent'       => $sent,
             'delay'      => 1,
             'notCollect' => $notCollect,
@@ -259,10 +259,15 @@ class WordController
         $groups = WordGroup::where('list_id', $listId)
                            ->get([\DB::raw("DISTINCT `group_id`"), 'unit_id'])
                            ->groupBy('unit_id');
+        $model = WordGroup::select([\DB::raw("min(list_id) `list_id`"), \DB::raw("min(created_at) `created_at`")])
+                          ->groupBy('list_id');
+
+        $latestId = resolve(WordRepositroy::class)->latestId($listId, $model, 'list_id');
+        $nextId = resolve(WordRepositroy::class)->nextId($listId, $model, 'list_id');
 
         return view('words.read-groups', [
-            'lastUrl'    => url('words/read-list/'. ['word_id' => resolve(WordRepositroy::class)->latestId($nowId,$model)]),
-            'next'       => url('/words/collect/detail', ['word_id' => resolve(WordRepositroy::class)->nextId($nowId,$model )]),
+            'lastUrl' => $latestId ? url('words/read-list/' . $latestId) : null,
+            'nextUrl' => $nextId ? url('words/read-list/' . $nextId) : null,
             'listId'  => $listId,
             'groups'  => $groups,
             'backUrl' => url('words/read-list'),
@@ -275,14 +280,17 @@ class WordController
         $words = WordGroup::where('group_id', $groupId)
                           ->with('word')
                           ->get()->pluck('word');
-        $nextId = resolve(WordRepositroy::class)->getGroupId($groupId + 1);
-        $lastId = min($groupId - 1, 1);
+        // $nextId = resolve(WordRepositroy::class)->getGroupId($groupId + 1);
+        // $lastId = min($groupId - 1, 1);
+        $model = WordGroup::query();
+        $latestId = resolve(WordRepositroy::class)->latestId($groupId, $model, 'group_id');
+        $nextId = resolve(WordRepositroy::class)->nextId($groupId, $model, 'group_id');
 
         return view('words.read-group-list', [
             'words'   => $words,
             'backUrl' => url("words/read-list/$listId"),
-            'lastUrl' => build_url("words/read-list/0}/{$lastId}"),
-            'next'    => build_url("words/read-list/0}/{$nextId}"),
+            'lastUrl' => build_url("words/read-list/0/{$latestId}"),
+            'nextUrl'    => build_url("words/read-list/0/{$nextId}"),
         ]);
     }
 
@@ -293,7 +301,7 @@ class WordController
         $collectIds = $this->getNow('collect', []);
         if (!empty($wordId) && !in_array($wordId, $collectIds)) {
             if (Word::where('id', $wordId)->exists()) {
-                array_unshift($collectIds,$wordId);
+                array_unshift($collectIds, $wordId);
                 $this->cacheNow($collectIds, 'collect');
             }
 
@@ -312,19 +320,21 @@ class WordController
 
     public function collectDetail()
     {
-        $nowId= request('word_id');
+        $nowId = request('word_id');
 
         $collectIds = $this->getNow('collect', []);
-        $model =  Word::where('book_id', 1)->whereIn('id', $collectIds)->orderByDesc('id');
-        $w = Word::where('id',$nowId)->orderByDesc('id')->first();
+        $model = Word::where('book_id', 1)->whereIn('id', $collectIds)->orderByDesc('id');
+        $w = Word::where('id', $nowId)->orderByDesc('id')->first();
         $word = $w->translate;
         $notCollect = !$this->isCollect($w->id);
 
         return view('words.index', [
-            'lastUrl'    => build_url('/words/collect/detail', ['word_id' => resolve(WordRepositroy::class)->latestId($nowId,$model)]),
-            'next'       => build_url('/words/collect/detail', ['word_id' => resolve(WordRepositroy::class)->nextId($nowId,$model )]),
+            'lastUrl'    => build_url('/words/collect/detail',
+                ['word_id' => resolve(WordRepositroy::class)->latestId($nowId, $model)]),
+            'next'       => build_url('/words/collect/detail',
+                ['word_id' => resolve(WordRepositroy::class)->nextId($nowId, $model)]),
             'w'          => $w,
-            'isAuto'     => request('action')=='next'?true:false,
+            'isAuto'     => request('action') == 'next' ? true : false,
             'word'       => $word,
             'notCollect' => $notCollect,
 
@@ -343,8 +353,6 @@ class WordController
         return view('words.config', []);
 
     }
-
-
 
 
 }

@@ -30,12 +30,12 @@
             <div class="row delay">
 
                 @foreach($w->getTranslateTexts() as $v)
-                    {{$v['part']}}  {{implode(' ',$v['means'])}}<br>
+                    {{$v}}<br>
                 @endforeach
                 <br>
                 @if(!empty($sent))
-                    {{$sent['orig']}} <br>
-                    {{$sent['trans']}} <br>
+                    {!! $sent['orig'] !!} <br>
+                        {!! $sent['trans'] !!}<br>
                 @endif
             </div>
 

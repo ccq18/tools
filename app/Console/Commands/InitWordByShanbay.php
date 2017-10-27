@@ -69,6 +69,8 @@ class InitWordByShanbay extends Command
                      $word->example = $example;
                      $word->save();
                      $word = Word::find($word->id);
+                     $word->simple_trans = $word->getFirstTranslateText();
+                     $word->save();
                      $this->info('after:'.$word->getFirstTranslateText());
                  });
              }catch (\Exception $e){

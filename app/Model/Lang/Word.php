@@ -34,7 +34,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method getPham()
  * @method getAmAudio()
  * @method sents()
+ * @method getFirstTranslateText()
  * @property $type youdao shanbay
+ * @property string|null $simple_trans
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereSimpleTrans($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereType($value)
  */
 class Word extends Model
 {
@@ -70,6 +74,7 @@ class Word extends Model
     public function __call($name, $arguments)
     {
         if (in_array($name, [
+            'getFirstTranslateText',
             'getTranslateTexts',
             'getPham',
             'getAmAudio',
@@ -81,11 +86,7 @@ class Word extends Model
         }
     }
 
-    public function getFirstTranslateText()
-    {
-        $translates = $this->getTranslateTexts();
-        return isset($translates[0])?$translates[0]:"";
-    }
+
 
     public function firstSent()
     {

@@ -6,7 +6,7 @@
 
         @foreach($words as $word)
             <div class="row">
-                <a href="{{build_url('/words/index',['word_id'=>$word->id])}}">{{$word->translate['word_name']}}
+                <a href="{{build_url('/words/index',['word_id'=>$word->id])}}">{{$word->word}}
                     [{{$word->getPham()}}]</a>
                 <span class="glyphicon glyphicon-play word-play" style="height: 25px" data-src="{{$word->getAmAudio()}}">
                     <audio></audio>

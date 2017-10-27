@@ -8,7 +8,14 @@ class YoudaoWord implements WordInterface
 
     use ProxyTrait;
 
-
+    public function getFirstTranslateText()
+    {
+        if(isset($this->translate['symbols'][0]['parts'][0]['part']) && isset($this->translate['symbols'][0]['parts'][0]['means'][0])){
+            return $this->translate['symbols'][0]['parts'][0]['part'].' '.$this->translate['symbols'][0]['parts'][0]['means'][0];
+        }else{
+            return '';
+        }
+    }
 
     public function getTranslateTexts()
     {
