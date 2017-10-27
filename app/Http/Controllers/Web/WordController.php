@@ -50,7 +50,7 @@ class WordController
 
         return view('words.index', [
             'lastUrl'    => build_url('/words/index', ['action' => 'last']),
-            'next'       => build_url('/words/index', ['action' => 'next']),
+            'nextUrl'       => build_url('/words/index', ['action' => 'next']),
             'w'          => $w,
             'isAuto'     => $isAuto,
             'word'       => $word,
