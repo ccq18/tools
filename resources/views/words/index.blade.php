@@ -9,27 +9,27 @@
             <h3>{{$progress}}</h3>
             <h1>{{$w->word}}</h1>
         </div>
-            <div class="row">
-                {{--美 --}}
-                [{{$w->getPham()}}]
-                <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$w->getAmAudio()}}">
-                    <audio src="{{$w->getAmAudio()}}"></audio>
-                </div>
+        <div class="row">
+            {{--美 --}}
+            [{{$w->getPham()}}]
+            <div class="glyphicon glyphicon-play word-play" id="ph_am_mp3" data-src="{{$w->getAmAudio()}}">
+                <audio src="{{$w->getAmAudio()}}"></audio>
+            </div>
 
 
-            </div>
-            <div class="row">
-                @foreach($w->getTranslateTexts() as $v)
-                    {{$v}}<br>
-                @endforeach
-            </div>
-            <br><br>
-            @foreach($w->sents() as $sent)
-                <div class="row">
-                    {{$sent['orig']}} <br>
-                    {{$sent['trans']}} <br>
-                </div>
+        </div>
+        <div class="row">
+            @foreach($w->getTranslateTexts() as $v)
+                {{$v}}<br>
             @endforeach
+        </div>
+        <br><br>
+        @foreach($w->sents() as $sent)
+            <div class="row">
+                {!!$sent['orig'] !!} <br>
+                {!!$sent['trans'] !!} <br>
+            </div>
+        @endforeach
 
 
     </div>
@@ -69,6 +69,10 @@
             }, t);
             return $d.promise();
         };
+        $('.delay').hide();
+        setTimeout(function () {
+            $('.delay').show();
+        }, parseFloat("{{$delay or 0}}") * 1000)
         $(function () {
             $('#follow').click(function () {
                 $.post('/words/add-collect', {'word_id': "{{$w->id}}"}, function () {
@@ -86,19 +90,15 @@
                 }, 1000)
             });
 
-            var defer = $.Deferred();
-            defer.then(function () {
+            var playNum = parseInt("{{$playNum or 0}}");
+            var nowPlayNum = 0;
+            var recall = setInterval( function () {
+                if (nowPlayNum >= playNum) {
+                    return clearInterval(recall);
+                }
                 $('#ph_am_mp3').click();
-                return wait(2000)
-            }).then(function () {
-                $('#ph_am_mp3').click();
-                return wait(2000)
-            }).then(function () {
-                $('#ph_am_mp3').click();
-                return wait(4000)
-            });
-
-            defer.resolve();
+                nowPlayNum++;
+            },2000);
 
 
         })

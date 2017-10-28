@@ -45,18 +45,16 @@ class WordController
                 $this->cacheNow($now);
                 break;
         }
-        $word = $w->translate;
-        $notCollect = !$this->isCollect($w->id);
 
         return view('words.index', [
             'lastUrl'    => build_url('/words/index', ['action' => 'last']),
-            'nextUrl'       => build_url('/words/index', ['action' => 'next']),
+            'nextUrl'    => build_url('/words/index', ['action' => 'next']),
             'w'          => $w,
             'isAuto'     => $isAuto,
-            'word'       => $word,
-            'notCollect' => $notCollect,
-            'progress'   => $now
-
+            'progress'   => $now,
+            'delay'      => 1,
+            'playNum'    => 3,
+            'notCollect' => !$this->isCollect($w->id),
 
         ]);
     }
@@ -223,20 +221,17 @@ class WordController
         $nowNum = Word::where('book_id', 1)->where('id', '<=', $nowId)->count();
         $apr = number_format($nowNum / $allNum * 100, 2);
         $w = Word::where('id', '=', $nowId)->first();
-        $word = $w->translate;
-        //例句
-        $sent = $w->firstSent() ?: [];
 
-        $notCollect = !$this->isCollect($w->id);
-
-        return view('words.read-word', [
+        return view('words.index', [
+            'lastUrl'    => build_url('/words/read-word', ['action' => 'last']),
+            'nextUrl'    => build_url('/words/read-word', ['action' => 'next']),
             'w'          => $w,
-            'word'       => $word,
             'isAuto'     => $isAuto,
             'progress'   => $apr,
-            'sent'       => $sent,
+            'sent'       => $w->firstSent(),
             'delay'      => 1,
-            'notCollect' => $notCollect,
+            'playNum'    => 3,
+            'notCollect' => !$this->isCollect($w->id),
         ]);
     }
 
@@ -290,7 +285,7 @@ class WordController
             'words'   => $words,
             'backUrl' => url("words/read-list/$listId"),
             'lastUrl' => build_url("words/read-list/0/{$latestId}"),
-            'nextUrl'    => build_url("words/read-list/0/{$nextId}"),
+            'nextUrl' => build_url("words/read-list/0/{$nextId}"),
         ]);
     }
 

@@ -92,7 +92,7 @@ class Word extends Model
     {
         $sents = $this->sents();
 
-        return collect($sents)->first();
+        return collect($sents)->first()?:[];
 
     }
 
