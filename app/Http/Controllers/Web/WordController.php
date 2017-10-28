@@ -13,6 +13,11 @@ class WordController
 {
     const PAGE_SIZE = 12;
 
+    public function getNowBook()
+    {
+        return Word::where('book_id', 1);
+    }
+
     public function index()
     {
 
@@ -22,7 +27,7 @@ class WordController
             case "last":
                 $now = $this->getNow();
                 $now = max($now, 1);
-                $w = Word::where('book_id', 1)->where('id', '<', $now)->orderByDesc('id')->first();
+                $w = $this->getNowBook()->where('id', '<', $now)->orderByDesc('id')->first();
                 if (empty($w)) {
                     $w = Word::first();
                 }
@@ -32,7 +37,7 @@ class WordController
             case "next":
                 $isAuto = true;
                 $now = $this->getNow();
-                $w = Word::where('book_id', 1)->where('id', '>', $now)->first();
+                $w = $this->getNowBook()->where('id', '>', $now)->first();
                 $now = $w->id;
                 $this->cacheNow($now);
                 break;
@@ -41,7 +46,7 @@ class WordController
                 if (empty($now)) {
                     $now = $this->getNow();
                 }
-                $w = Word::where('book_id', 1)->where('id', '>=', $now)->first();
+                $w = $this->getNowBook()->where('id', '>=', $now)->first();
                 $this->cacheNow($now);
                 break;
         }
@@ -77,7 +82,7 @@ class WordController
     public function listWord()
     {
         $this->defaultOrPage();
-        $words = Word::where('book_id', 1)->paginate(static::PAGE_SIZE);
+        $words = $this->getNowBook()->paginate(static::PAGE_SIZE);
 
         return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
     }
@@ -87,12 +92,12 @@ class WordController
         $now = $this->getNow();
         $p = request('page');
         if (empty($p)) {
-            $n = Word::where('book_id', 1)->where('id', '<', $now)->count();
+            $n = $this->getNowBook()->where('id', '<', $now)->count();
             $p = floor($n / static::PAGE_SIZE + 1);
 
         } else {
-            $n = Word::where('book_id', 1)->skip(($p - 1) * static::PAGE_SIZE)->first();
-            $now = $n ? $n->id : Word::where('book_id', 1)->count();
+            $n = $this->getNowBook()->skip(($p - 1) * static::PAGE_SIZE)->first();
+            $now = $n ? $n->id : $this->getNowBook()->count();
         }
         // dump($now,$p);
         $this->cacheNow($now);
@@ -135,7 +140,7 @@ class WordController
             } else {
                 if (empty($readList['now'])) {
                     $nowReadId = $this->getNow();
-                    $readeds = Word::where('book_id', 1)->where('id', '<', $nowReadId)->get();
+                    $readeds = $this->getNowBook()->where('id', '<', $nowReadId)->get();
                     $today['want-read-list'] = $readeds->map(function ($vv) {
                         $v['at'] = $vv->id * 10 + 1000;
                         $v['increment'] = 256;
@@ -172,7 +177,7 @@ class WordController
                 return $v['at'] > $now;
             })->merge($wanted)->merge($noWanted)->all();
             $today['read-list'] = array_merge($today['read-list'], $wanted->pluck('id')->all());
-            $next = Word::where('book_id', 1)->where('id', '>', $nowReadId)->first();
+            $next = $this->getNowBook()->where('id', '>', $nowReadId)->first();
             if (!empty($next)) {
                 $nowReadId = $next->id;
                 $today['want-read-list'][] = [
@@ -217,8 +222,8 @@ class WordController
                 $nowId = $this->getNextWordId(0);
                 break;
         }
-        $allNum = Word::where('book_id', 1)->where('id', '>', $nowId)->count();
-        $nowNum = Word::where('book_id', 1)->where('id', '<=', $nowId)->count();
+        $allNum = $this->getNowBook()->where('id', '>', $nowId)->count();
+        $nowNum = $this->getNowBook()->where('id', '<=', $nowId)->count();
         $apr = number_format($nowNum / $allNum * 100, 2);
         $w = Word::where('id', '=', $nowId)->first();
 
@@ -308,7 +313,7 @@ class WordController
     public function collectList()
     {
         $collectIds = $this->getNow('collect', []);
-        $words = Word::where('book_id', 1)->whereIn('id', $collectIds)->orderByDesc('id')->paginate(static::PAGE_SIZE);
+        $words = $this->getNowBook()->whereIn('id', $collectIds)->orderByDesc('id')->paginate(static::PAGE_SIZE);
 
         return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
     }
@@ -318,7 +323,7 @@ class WordController
         $nowId = request('word_id');
 
         $collectIds = $this->getNow('collect', []);
-        $model = Word::where('book_id', 1)->whereIn('id', $collectIds)->orderByDesc('id');
+        $model = $this->getNowBook()->whereIn('id', $collectIds)->orderByDesc('id');
         $w = Word::where('id', $nowId)->orderByDesc('id')->first();
         $word = $w->translate;
         $notCollect = !$this->isCollect($w->id);
