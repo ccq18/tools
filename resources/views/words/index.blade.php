@@ -2,6 +2,8 @@
 @section('title')
     {{$w->word}}:{{$w->getFirstTranslateText()}}
 @endsection
+@section('css')
+@endsection
 @section('content')
 
     <div class="container" style="margin-left: 10px">
@@ -62,6 +64,9 @@
 @endsection
 @section('js')
     <script>
+        $('vocab').each(function () {
+            $(this).html('<span style="font-weight:bold;">'+$(this).html()+'<span>')
+        })
         var wait = function (t) {
             var $d = $.Deferred();
             setTimeout(function () {
@@ -92,13 +97,13 @@
 
             var playNum = parseInt("{{$playNum or 0}}");
             var nowPlayNum = 0;
-            var recall = setInterval( function () {
+            var recall = setInterval(function () {
                 if (nowPlayNum >= playNum) {
                     return clearInterval(recall);
                 }
                 $('#ph_am_mp3').click();
                 nowPlayNum++;
-            },2000);
+            }, 2000);
 
 
         })
