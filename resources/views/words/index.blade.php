@@ -23,23 +23,29 @@
 
 
         </div>
+
         <div class="row">
-            @if(empty($w->getTranslateTexts()))
-                {{$w->getFirstTranslateText()}}
-            @else
-                @foreach($w->getTranslateTexts() as $v)
-                    {{$v}}<br>
-                @endforeach
-            @endif
+            <div class="delay">
+                @if(empty($w->getTranslateTexts()))
+                    {{$w->getFirstTranslateText()}}
+                @else
+                    @foreach($w->getTranslateTexts() as $v)
+                        {{$v}}<br>
+                    @endforeach
+                @endif
+            </div>
         </div>
         <br><br>
-        @foreach($w->sents() as $sent)
-            <div class="row">
-                {!!$sent['orig'] !!} <br>
-                {!!$sent['trans'] !!} <br>
-            </div>
-        @endforeach
+        <div class="row">
+            <div class="delay">
+                @foreach($w->sents() as $sent)
 
+                    {!!$sent['orig'] !!} <br>
+                    {!!$sent['trans'] !!} <br>
+                @endforeach
+                <br>
+            </div>
+        </div>
 
     </div>
     <nav class="navbar navbar-default navbar-fixed-bottom">

@@ -22,7 +22,7 @@ class WordRepositroy
      * @param string $field
      * @return mixed
      */
-    public function nextId($now, $baseModel,$field='id')
+    public function nextId($now, $baseModel, $field = 'id')
     {
         $baseModel = clone $baseModel;
         $modelClone = clone $baseModel;
@@ -31,7 +31,7 @@ class WordRepositroy
             $w = $modelClone->first();
         }
 
-        return $w?$w->{$field}:null;
+        return $w ? $w->{$field} : null;
 
 
     }
@@ -42,7 +42,7 @@ class WordRepositroy
      * @param string $field
      * @return mixed
      */
-    public function latestId($now, $baseModel,$field ='id')
+    public function latestId($now, $baseModel, $field = 'id')
     {
         $baseModel = clone $baseModel;
         $modelClone = clone $baseModel;
@@ -52,10 +52,26 @@ class WordRepositroy
             $w = $modelClone->first();
         }
 
-        return $w?$w->{$field}:null;
+        return $w ? $w->{$field} : null;
     }
 
+    public function isEnglish($str)
+    {
+        if (empty(trim($str))) {
+            return false;
+        }
 
+        return preg_match('/^[a-zA-Z0-9\-\.\s,! \(\)\/\“\”\'‘’\"\?\%\;\:\[\]\£°\$，——、]+$/', $str);
+    }
+
+    public function isChinese($str)
+    {
+        if (empty(trim($str))) {
+            return false;
+        }
+
+        return !$this->isEnglish($str);
+    }
 
     // public function nextId($now, Word $baseModel)
     // {

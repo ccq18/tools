@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Model\Lang\Sent;
 use App\Model\Lang\Word;
+use App\Repositories\WordRepositroy;
 use Illuminate\Console\Command;
 
 class BuildSent extends Command
@@ -116,15 +117,15 @@ class BuildSent extends Command
     {
         $s = file_get_contents($file);
         $lines = explode("\n", $s);
-        // dd($this->isEnglish(' I\'ve made a mistake.'));
+        // dd(resolve(WordRepositroy::class)->isEnglish(' I\'ve made a mistake.'));
         $rs = [];
         $en = 0;
         $cn = 0;
         foreach ($lines as $line){
-            if($this->isEnglish($line)){
+            if(resolve(WordRepositroy::class)->isEnglish($line)){
                 $rs[] = ['en',$line];
                 $en++;
-            }else if($this->isChinese($line)){
+            }else if(resolve(WordRepositroy::class)->isChinese($line)){
                 $rs[] = ['cn',$line];
                 $cn++;
             }
@@ -151,19 +152,5 @@ class BuildSent extends Command
         }
         return $sents;
     }
-    public function isEnglish($str)
-    {
-        if(empty(trim($str))){
-            return false;
-        }
-        return preg_match('/^[a-zA-Z0-9\-\.\s,! \(\)\/\“\”\'‘’\"\?\%\;\:\[\]\£°\$，——、]+$/',$str);
-    }
 
-    public function isChinese($str)
-    {
-        if(empty(trim($str))){
-            return false;
-        }
-        return !$this->isEnglish($str);
-    }
 }

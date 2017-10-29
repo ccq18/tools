@@ -89,7 +89,14 @@ class WordController
 
     public function search()
     {
-        $words = Word::where('word', 'like', request('search', '') . '%')->paginate(static::PAGE_SIZE);
+        $search = request('search', '');
+        if (resolve(WordRepositroy::class)->isChinese($search)) {
+            $words = Word::where('simple_trans', 'like',
+                '%' . request('search', '') . '%')->paginate(static::PAGE_SIZE);
+        } else {
+            $words = Word::where('word', 'like', request('search', '') . '%')->paginate(static::PAGE_SIZE);
+
+        }
 
         return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
 
