@@ -36,6 +36,12 @@
 
                     </li>
                     <li>
+                        <a href="{{ url('/words/learned-list') }}">
+                            已学列表
+                        </a>
+
+                    </li>
+                    <li>
                         <a href="{{ url('/words/read-list') }}">
                             分组单词表
                         </a>

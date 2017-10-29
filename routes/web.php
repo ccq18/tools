@@ -44,6 +44,8 @@ Route::group(['namespace' => 'Web',], function () {
         Route::any('words/add-collect', 'WordController@addCollect');
         Route::get('words/collects', 'WordController@collectList');
         Route::get('words/search', 'WordController@search');
+        Route::get('words/learned-list', 'WordController@getLearnedList');
+
 
         Route::get('inbox', 'InboxController@index');
         Route::get('inbox/{dialogId}', 'InboxController@show');

@@ -274,7 +274,7 @@ class WordController
                 $ids = resolve(WordRepositroy::class)->generateByWords($ids, 30);
                 $readList['nowReadList'] = $this->mergeByType($readList['nowReadList'], $ids, 'first_read');
             }
-            // dd($ids);
+
         }
         if (!isset($readList['nowReadList'][$readList['now']])) {
             return ['id' => $readList['nowId'], 'type' => 'read_again'];
@@ -284,11 +284,25 @@ class WordController
             $readList['days'][$nowKey][] = $nowId;
         }
 
-        $this->cacheNow($readList, 'wordListData22');
-
+        $this->cacheNow($readList, 'wordListData2');
+        // dd($readList['nowReadList'][$readList['now']]);
         return $readList['nowReadList'][$readList['now']];
 
 
+    }
+
+    public function getLearnedList()
+    {
+        $readList = $this->getNow('wordListData2');
+        $readList['days']= ['2017-07-1'=>[1],'2017-07-2'=>[1],'2017-07-3'=>[1]];
+        $words = [];
+        if (!empty($readList['days'])) {
+            foreach ($readList['days'] as $day => $ids) {
+                $words[$day] = $this->getNowBook()->whereIn('id', $ids)->get();
+            }
+        }
+        krsort($words);
+        return view('words.learned-list', ['allWords' => $words]);
     }
 
     public function readWord()
