@@ -72,14 +72,7 @@
                     {{--<span class="navbar-brand btn btn-primary">搜索</span>--}}
                 {{--</form>--}}
 
-                <form class="form-inline form-horizontal" action="/words/search" style="display:inline-block;padding-top: 0.5em;width: 80%">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" >
-                            <div class="input-group-addon">搜索</div>
-                        </div>
-                    </div>
-                </form>
+
             </div>
             @include("layouts.nav")
         </div>

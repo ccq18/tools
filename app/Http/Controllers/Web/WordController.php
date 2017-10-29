@@ -96,7 +96,7 @@ class WordController
 
         }
 
-        return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
+        return view('words.search', ['words' => $words, 'paginate' => $words->links()]);
 
     }
 

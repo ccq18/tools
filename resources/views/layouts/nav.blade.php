@@ -19,6 +19,12 @@
                 </a>
 
             </li>
+            <li>
+                <a href="{{ url('/words/search') }}">
+                    查单词
+                </a>
+
+            </li>
             <li class="dropdown">
                 {{--<a href="{{ url('/words') }}" >--}}
                 {{--单词表-顺序--}}
