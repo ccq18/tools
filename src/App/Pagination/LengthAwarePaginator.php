@@ -16,6 +16,11 @@ class LengthAwarePaginator extends \Illuminate\Pagination\LengthAwarePaginator
         return $this;
     }
 
+    public function url($page)
+    {
+        return build_url(request()->getRequestUri(),['page'=>$page]);
+    }
+
     /**
      * Get the array of elements to pass to the view.
      *

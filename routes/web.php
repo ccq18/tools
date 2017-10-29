@@ -1,7 +1,9 @@
 <?php
 Auth::routes();
 Route::group(['namespace' => 'Web',], function () {
-    Route::get('/', 'QuestionsController@index');
+    // Route::get('/', 'QuestionsController@index');
+    Route::get('/', 'WordController@search');
+
     Route::get('/home', 'HomeController@index');
     Route::get('email/verify/{token}', ['as' => 'email.verify', 'uses' => 'EmailController@verify']);
     Route::resource('questions', 'QuestionsController', [
@@ -41,6 +43,7 @@ Route::group(['namespace' => 'Web',], function () {
         Route::get('words/read-list/{listId}/{groupId}', 'WordController@readWordGroupList');
         Route::any('words/add-collect', 'WordController@addCollect');
         Route::get('words/collects', 'WordController@collectList');
+        Route::get('words/search', 'WordController@search');
 
         Route::get('inbox', 'InboxController@index');
         Route::get('inbox/{dialogId}', 'InboxController@show');

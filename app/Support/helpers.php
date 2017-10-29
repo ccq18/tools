@@ -108,15 +108,16 @@ if (!function_exists('str_translate')) {
         ]);
     }
 
-    function str_translate_diver_jinshan_detail($key){
+    function str_translate_diver_jinshan_detail($key)
+    {
         static $http = null;
         if (empty($http)) {
             $http = new Util\Http();
         }
 
         $str = $http->get("http://dict-co.iciba.com/api/dictionary.php", [
-            'key'  => '6741D17CDADF4293923EC7D0583E9463',
-            'w'    => $key,
+            'key' => '6741D17CDADF4293923EC7D0583E9463',
+            'w'   => $key,
         ]);
 
         return xml_to_array($str);
@@ -126,13 +127,13 @@ if (!function_exists('str_translate')) {
 
 
 if (!function_exists('build_url')) {
-    function build_url($path, $parameters = [], $host = '')
+    function build_url($path, $parameters = [])
     {
 
         $output = get_url_params($path);
         $parm_str = http_build_query(array_merge($output, $parameters));
 
-        return rtrim($host, '\/') . '/' . ltrim(clear_urlcan($path), '\/') . (empty($parm_str) ? "" : '?' . $parm_str);
+        return url(ltrim(clear_urlcan($path), '\/') . (empty($parm_str) ? "" : '?' . $parm_str));
     }
 }
 if (!function_exists('get_url_params')) {

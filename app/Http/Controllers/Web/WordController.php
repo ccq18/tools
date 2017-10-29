@@ -52,8 +52,8 @@ class WordController
         }
 
         return view('words.index', [
-            'lastUrl'    => $w->book_id!=1?"":build_url('/words/index', ['action' => 'last']),
-            'nextUrl'    => $w->book_id!=1?"":build_url('/words/index', ['action' => 'next']),
+            'lastUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'last']),
+            'nextUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'next']),
             'w'          => $w,
             'isAuto'     => $isAuto,
             'progress'   => $now,
@@ -85,6 +85,14 @@ class WordController
         $words = $this->getNowBook()->paginate(static::PAGE_SIZE);
 
         return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
+    }
+
+    public function search()
+    {
+        $words = Word::where('word', 'like', request('search', '') . '%')->paginate(static::PAGE_SIZE);
+
+        return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
+
     }
 
     protected function defaultOrPage()
