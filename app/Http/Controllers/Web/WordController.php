@@ -196,7 +196,6 @@ class WordController
     public function getLearnedList()
     {
         $readList = $this->getNow('wordListData2');
-        $readList['days'] = ['2017-07-1' => [1], '2017-07-2' => [1], '2017-07-3' => [1]];
         $words = [];
         if (!empty($readList['days'])) {
             foreach ($readList['days'] as $day => $ids) {
