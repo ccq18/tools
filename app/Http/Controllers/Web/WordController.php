@@ -52,8 +52,8 @@ class WordController
         }
 
         return view('words.index', [
-            'lastUrl'    => build_url('/words/index', ['action' => 'last']),
-            'nextUrl'    => build_url('/words/index', ['action' => 'next']),
+            'lastUrl'    => $w->book_id!=1?"":build_url('/words/index', ['action' => 'last']),
+            'nextUrl'    => $w->book_id!=1?"":build_url('/words/index', ['action' => 'next']),
             'w'          => $w,
             'isAuto'     => $isAuto,
             'progress'   => $now,
