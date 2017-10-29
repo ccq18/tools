@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\BuildSent::class,
         \App\Console\Commands\WordGroupGenerate::class,
         \App\Console\Commands\InitWordByShanbay::class,
+        \App\Console\Commands\GenerateNiujing::class,
     ];
 
     /**

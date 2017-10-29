@@ -43,7 +43,7 @@ class InitWordByShanbay extends Command
     {
         $http = new Http();
         $i = 0;
-         Word::where('book_id',1)->where('type','youdao')->orderBy('updated_at','asc')->limit(600)->get()->map(function(Word $word)use($http,&$i){
+         Word::where('type','!=','shanbay')->orderBy('updated_at','asc')->limit(600)->get()->map(function(Word $word)use($http,&$i){
              $i++;
              try{
                  $tanslate = $http->getJson('https://api.shanbay.com/bdc/search/',['word'=>$word->word]);
