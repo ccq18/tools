@@ -27,6 +27,7 @@
                 @foreach($w->getTranslateTexts() as $v)
                     {{$v}}<br>
                 @endforeach
+            @endif
         </div>
         <br><br>
         @foreach($w->sents() as $sent)
