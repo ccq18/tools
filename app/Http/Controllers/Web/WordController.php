@@ -55,7 +55,7 @@ class WordController
             'w'          => $w,
             'isAuto'     => $isAuto,
             'progress'   => $now,
-            'delay'      => 1,
+            'delay'      => 2,
             'playNum'    => 3,
             'notCollect' => !$this->isCollect($w->id),
 
