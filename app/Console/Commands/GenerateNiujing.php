@@ -39,19 +39,24 @@ class GenerateNiujing extends Command
     public function handle()
     {
         //
-        $lines = explode("\n",file_get_contents(resource_path('data/niujing')));
-        foreach ($lines as $line){
-            $isMatch = preg_match('/(.+?)[ \s]+(\S+)/',$line,$match);
-            if(count($match)!=3||!$isMatch){
-                continue;
+        $lines = explode("\n", file_get_contents(resource_path('data/niujing')));
+        foreach ($lines as $line) {
+            try {
+                $isMatch = preg_match('/(.+?)[ \s]+(\S+)/', $line, $match);
+                if (count($match) != 3 || !$isMatch) {
+                    continue;
+                }
+                $word = new Word();
+                $word->type = 'simple';
+                $word->book_id = 2;
+                $word->word = $match[1];
+                $word->simple_trans = $match[2];
+                $word->saveOrFail();
+                $this->info($word->word);
+            } catch (\Exception $e) {
+                $this->info($e->getMessage());
             }
-            $word = new Word();
-            $word->type= 'simple';
-            $word->book_id= 2;
-            $word->word= $match[1];
-            $word->simple_trans = $match[2];
-            $word->saveOrFail();
-            $this->info($word->word);
+
         }
     }
 }
