@@ -5,12 +5,12 @@
     <div class="container" style="margin-left: 10px">
         <div class="row">
             <div>
-                <form action="/words/search">
+                <form action="/words/search" method="get">
 
                     <div class="input-group">
                         <input type="text" name="search" class="form-control" placeholder="word">
                         <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">Go</button>
+                                <button class="btn btn-default" type="submit">Go</button>
                             </span>
                     </div><!-- /input-group -->
 
