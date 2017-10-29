@@ -73,6 +73,46 @@ class WordRepositroy
         return !$this->isEnglish($str);
     }
 
+    public function generateByWords($wordIds,$max)
+    {
+
+        $readList = [];
+        $wantReadList = [];
+        $now = 0;
+        while(count( $readList)<$max){
+
+            $now = max(0, $now);
+            $want = collect($wantReadList);
+            $wanted = $want->filter(function ($v) use ($now) {
+                return $v['at'] <= $now;
+            });
+            $noWanted = $wanted->slice(5);
+            $wanted = $wanted->slice(0,5);
+            $wanted = $wanted->map(function ($v) use ($now) {
+                $v['increment'] *= 4;
+                $v['at'] = $now + $v['increment'];
+                return $v;
+            });
+            $wantReadList = $want->filter(function ($v) use ($now) {
+                return $v['at'] > $now;
+            })->merge($wanted)->merge($noWanted)->all();
+            $readList = array_merge( $readList, $wanted->pluck('id')->all());
+            if (isset($wordIds[$now])) {
+                $nowReadId = $wordIds[$now];
+                $wantReadList[] = [
+                    'increment' => 4,
+                    'at'        => $now + 4,
+                    'id'        => $nowReadId
+                ];
+                $readList[] = $nowReadId;
+            }
+            $now += 1;
+        }
+
+
+        return  $readList;
+    }
+
     // public function nextId($now, Word $baseModel)
     // {
     //     $w = $baseModel->where('id', '>', $now)->first();

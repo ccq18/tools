@@ -20,8 +20,6 @@ class WordController
 
     public function index()
     {
-
-
         $isAuto = false;
         switch (request('action')) {
             case "last":
@@ -119,130 +117,203 @@ class WordController
         \Request::merge(['page' => $p]);
     }
 
-    protected function getNextWordId($increment)
+    // protected function getNextWordId($increment)
+    // {
+    //     $nowKey = date('Y-m-d');
+    //     $lastKey = Carbon::yesterday()->format('Y-m-d');
+    //     $readList = $this->getNow('word-data1',
+    //         [
+    //             'now'         => 0,
+    //             'now-read-id' => 1,
+    //             'days'        => [],
+    //         ]);
+    //     $now = $readList['now'];
+    //     $nowReadId = $readList['now-read-id'];
+    //     $now += $increment;
+    //     $now = max(0, $now);
+    //     //初始化今日数据
+    //     if (!isset($readList['days'][$nowKey])) {
+    //         $today = [];
+    //         $today['want-read-list'] = [];
+    //         $today['read-list'] = [];
+    //         $today['have-read-list'] = [];
+    //         $today['today-study-list'] = [];
+    //         $today['today-start-id'] = $nowReadId;
+    //         //今日复习列表由昨日的复习列表决定
+    //         if (isset($readList['days'][$lastKey]['read-list'])) {
+    //             $today['want-read-list'] = collect($readList['days'][$lastKey]['want-read-list'])->map(function ($v) use
+    //             (
+    //                 $now
+    //             ) {
+    //                 $v['at'] -= $now;
+    //
+    //                 return $v;
+    //             })->all();
+    //             //初始化基础数据
+    //         } else {
+    //             if (empty($readList['now'])) {
+    //                 $nowReadId = $this->getNow();
+    //                 $readeds = $this->getNowBook()->where('id', '<', $nowReadId)->get();
+    //                 $today['want-read-list'] = $readeds->map(function ($vv) {
+    //                     $v['at'] = $vv->id * 10 + 1000;
+    //                     $v['increment'] = 256;
+    //                     $v['id'] = $vv->id;
+    //
+    //                     return $v;
+    //
+    //                 })->all();
+    //             }
+    //         }
+    //
+    //         $now = 0;
+    //     } else {
+    //         $today = $readList['days'][$nowKey];
+    //     }
+    //
+    //     if (count($today['read-list']) <= $now) {
+    //         $want = collect($today['want-read-list']);
+    //         $wanted = $want->filter(function ($v) use ($now) {
+    //             return $v['at'] <= $now;
+    //         });
+    //         $noWanted = $wanted->slice(5);
+    //         $wanted = $wanted->slice(0, 5);
+    //         $wanted = $wanted->map(function ($v) use ($now) {
+    //             $v['increment'] *= 4;
+    //             if ($v['increment'] >= 256) {
+    //                 $v['increment'] *= 3;
+    //             }
+    //             $v['at'] = $now + $v['increment'];
+    //
+    //             return $v;
+    //         });
+    //         $today['want-read-list'] = $want->filter(function ($v) use ($now) {
+    //             return $v['at'] > $now;
+    //         })->merge($wanted)->merge($noWanted)->all();
+    //         $today['read-list'] = array_merge($today['read-list'], $wanted->pluck('id')->all());
+    //         $next = $this->getNowBook()->where('id', '>', $nowReadId)->first();
+    //         if (!empty($next)) {
+    //             $nowReadId = $next->id;
+    //             $today['want-read-list'][] = [
+    //                 'increment' => 4,
+    //                 'at'        => $now + 8,
+    //                 'id'        => $nowReadId
+    //             ];
+    //             $today['read-list'][] = $nowReadId;
+    //         }
+    //
+    //     }
+    //     $nextId = isset($today['read-list'][$now]) ? $today['read-list'][$now] : $nowReadId;
+    //     if ($today['today-start-id'] <= $nextId && !in_array($nextId, $today['today-study-list'])) {
+    //         $today['today-study-list'][] = $nextId;
+    //     }
+    //     $today['have-read-list'][] = $nextId;
+    //
+    //
+    //     $readList['now'] = $now;
+    //     $readList['now-read-id'] = $nowReadId;
+    //     $readList['days'][$nowKey] = $today;
+    //
+    //     $this->cacheNow($readList, 'word-data1');
+    //
+    //     return $nextId;
+    // }
+    protected function resetList($start)
     {
-        $nowKey = date('Y-m-d');
-        $lastKey = Carbon::yesterday()->format('Y-m-d');
-        $readList = $this->getNow('word-data1',
-            [
-                'now'         => 0,
-                'now-read-id' => 1,
-                'days'        => [],
-            ]);
-        $now = $readList['now'];
-        $nowReadId = $readList['now-read-id'];
-        $now += $increment;
-        $now = max(0, $now);
-        //初始化今日数据
-        if (!isset($readList['days'][$nowKey])) {
-            $today = [];
-            $today['want-read-list'] = [];
-            $today['read-list'] = [];
-            $today['have-read-list'] = [];
-            $today['today-study-list'] = [];
-            $today['today-start-id'] = $nowReadId;
-            //今日复习列表由昨日的复习列表决定
-            if (isset($readList['days'][$lastKey]['read-list'])) {
-                $today['want-read-list'] = collect($readList['days'][$lastKey]['want-read-list'])->map(function ($v) use
-                (
-                    $now
-                ) {
-                    $v['at'] -= $now;
-
-                    return $v;
-                })->all();
-                //初始化基础数据
-            } else {
-                if (empty($readList['now'])) {
-                    $nowReadId = $this->getNow();
-                    $readeds = $this->getNowBook()->where('id', '<', $nowReadId)->get();
-                    $today['want-read-list'] = $readeds->map(function ($vv) {
-                        $v['at'] = $vv->id * 10 + 1000;
-                        $v['increment'] = 256;
-                        $v['id'] = $vv->id;
-
-                        return $v;
-
-                    })->all();
-                }
-            }
-
-            $now = 0;
-        } else {
-            $today = $readList['days'][$nowKey];
-        }
-
-        if (count($today['read-list']) <= $now) {
-            $want = collect($today['want-read-list']);
-            $wanted = $want->filter(function ($v) use ($now) {
-                return $v['at'] <= $now;
-            });
-            $noWanted = $wanted->slice(5);
-            $wanted = $wanted->slice(0, 5);
-            $wanted = $wanted->map(function ($v) use ($now) {
-                $v['increment'] *= 4;
-                if ($v['increment'] >= 256) {
-                    $v['increment'] *= 3;
-                }
-                $v['at'] = $now + $v['increment'];
-
-                return $v;
-            });
-            $today['want-read-list'] = $want->filter(function ($v) use ($now) {
-                return $v['at'] > $now;
-            })->merge($wanted)->merge($noWanted)->all();
-            $today['read-list'] = array_merge($today['read-list'], $wanted->pluck('id')->all());
-            $next = $this->getNowBook()->where('id', '>', $nowReadId)->first();
-            if (!empty($next)) {
-                $nowReadId = $next->id;
-                $today['want-read-list'][] = [
-                    'increment' => 4,
-                    'at'        => $now + 8,
-                    'id'        => $nowReadId
-                ];
-                $today['read-list'][] = $nowReadId;
-            }
-
-        }
-        $nextId = isset($today['read-list'][$now]) ? $today['read-list'][$now] : $nowReadId;
-        if ($today['today-start-id'] <= $nextId && !in_array($nextId, $today['today-study-list'])) {
-            $today['today-study-list'][] = $nextId;
-        }
-        $today['have-read-list'][] = $nextId;
-
-
-        $readList['now'] = $now;
-        $readList['now-read-id'] = $nowReadId;
-        $readList['days'][$nowKey] = $today;
-
-        $this->cacheNow($readList, 'word-data1');
-
-        return $nextId;
+        return [
+            'now'         => 0,
+            'nowId'       => $start,
+            'nowAddedId'  => $start,
+            'nowReadList' => [],
+            'days'        => [],
+        ];
     }
 
+    protected function mergeByType($list, $ids, $type)
+    {
+        foreach ($ids as $id) {
+            $list[] = ['id' => $id, 'type' => $type];
+        }
+
+        return $list;
+
+    }
+
+    public function getNextWordId2($increment)
+    {
+        $nowKey = date('Y-m-d');
+        $readList = $this->getNow('wordListData2');
+        if (empty($readList)) {
+            $readList1 = $this->getNow('word-data1');
+            $start = 0;
+            if (isset($readList1['now-read-id'])) {
+                $start = $readList1['now-read-id'];
+            }
+            $readList = $this->resetList($start);
+        }
+        $readList['now'] += $increment;
+        $readList['now'] = max(0, $readList['now']);
+        //初始化
+        if (!isset($readList['days'][$nowKey])) {
+            $readList['days'][$nowKey] = [];
+            $readList['now'] = 0;
+
+        }
+        //todo 复习昨日内容
+        //每学60个新词整个复习一次
+        if (count($readList['days'][$nowKey]) % 60 == 0 && count($readList['days'][$nowKey]) > 0) {
+            $readList['nowReadList'] = $this->mergeByType($readList['nowReadList'], $readList['days'][$nowKey],
+                'read_again');
+        }
+        if ($readList['now'] >= count($readList['nowReadList'])) {
+            $ids = $this->getNowBook()
+                        ->where('id', '>', $readList['nowAddedId'])
+                        ->limit(10)
+                        ->pluck('id')->all();
+            if (!empty($ids)) {
+                $readList['nowAddedId'] = max($ids);
+                $ids = resolve(WordRepositroy::class)->generateByWords($ids, 30);
+                $readList['nowReadList'] = $this->mergeByType($readList['nowReadList'], $ids, 'first_read');
+            }
+            // dd($ids);
+        }
+        if (!isset($readList['nowReadList'][$readList['now']])) {
+            return ['id' => $readList['nowId'], 'type' => 'read_again'];
+        }
+        $readList['nowId'] = $nowId = $readList['nowReadList'][$readList['now']];
+        if (in_array($nowId, $readList['days'][$nowKey])) {
+            $readList['days'][$nowKey][] = $nowId;
+        }
+
+        $this->cacheNow($readList, 'wordListData22');
+
+        return $readList['nowReadList'][$readList['now']];
+
+
+    }
 
     public function readWord()
     {
         $isAuto = false;
         switch (request('action')) {
             case "last":
-                $nowId = $this->getNextWordId(-1);
+                $nowId = $this->getNextWordId2(-1);
                 break;
             case "next":
                 $isAuto = true;
-                $nowId = $this->getNextWordId(1);
+                $nowId = $this->getNextWordId2(1);
 
                 break;
             default:
-                $nowId = $this->getNextWordId(0);
+                $nowId = $this->getNextWordId2(0);
                 break;
         }
-        $allNum = $this->getNowBook()->where('id', '>', $nowId)->count();
-        $nowNum = $this->getNowBook()->where('id', '<=', $nowId)->count();
+        $allNum = $this->getNowBook()->where('id', '>', $nowId['id'])->count();
+        $nowNum = $this->getNowBook()->where('id', '<=', $nowId['id'])->count();
         $apr = number_format($nowNum / $allNum * 100, 2);
         $w = Word::where('id', '=', $nowId)->first();
 
         return view('words.index', [
+            'type'       => $nowId['type'],
             'lastUrl'    => build_url('/words/read-word', ['action' => 'last']),
             'nextUrl'    => build_url('/words/read-word', ['action' => 'next']),
             'w'          => $w,
@@ -254,6 +325,39 @@ class WordController
             'notCollect' => !$this->isCollect($w->id),
         ]);
     }
+    // public function readWord1()
+    // {
+    //     $isAuto = false;
+    //     switch (request('action')) {
+    //         case "last":
+    //             $nowId = $this->getNextWordId(-1);
+    //             break;
+    //         case "next":
+    //             $isAuto = true;
+    //             $nowId = $this->getNextWordId(1);
+    //
+    //             break;
+    //         default:
+    //             $nowId = $this->getNextWordId(0);
+    //             break;
+    //     }
+    //     $allNum = $this->getNowBook()->where('id', '>', $nowId)->count();
+    //     $nowNum = $this->getNowBook()->where('id', '<=', $nowId)->count();
+    //     $apr = number_format($nowNum / $allNum * 100, 2);
+    //     $w = Word::where('id', '=', $nowId)->first();
+    //
+    //     return view('words.index', [
+    //         'lastUrl'    => build_url('/words/read-word', ['action' => 'last']),
+    //         'nextUrl'    => build_url('/words/read-word', ['action' => 'next']),
+    //         'w'          => $w,
+    //         'isAuto'     => $isAuto,
+    //         'progress'   => $apr,
+    //         'sent'       => $w->firstSent(),
+    //         'delay'      => 1,
+    //         'playNum'    => 3,
+    //         'notCollect' => !$this->isCollect($w->id),
+    //     ]);
+    // }
 
     public function readWord2()
     {
