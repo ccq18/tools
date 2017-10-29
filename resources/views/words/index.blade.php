@@ -21,9 +21,12 @@
 
         </div>
         <div class="row">
-            @foreach($w->getTranslateTexts() as $v)
-                {{$v}}<br>
-            @endforeach
+            @if(empty($w->getTranslateTexts()))
+                {{$w->getFirstTranslateText()}}
+            @else
+                @foreach($w->getTranslateTexts() as $v)
+                    {{$v}}<br>
+                @endforeach
         </div>
         <br><br>
         @foreach($w->sents() as $sent)
@@ -65,7 +68,7 @@
 @section('js')
     <script>
         $('vocab').each(function () {
-            $(this).html('<span style="font-weight:bold;">'+$(this).html()+'<span>')
+            $(this).html('<span style="font-weight:bold;">' + $(this).html() + '<span>')
         })
         var wait = function (t) {
             var $d = $.Deferred();
