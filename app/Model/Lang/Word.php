@@ -3,6 +3,7 @@
 namespace App\Model\Lang;
 
 use App\Model\Lang\Diver\ShanbayWord;
+use App\Model\Lang\Diver\SimpleWord;
 use App\Model\Lang\Diver\YoudaoWord;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,14 +36,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method getAmAudio()
  * @method sents()
  * @method getFirstTranslateText()
- * @property $type youdao shanbay
+ * @property $type youdao shanbay simple
  * @property string|null $simple_trans
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereSimpleTrans($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereType($value)
  */
 class Word extends Model
 {
-    // use YoudaoTrait;
     /**
      * @var array
      */
@@ -55,16 +55,15 @@ class Word extends Model
     protected $_diver = null;
 
 
-
     public function _diver()
     {
         if (empty($this->_diver)) {
             if ($this->type == 'youdao') {
                 $this->_diver = new YoudaoWord($this);
-            } else {
-                if ($this->type == 'shanbay') {
-                    $this->_diver = new ShanbayWord($this);
-                }
+            } elseif ($this->type == 'shanbay') {
+                $this->_diver = new ShanbayWord($this);
+            }elseif ($this->type == 'simple') {
+                $this->_diver = new SimpleWord($this);
             }
         }
 
@@ -87,12 +86,11 @@ class Word extends Model
     }
 
 
-
     public function firstSent()
     {
         $sents = $this->sents();
 
-        return collect($sents)->first()?:[];
+        return collect($sents)->first() ?: [];
 
     }
 

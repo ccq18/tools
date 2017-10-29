@@ -46,6 +46,7 @@ class GenerateNiujing extends Command
                 continue;
             }
             $word = new Word();
+            $word->type= 'simple';
             $word->book_id= 2;
             $word->word= $match[1];
             $word->simple_trans = $match[2];
