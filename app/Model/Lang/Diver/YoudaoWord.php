@@ -10,9 +10,9 @@ class YoudaoWord implements WordInterface
 
     public function getFirstTranslateText()
     {
-        if(isset($this->translate['symbols'][0]['parts'][0]['part']) && isset($this->translate['symbols'][0]['parts'][0]['means'][0])){
-            return $this->translate['symbols'][0]['parts'][0]['part'].' '.$this->translate['symbols'][0]['parts'][0]['means'][0];
-        }else{
+        if (isset($this->translate['symbols'][0]['parts'][0]['part']) && isset($this->translate['symbols'][0]['parts'][0]['means'][0])) {
+            return $this->translate['symbols'][0]['parts'][0]['part'] . ' ' . $this->translate['symbols'][0]['parts'][0]['means'][0];
+        } else {
             return '';
         }
     }
@@ -20,9 +20,10 @@ class YoudaoWord implements WordInterface
     public function getTranslateTexts()
     {
         $rs = [];
-        if(!empty($this->translate['symbols'][0]['parts']))
-        foreach ($this->translate['symbols'][0]['parts'] as $v) {
-            $rs[] = $v['part'] . implode(' ', $v['means']);
+        if (!empty($this->translate['symbols'][0]['parts'])) {
+            foreach ($this->translate['symbols'][0]['parts'] as $v) {
+                $rs[] = $v['part'] . implode(' ', $v['means']);
+            }
         }
 
         return $rs;
@@ -53,12 +54,35 @@ class YoudaoWord implements WordInterface
     }
 
 
-
     public function sents()
     {
         $detail = $this->getDetail();
 
         return isset($detail['sent']) ? $detail['sent'] : [];
 
+    }
+
+    /**
+     * @return string
+     */
+    public function getUkAudio()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstEnglishTran()
+    {
+        return '';
+    }
+
+    /**
+     * @return []
+     */
+    public function getEnglishTrans()
+    {
+        return [];
     }
 }

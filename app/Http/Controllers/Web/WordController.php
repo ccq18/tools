@@ -33,7 +33,7 @@ class WordController
                 $this->cacheNow($now);
                 break;
             case "next":
-                $isAuto = true;
+                $isAuto = isset($config['auto_jump']) ? $config['auto_jump'] > 0 : false;
                 $now = $this->getNow();
                 $w = $this->getNowBook()->where('id', '>', $now)->first();
                 $now = $w->id;
@@ -49,17 +49,38 @@ class WordController
                 break;
         }
 
-        return view('words.index', [
-            'lastUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'last']),
-            'nextUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'next']),
-            'w'          => $w,
-            'isAuto'     => $isAuto,
-            'progress'   => $now,
-            'delay'      => 2,
-            'playNum'    => 3,
-            'notCollect' => !$this->isCollect($w->id),
+        $sent = [];
+        if (!empty($w->sents())) {
+            $sents = $w->sents();
+            $sent = $sents[0];
+        }
 
-        ]);
+        return view('words.index', array_merge([
+            'lastUrl'      => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'last']),
+            'nextUrl'      => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'next']),
+            'w'            => $w,
+            'progress'      => $now,
+            'sent'         => $sent,
+            'notCollect'   => !$this->isCollect($w->id),
+        ],$this->getConfig($isAuto)));
+    }
+
+    protected function getConfig($isAuto)
+    {
+        $config = $this->getNow('config', []);
+        $cIsAuto = isset($config['auto_jump']) ? $config['auto_jump'] > 0 : false;
+        $realIsAuto= false;
+        if($cIsAuto && $isAuto){
+            $realIsAuto = true;
+        }
+        return [
+            'isAuto'        => $realIsAuto,
+            'autoTime'      => isset($config['auto_jump']) ? $config['auto_jump'] : 0,
+            'delay'         => isset($config['delay_time']) ? $config['delay_time'] : 0,
+            'playNum'       => isset($config['audio_num']) ? $config['audio_num'] : 0,
+            'example'       => isset($config['example']) ? $config['example'] : 0,
+            'englishTrans' => isset($config['english_trans']) ? $config['english_trans'] : 0,
+        ];
     }
 
     protected function getNow($prefix = '', $default = 0)
@@ -103,6 +124,7 @@ class WordController
     protected function defaultOrPage()
     {
         $now = $this->getNow();
+        $p = request('page');
         $p = request('page');
         if (empty($p)) {
             $n = $this->getNowBook()->where('id', '<', $now)->count();
@@ -181,7 +203,7 @@ class WordController
         }
         $readList['nowId'] = $readList['nowReadList'][$readList['now']]['id'];
         if (!in_array($readList['nowId'], $readList['days'][$nowKey])) {
-            $readList['days'][$nowKey][] =$readList['nowId'];
+            $readList['days'][$nowKey][] = $readList['nowId'];
         }
 
         $this->cacheNow($readList, 'wordListData2');
@@ -227,18 +249,16 @@ class WordController
         $w = Word::where('id', '=', $nowId)->first();
         $nowKey = date('Y-m-d');
 
-        return view('words.index', [
+
+        return view('words.index', array_merge([
             'type'       => $readList['nowWord']['type'],
             'lastUrl'    => build_url('/words/read-word', ['action' => 'last']),
             'nextUrl'    => build_url('/words/read-word', ['action' => 'next']),
             'w'          => $w,
-            'isAuto'     => $isAuto,
             'progress'   => count($readList['days'][$nowKey]),
             'sent'       => $w->firstSent(),
-            'delay'      => 1,
-            'playNum'    => 3,
             'notCollect' => !$this->isCollect($w->id),
-        ]);
+        ],$this->getConfig($isAuto)));
     }
     // public function readWord1()
     // {
@@ -384,7 +404,21 @@ class WordController
 
     public function config()
     {
-        return view('words.config', []);
+        $config = $this->getNow('config', []);
+        if (request()->isMethod('post')) {
+            $config['example'] = request('example');
+            $config['english_trans'] = request('english_trans');
+            $config['audio_num'] = request('audio_num');
+            $config['delay_time'] = request('delay_time');
+            $config['auto_jump'] = request('auto_jump');
+            $this->cacheNow($config, 'config');
+            flash('设置保存成功！', 'success');
+
+        }
+
+        return view('words.config', [
+            'config' => $config
+        ]);
 
     }
 

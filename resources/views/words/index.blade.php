@@ -3,6 +3,11 @@
     {{$w->word}}:{{$w->getFirstTranslateText()}}
 @endsection
 @section('css')
+    <style>
+        delay{
+            display: none;
+        }
+    </style>
 @endsection
 @section('content')
 
@@ -35,18 +40,49 @@
                 @endif
             </div>
         </div>
+        @if($englishTrans != 0)
+            <div class="row">
+                <div class="delay">
+                    @if(empty($w->getEnglishTrans()))
+                        {{$w->getFirstEnglishTran()}}
+                    @else
+                        @foreach($w->getEnglishTrans() as $v)
+                            {{$v}}<br>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+        @endif
         <br><br>
+        @if($example != 0)
         <div class="row">
             <div class="delay">
-                @foreach($w->sents() as $sent)
-
+                @if($example == 1)
+                    @if(!empty($sent['audio_uk']))
+                        <div class="glyphicon glyphicon-play word-play"
+                             data-src="{{$sent['audio_uk']}}">
+                            <audio src="{{$sent['audio_uk']}}"></audio>
+                        </div>
+                    @endif
                     {!!$sent['orig'] !!} <br>
                     {!!$sent['trans'] !!} <br>
-                @endforeach
+
+                @elseif($example == 2)
+                    @foreach($w->sents() as $sent)
+                        @if(!empty($sent['audio_uk']))
+                            <div class="glyphicon glyphicon-play word-play"
+                                 data-src="{{$sent['audio_uk']}}">
+                                <audio src="{{$sent['audio_uk']}}"></audio>
+                            </div>
+                        @endif
+                        {!!$sent['orig'] !!} <br>
+                        {!!$sent['trans'] !!} <br>
+                    @endforeach
+                @endif
                 <br>
             </div>
         </div>
-
+        @endif
     </div>
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">

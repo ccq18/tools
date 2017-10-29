@@ -47,4 +47,28 @@ class SimpleWord implements WordInterface
     {
         return [];
     }
+
+    /**
+     * @return string
+     */
+    public function getUkAudio()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstEnglishTran()
+    {
+        return '';
+    }
+
+    /**
+     * @return []
+     */
+    public function getEnglishTrans()
+    {
+        return [];
+    }
 }

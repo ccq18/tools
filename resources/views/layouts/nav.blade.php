@@ -34,7 +34,12 @@
                 </a>
 
                 <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="{{ url('/words/config') }}">
+                            单词设置
+                        </a>
 
+                    </li>
                     <li>
                         <a href="{{ url('/words') }}">
                             顺序单词表

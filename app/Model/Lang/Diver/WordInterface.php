@@ -28,4 +28,17 @@ interface WordInterface
      * @return []
      */
     public function sents();
+    /**
+     * @return string
+     */
+    public function getUkAudio();
+    /**
+     * @return string
+     */
+    public function getFirstEnglishTran();
+    /**
+     * @return []
+     */
+    public function getEnglishTrans();
+
 }

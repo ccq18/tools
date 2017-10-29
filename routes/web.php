@@ -30,6 +30,7 @@ Route::group(['namespace' => 'Web',], function () {
     Route::group(['middleware' => ['auth']], function () {
         //单词
         Route::get('words/config', 'WordController@config');
+        Route::post('words/config', 'WordController@config');
 
         Route::get('words/index', 'WordController@index');
         Route::get('words', 'WordController@listWord');

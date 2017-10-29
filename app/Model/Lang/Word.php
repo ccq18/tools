@@ -62,7 +62,7 @@ class Word extends Model
                 $this->_diver = new YoudaoWord($this);
             } elseif ($this->type == 'shanbay') {
                 $this->_diver = new ShanbayWord($this);
-            }elseif ($this->type == 'simple') {
+            } elseif ($this->type == 'simple') {
                 $this->_diver = new SimpleWord($this);
             }
         }
@@ -78,6 +78,9 @@ class Word extends Model
             'getPham',
             'getAmAudio',
             'sents',
+            'getUkAudio',
+            'getFirstEnglishTran',
+            'getEnglishTrans',
         ])) {
             return call_user_func_array([$this->_diver(), $name], $arguments);
         } else {
