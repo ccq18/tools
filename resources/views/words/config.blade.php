@@ -121,7 +121,7 @@
                 </label>
             </div>
             <div class="input-group">
-               <button type="submit">保存</button>
+               <button type="submit" class="btn btn-primary ">保存</button>
             </div>
         </form>
 
