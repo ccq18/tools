@@ -8,7 +8,7 @@
                 <form action="/words/search" method="get">
 
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control" value="{{request('word','')}}" placeholder="word">
+                        <input type="text" name="search" class="form-control" value="{{request('search')}}" placeholder="word">
                         <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">Go</button>
                             </span>
