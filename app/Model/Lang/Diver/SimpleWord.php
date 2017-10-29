@@ -21,7 +21,7 @@ class SimpleWord implements WordInterface
      */
     public function getTranslateTexts()
     {
-        return [];
+        return [$this->simple_trans];
     }
 
     /**
