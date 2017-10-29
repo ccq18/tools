@@ -2,9 +2,9 @@
 
 @section('content')
 
-    <div class="container" style="margin-left: 10px">
+    <div class="container" style="margin-left: 0.5em;margin-right: 0.5em">
         <div class="row">
-            <div>
+            <div style="padding: 0.5em">
                 <form action="/words/search" method="get">
 
                     <div class="input-group">
