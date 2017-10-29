@@ -13,7 +13,7 @@ class SimpleWord implements WordInterface
      */
     public function getFirstTranslateText()
     {
-        return '';
+        return $this->simple_trans;
     }
 
     /**

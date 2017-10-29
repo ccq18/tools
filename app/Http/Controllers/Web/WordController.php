@@ -46,7 +46,7 @@ class WordController
                 if (empty($now)) {
                     $now = $this->getNow();
                 }
-                $w = $this->getNowBook()->where('id', '>=', $now)->first();
+                $w = Word::where('id', '>=', $now)->first();
                 $this->cacheNow($now);
                 break;
         }
