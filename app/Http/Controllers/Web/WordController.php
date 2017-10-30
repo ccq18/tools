@@ -7,6 +7,7 @@ use App\Model\Lang\Word;
 use App\Model\Lang\WordGroup;
 use App\Repositories\WordRepositroy;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Word\WordListHelper;
 
 class WordController
@@ -22,7 +23,12 @@ class WordController
     {
         $w= Word::where('word',request('word'))->first();
         if(empty($w)){
-            return ['status'=>404,'data'=>null];
+            $word = Str::singular(request('word'));
+            $w= Word::where('word',$word)->first();
+            if(empty($w)){
+                return ['status'=>404,'data'=>null];
+            }
+
 
         }
         return ['status'=>200,'data'=>['word'=>$w->word,'simple_trans'=>$w->simple_trans,'url'=>build_url('/words/index',['word_id'=>$w->id])]];
