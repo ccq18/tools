@@ -18,6 +18,16 @@ class WordController
         return Word::where('book_id', 1);
     }
 
+    public function getWord()
+    {
+        $w= Word::where('word',request('word'))->first();
+        if(empty($w)){
+            return ['status'=>404,'data'=>null];
+
+        }
+        return ['status'=>200,'data'=>['word'=>$w->word,'simple_trans'=>$w->simple_trans,'url'=>build_url('/words/index',['word_id'=>$w->id])]];
+
+    }
     public function index()
     {
         $isAuto = false;

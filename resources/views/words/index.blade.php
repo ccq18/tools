@@ -4,7 +4,7 @@
 @endsection
 @section('css')
     <style>
-        delay{
+        delay {
             display: none;
         }
     </style>
@@ -55,33 +55,33 @@
         @endif
         <br><br>
         @if($example != 0)
-        <div class="row">
-            <div class="delay">
-                @if($example == 1)
-                    @if(!empty($sent['audio_uk']))
-                        <div class="glyphicon glyphicon-play word-play"
-                             data-src="{{$sent['audio_uk']}}">
-                            <audio src="{{$sent['audio_uk']}}"></audio>
-                        </div>
-                    @endif
-                    {!!$sent['orig'] !!} <br>
-                    {!!$sent['trans'] !!} <br>
-
-                @elseif($example == 2)
-                    @foreach($w->sents() as $sent)
+            <div class="row">
+                <div class="delay">
+                    @if($example == 1)
                         @if(!empty($sent['audio_uk']))
                             <div class="glyphicon glyphicon-play word-play"
                                  data-src="{{$sent['audio_uk']}}">
                                 <audio src="{{$sent['audio_uk']}}"></audio>
                             </div>
                         @endif
-                        {!!$sent['orig'] !!} <br>
+                        <span class="translateWord">{!!$sent['orig'] !!} </span><br>
                         {!!$sent['trans'] !!} <br>
-                    @endforeach
-                @endif
-                <br>
+
+                    @elseif($example == 2)
+                        @foreach($w->sents() as $sent)
+                            @if(!empty($sent['audio_uk']))
+                                <div class="glyphicon glyphicon-play word-play"
+                                     data-src="{{$sent['audio_uk']}}">
+                                    <audio src="{{$sent['audio_uk']}}"></audio>
+                                </div>
+                            @endif
+                            <span class="translateWord">{!!$sent['orig'] !!} </span><br>
+                            {!!$sent['trans'] !!} <br>
+                        @endforeach
+                    @endif
+                    <br>
+                </div>
             </div>
-        </div>
         @endif
     </div>
     <nav class="navbar navbar-default navbar-fixed-bottom">
@@ -110,12 +110,52 @@
 
         </div>
     </nav>
+
+
+{{--单词查询--}}
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="trans_word"></h4>
+                </div>
+                <div class="modal-body">
+                    <span id="trans_content"></span><br>
+                    <a id="trans_url" class="btn btn-default btn-xs" href="">详细</a>
+                </div>
+                {{--<div class="modal-footer">--}}
+                {{--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>--}}
+                {{--</div>--}}
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
     <script>
-        $('vocab').each(function () {
-            $(this).html('<span style="font-weight:bold;">' + $(this).html() + '<span>')
-        })
+        $('.translateWord').each(function () {
+            var strs = $(this).html();
+            var vocab = strs.match(/<vocab>.*<\/vocab>/g);
+
+            strs = strs.replace(/\b(\w+)\b/g, "<span class=\"word\">$1</span>");
+            strs = strs.replace('<<span class="word">vocab</span>>', '<span style="font-weight:bold;">');
+            strs = strs.replace('</<span class="word">vocab</span>>', '</span>');
+            console.log(strs)
+
+            $(this).html(strs);
+        });
+        $('.word').click(function () {
+            $.get("{{url('words/word')}}", {word: $(this).text()}, function (rs) {
+                if (rs.status != 200) {
+                    return;
+                }
+                $('#trans_word').html(rs.data.word);
+                $('#trans_content').html(rs.data.simple_trans);
+                $('#trans_url').attr('href', rs.data.url);
+                $('#myModal').modal();
+
+            })
+        });
         var wait = function (t) {
             var $d = $.Deferred();
             setTimeout(function () {

@@ -31,6 +31,10 @@ Route::group(['namespace' => 'Web',], function () {
         //单词
         Route::get('words/config', 'WordController@config');
         Route::post('words/config', 'WordController@config');
+        //单词查询
+        Route::get('words/word', 'WordController@getWord');
+        //单词搜索
+        Route::get('words/search', 'WordController@search');
 
         Route::get('words/index', 'WordController@index');
         Route::get('words', 'WordController@listWord');
@@ -44,7 +48,6 @@ Route::group(['namespace' => 'Web',], function () {
         Route::get('words/read-list/{listId}/{groupId}', 'WordController@readWordGroupList');
         Route::any('words/add-collect', 'WordController@addCollect');
         Route::get('words/collects', 'WordController@collectList');
-        Route::get('words/search', 'WordController@search');
         Route::get('words/learned-list', 'WordController@getLearnedList');
 
 
