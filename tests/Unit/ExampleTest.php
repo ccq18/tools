@@ -13,6 +13,10 @@ use Symfony\Component\Yaml\Yaml;
 
 class ExampleTest extends TestCase
 {
+    public function testdump()
+    {
+
+    }
 
     public function upAndGetFirstTaskByParseStatus(
         $domain,

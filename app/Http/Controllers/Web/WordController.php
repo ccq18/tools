@@ -56,29 +56,30 @@ class WordController
         }
 
         return view('words.index', array_merge([
-            'lastUrl'      => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'last']),
-            'nextUrl'      => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'next']),
-            'w'            => $w,
-            'progress'      => $now,
-            'sent'         => $sent,
-            'notCollect'   => !$this->isCollect($w->id),
-        ],$this->getConfig($isAuto)));
+            'lastUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'last']),
+            'nextUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'next']),
+            'w'          => $w,
+            'progress'   => $now,
+            'sent'       => $sent,
+            'notCollect' => !$this->isCollect($w->id),
+        ], $this->getConfig($isAuto)));
     }
 
     protected function getConfig($isAuto)
     {
         $config = $this->getNow('config', []);
         $cIsAuto = isset($config['auto_jump']) ? $config['auto_jump'] > 0 : false;
-        $realIsAuto= false;
-        if($cIsAuto && $isAuto){
+        $realIsAuto = false;
+        if ($cIsAuto && $isAuto) {
             $realIsAuto = true;
         }
+
         return [
-            'isAuto'        => $realIsAuto,
-            'autoTime'      => isset($config['auto_jump']) ? $config['auto_jump'] : 0,
-            'delay'         => isset($config['delay_time']) ? $config['delay_time'] : 0,
-            'playNum'       => isset($config['audio_num']) ? $config['audio_num'] : 0,
-            'example'       => isset($config['example']) ? $config['example'] : 0,
+            'isAuto'       => $realIsAuto,
+            'autoTime'     => isset($config['auto_jump']) ? $config['auto_jump'] : 0,
+            'delay'        => isset($config['delay_time']) ? $config['delay_time'] : 0,
+            'playNum'      => isset($config['audio_num']) ? $config['audio_num'] : 0,
+            'example'      => isset($config['example']) ? $config['example'] : 0,
             'englishTrans' => isset($config['english_trans']) ? $config['english_trans'] : 0,
         ];
     }
@@ -178,11 +179,13 @@ class WordController
         if (!isset($readList['days'][$nowKey])) {
             $readList['days'][$nowKey] = [];
             $readList['now'] = 0;
+            $readList['nowReadList'] = [];
 
         }
         //todo 复习昨日内容
+        //todo 加入提问
         //每学60个新词整个复习一次
-        if (count($readList['days'][$nowKey]) % 60 == 0 && count($readList['days'][$nowKey]) > 0) {
+        if (in_array($readList['now'], [60, 180, 360, 720, 1440])) {
             $readList['nowReadList'] = $this->mergeByType($readList['nowReadList'], $readList['days'][$nowKey],
                 'read_again');
         }
@@ -258,7 +261,7 @@ class WordController
             'progress'   => count($readList['days'][$nowKey]),
             'sent'       => $w->firstSent(),
             'notCollect' => !$this->isCollect($w->id),
-        ],$this->getConfig($isAuto)));
+        ], $this->getConfig($isAuto)));
     }
     // public function readWord1()
     // {
