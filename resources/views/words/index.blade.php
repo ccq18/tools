@@ -121,12 +121,11 @@
                     <h4 class="modal-title" id="trans_word"></h4>
                 </div>
                 <div class="modal-body">
-                    <span id="trans_content"></span><br>
+                   <span id="trans_content"></span><br>
+                </div>
+                <div class="modal-footer">
                     <a id="trans_url" class="btn btn-default btn-xs" href="">详细</a>
                 </div>
-                {{--<div class="modal-footer">--}}
-                {{--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>--}}
-                {{--</div>--}}
             </div>
         </div>
     </div>
