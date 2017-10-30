@@ -42,7 +42,7 @@
         </div>
         @if($englishTrans != 0)
             <div class="row">
-                <div class="delay">
+                <div class="delay translateWord">
                     @if(empty($w->getEnglishTrans()))
                         {{$w->getFirstEnglishTran()}}
                     @else
