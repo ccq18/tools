@@ -42,12 +42,12 @@
         </div>
         @if($englishTrans != 0)
             <div class="row">
-                <div class="delay translateWord">
+                <div class="delay">
                     @if(empty($w->getEnglishTrans()))
-                        {{$w->getFirstEnglishTran()}}
+                        <span class="translateWord">{{$w->getFirstEnglishTran()}}</span>
                     @else
                         @foreach($w->getEnglishTrans() as $v)
-                            {{$v}}<br>
+                            <span class="translateWord">{{$v}}</span><br>
                         @endforeach
                     @endif
                 </div>
@@ -112,7 +112,7 @@
     </nav>
 
 
-{{--单词查询--}}
+    {{--单词查询--}}
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
