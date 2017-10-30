@@ -16,10 +16,10 @@ class UpHsStock extends Command
 
     public function handle()
     {
-        $stocks = Stock::whereType(Stock::TYPE_SH)->orderBy('id')->chunk(400,function ($stocks){
+        Stock::whereType(Stock::TYPE_SH)->orderBy('id')->chunk(400,function ($stocks){
             $this->upStocks($stocks);
         });
-        $stocks = Stock::whereType(Stock::TYPE_SZ)->orderBy('id')->chunk(400,function ($stocks){
+        Stock::whereType(Stock::TYPE_SZ)->orderBy('id')->chunk(400,function ($stocks){
             $this->upStocks($stocks);
         });
     }
