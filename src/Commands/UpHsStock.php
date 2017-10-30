@@ -16,10 +16,12 @@ class UpHsStock extends Command
 
     public function handle()
     {
-        $stocks = Stock::whereType(Stock::TYPE_SH)->get();
-        $this->upStocks($stocks);
-        $stocks = Stock::whereType(Stock::TYPE_SZ)->get();
-        $this->upStocks($stocks);
+        $stocks = Stock::whereType(Stock::TYPE_SH)->orderBy('id')->chunk(400,function ($stocks){
+            $this->upStocks($stocks);
+        });
+        $stocks = Stock::whereType(Stock::TYPE_SZ)->orderBy('id')->chunk(400,function ($stocks){
+            $this->upStocks($stocks);
+        });
     }
 
     public function upStocks($stocks)
@@ -47,8 +49,10 @@ class UpHsStock extends Command
                 }
 
             }
-            sleep(1);
+            sleep( rand(1,10));
         });
+        sleep(60);
+
 
     }
 }
