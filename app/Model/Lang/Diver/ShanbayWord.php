@@ -69,7 +69,7 @@ class ShanbayWord implements WordInterface
         $allTrans = isset($this->translate['en_definitions']) ? $this->translate['en_definitions'] : [];
 
         foreach ($allTrans as $k=>$tran){
-            $rs[] =  $k.implode(' ',$tran);
+            $rs[] =  $k.'. '.implode(' ',$tran);
         }
 
         return $rs;
