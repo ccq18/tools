@@ -1,5 +1,0 @@
----
-- hosts: vagrant
-  user: vagrant
-  roles:
-    - role: reload

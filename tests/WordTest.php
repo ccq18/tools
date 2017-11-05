@@ -7,7 +7,7 @@ use App\Model\Lang\Word;
 use App\Repositories\WordRepositroy;
 use App\Spl\LinkListHelper;
 use Ddc\CoreBundle\Service\Express\SfExpress\XmlHelper;
-use Util\Parser;
+use Util\Persist\Persist;
 
 class WordTest extends TestCase
 {
@@ -267,4 +267,22 @@ class WordTest extends TestCase
         dump(resolve(WordRepositroy::class)->generateByWords([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 40));
     }
 
+    public function test000()
+    {
+
+        // $o = new PersistDemo(222);
+        // $o->data = '111';
+        // $o->save();
+        // $o2 = PersistDemo::first(222);
+        // $o2->data = '333';
+        // $o2->save();
+        $o3 = PersistDemo::first(222);
+
+        dump($o3->toArray());
+
+    }
+}
+
+class PersistDemo extends Persist{
+    static $_table = 'persist_demo';
 }

@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Model\Lang\Word;
 use App\Model\Lang\WordGroup;
+use App\PersistModel\DayReadList;
+use App\PersistModel\LearnInfo;
+use App\PersistModel\NowReadList;
+use App\PersistModel\UserConfig;
+use App\PersistModel\WordCollect;
 use App\Repositories\WordRepositroy;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -21,74 +26,70 @@ class WordController
 
     public function getWord()
     {
-        $w= Word::where('word',request('word'))->first();
-        if(empty($w)){
+        $w = Word::where('word', request('word'))->first();
+        if (empty($w)) {
             $word = Str::singular(request('word'));
-            $w= Word::where('word',$word)->first();
-            if(empty($w)){
-                return ['status'=>404,'data'=>null];
+            $w = Word::where('word', $word)->first();
+            if (empty($w)) {
+                return ['status' => 404, 'data' => null];
             }
 
 
         }
-        return ['status'=>200,'data'=>['word'=>$w->word,'simple_trans'=>$w->simple_trans,'url'=>build_url('/words/index',['word_id'=>$w->id])]];
+
+
+        return [
+            'status' => 200,
+            'data'   => [
+                'word'         => $w->word,
+                'simple_trans' => $w->simple_trans,
+                'url'          => build_url('/words/index', ['word_id' => $w->id])
+            ]
+        ];
 
     }
+
     public function index()
     {
         $isAuto = false;
+        $config = UserConfig::firstOrNew(auth()->id());
+
         switch (request('action')) {
             case "last":
-                $now = $this->getNow();
-                $now = max($now, 1);
-                $w = $this->getNowBook()->where('id', '<', $now)->orderByDesc('id')->first();
+                $config->now = max($config->now, 1);
+                $w = $this->getNowBook()->where('id', '<', $config->now)->orderByDesc('id')->first();
                 if (empty($w)) {
                     $w = Word::first();
                 }
-                $now = $w->id;
-                $this->cacheNow($now);
+                $config->now = $w->id;
                 break;
             case "next":
                 $isAuto = isset($config['auto_jump']) ? $config['auto_jump'] > 0 : false;
-                $now = $this->getNow();
-                $w = $this->getNowBook()->where('id', '>', $now)->first();
-                $now = $w->id;
-                $this->cacheNow($now);
+                $w = $this->getNowBook()->where('id', '>', $config->now)->first();
+                $config->now = $w->id;
                 break;
             default:
-                $now = request('word_id');
-                if (empty($now)) {
-                    $now = $this->getNow();
+                if (!empty(request('word_id'))) {
+                    $config->now = request('word_id');
                 }
-                $w = Word::where('id', '>=', $now)->first();
-                $this->cacheNow($now);
+                $w = Word::where('id', '>=', $config->now)->first();
                 break;
         }
-
-        $sent = [];
-        if (!empty($w->sents())) {
-            $sents = $w->sents();
-            $sent = $sents[0];
-        }
+        $config->save();
 
         return view('words.index', array_merge([
             'lastUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'last']),
             'nextUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'next']),
             'w'          => $w,
-            'progress'   => $now,
-            'sent'       => $sent,
+            'progress'   => $config->now,
             'notCollect' => !$this->isCollect($w->id),
         ], $this->getConfig($isAuto)));
     }
 
     protected function getConfig($isAuto)
     {
-        $config = $this->getNow('config', []);
-        $cIsAuto = isset($config['auto_jump']) ? $config['auto_jump'] > 0 : false;
-        $realIsAuto = false;
-        if ($cIsAuto && $isAuto) {
-            $realIsAuto = true;
-        }
+        $config = UserConfig::firstOrNew(auth()->id());
+        $realIsAuto = $config['auto_jump'] > 0 && $isAuto;
 
         return [
             'isAuto'       => $realIsAuto,
@@ -140,19 +141,17 @@ class WordController
 
     protected function defaultOrPage()
     {
-        $now = $this->getNow();
-        $p = request('page');
+        $config = UserConfig::firstOrNew(auth()->id());
         $p = request('page');
         if (empty($p)) {
-            $n = $this->getNowBook()->where('id', '<', $now)->count();
+            $n = $this->getNowBook()->where('id', '<', $config->now)->count();
             $p = floor($n / static::PAGE_SIZE + 1);
 
         } else {
             $n = $this->getNowBook()->skip(($p - 1) * static::PAGE_SIZE)->first();
-            $now = $n ? $n->id : $this->getNowBook()->count();
+            $config->now = $n ? $n->id : $this->getNowBook()->count();
         }
-        // dump($now,$p);
-        $this->cacheNow($now);
+        $config->save();
         \Request::merge(['page' => $p]);
     }
 
@@ -180,68 +179,66 @@ class WordController
     public function getNextWordId2($increment)
     {
         $nowKey = date('Y-m-d');
-        $readList = $this->getNow('wordListData2');
-        if (empty($readList)) {
-            $readList1 = $this->getNow('word-data1');
-            $start = 0;
-            if (isset($readList1['now-read-id'])) {
-                $start = $readList1['now-read-id'];
-            }
-            $readList = $this->resetList($start);
-        }
-        $readList['now'] += $increment;
-        $readList['now'] = max(0, $readList['now']);
+        $learnInfo = LearnInfo::firstOrNew(auth()->id());
+        $dayReadList = DayReadList::firstOrNew(auth()->id());
+        $nowReadList = NowReadList::firstOrNew(auth()->id());
+        $learnInfo['now'] += $increment;
+        $learnInfo['now'] = max(0, $learnInfo['now']);
         //初始化
-        if (!isset($readList['days'][$nowKey])) {
-            $readList['days'][$nowKey] = [];
-            $readList['now'] = 0;
-            $readList['nowReadList'] = [];
+        if (!isset($dayReadList[$nowKey])) {
+            $dayReadList[$nowKey] = [];
+            $learnInfo['now'] = 0;
+            $nowReadList->data([]);
 
         }
         //todo 复习昨日内容
         //todo 加入提问
         //每学60个新词整个复习一次
-        if (in_array($readList['now'], [60, 180, 360, 720, 1440])) {
-            $readList['nowReadList'] = $this->mergeByType($readList['nowReadList'], $readList['days'][$nowKey],
-                'read_again');
+        if (in_array($learnInfo['now'], [60, 180, 360, 720, 1440])) {
+            $nowReadList = $this->mergeByType($nowReadList, $dayReadList[$nowKey], 'read_again');
         }
-        if ($readList['now'] >= count($readList['nowReadList'])) {
+
+        /**
+         * 生成学习列表
+         */
+        if ($learnInfo['now'] >= count($nowReadList)) {
+
             $ids = $this->getNowBook()
-                        ->where('id', '>', $readList['nowAddedId'])
+                        ->where('id', '>', $learnInfo['nowAddedId'])
                         ->limit(10)
                         ->pluck('id')->all();
             if (!empty($ids)) {
-                $readList['nowAddedId'] = max($ids);
-                $ids = resolve(WordRepositroy::class)->generateByWords($ids, 30);
-                $readList['nowReadList'] = $this->mergeByType($readList['nowReadList'], $ids, 'first_read');
+                $learnInfo['nowAddedId'] = max($ids);
+                $ids = resolve(WordRepositroy::class)->generateReviewListByWords($ids, 30);
+                $nowReadList = $this->mergeByType($nowReadList, $ids, 'first_read');
             }
-
         }
-        if (!isset($readList['nowReadList'][$readList['now']])) {
-            return ['id' => $readList['nowId'], 'type' => 'read_again'];
+        if (!isset($nowReadList[$learnInfo['now']])) {
+            return $learnInfo;
         }
-        $readList['nowId'] = $readList['nowReadList'][$readList['now']]['id'];
-        if (!in_array($readList['nowId'], $readList['days'][$nowKey])) {
-            $readList['days'][$nowKey][] = $readList['nowId'];
+        $nowRead = $nowReadList[$learnInfo['now']];
+        $learnInfo['nowId'] = $nowRead['id'];
+        if (!in_array($learnInfo['nowId'], $dayReadList[$nowKey])) {
+            $dayReadList[$nowKey][] = $learnInfo['nowId'];
         }
 
-        $this->cacheNow($readList, 'wordListData2');
-        $readList['nowWord'] = $readList['nowReadList'][$readList['now']];
+        $learnInfo['nowWord'] = $nowReadList[$learnInfo['now']];
 
-        // dd($readList['nowReadList'][$readList['now']]);
-        return $readList;
+        return $learnInfo;
 
 
     }
 
     public function getLearnedList()
     {
-        $readList = $this->getNow('wordListData2');
+        $dayReadList = DayReadList::firstOrNew(auth()->id());
+
         $words = [];
-        if (!empty($readList['days'])) {
-            foreach ($readList['days'] as $day => $ids) {
+        if (!empty($dayReadList)) {
+            foreach ($dayReadList as $day => $ids) {
                 $words[$day] = $this->getNowBook()->whereIn('id', $ids)->get();
             }
+
         }
         krsort($words);
 
@@ -257,65 +254,28 @@ class WordController
                 break;
             case "next":
                 $isAuto = true;
+
                 $readList = $this->getNextWordId2(1);
 
                 break;
             default:
+
                 $readList = $this->getNextWordId2(0);
                 break;
         }
         $nowId = $readList['nowWord']['id'];
         $w = Word::where('id', '=', $nowId)->first();
         $nowKey = date('Y-m-d');
-
+        $dayReadList = DayReadList::firstOrNew(auth()->id());
 
         return view('words.index', array_merge([
             'type'       => $readList['nowWord']['type'],
             'lastUrl'    => build_url('/words/read-word', ['action' => 'last']),
             'nextUrl'    => build_url('/words/read-word', ['action' => 'next']),
             'w'          => $w,
-            'progress'   => count($readList['days'][$nowKey]),
-            'sent'       => $w->firstSent(),
+            'progress'   => count($dayReadList[$nowKey]),
             'notCollect' => !$this->isCollect($w->id),
         ], $this->getConfig($isAuto)));
-    }
-    // public function readWord1()
-    // {
-    //     $isAuto = false;
-    //     switch (request('action')) {
-    //         case "last":
-    //             $nowId = $this->getNextWordId(-1);
-    //             break;
-    //         case "next":
-    //             $isAuto = true;
-    //             $nowId = $this->getNextWordId(1);
-    //
-    //             break;
-    //         default:
-    //             $nowId = $this->getNextWordId(0);
-    //             break;
-    //     }
-    //     $allNum = $this->getNowBook()->where('id', '>', $nowId)->count();
-    //     $nowNum = $this->getNowBook()->where('id', '<=', $nowId)->count();
-    //     $apr = number_format($nowNum / $allNum * 100, 2);
-    //     $w = Word::where('id', '=', $nowId)->first();
-    //
-    //     return view('words.index', [
-    //         'lastUrl'    => build_url('/words/read-word', ['action' => 'last']),
-    //         'nextUrl'    => build_url('/words/read-word', ['action' => 'next']),
-    //         'w'          => $w,
-    //         'isAuto'     => $isAuto,
-    //         'progress'   => $apr,
-    //         'sent'       => $w->firstSent(),
-    //         'delay'      => 1,
-    //         'playNum'    => 3,
-    //         'notCollect' => !$this->isCollect($w->id),
-    //     ]);
-    // }
-
-    public function readWord2()
-    {
-
     }
 
     public function readWordLists()
@@ -353,8 +313,6 @@ class WordController
         $words = WordGroup::where('group_id', $groupId)
                           ->with('word')
                           ->get()->pluck('word');
-        // $nextId = resolve(WordRepositroy::class)->getGroupId($groupId + 1);
-        // $lastId = min($groupId - 1, 1);
         $model = WordGroup::query();
         $latestId = resolve(WordRepositroy::class)->latestId($groupId, $model, 'group_id');
         $nextId = resolve(WordRepositroy::class)->nextId($groupId, $model, 'group_id');
@@ -371,13 +329,12 @@ class WordController
     public function addCollect()
     {
         $wordId = request('word_id');
-        $collectIds = $this->getNow('collect', []);
-        if (!empty($wordId) && !in_array($wordId, $collectIds)) {
+        $collectIds = WordCollect::firstOrNew(auth()->id());
+        if (!empty($wordId) && !in_array($wordId, $collectIds->toArray())) {
             if (Word::where('id', $wordId)->exists()) {
-                array_unshift($collectIds, $wordId);
-                $this->cacheNow($collectIds, 'collect');
+                $collectIds[] = $wordId;
+                $collectIds->save();
             }
-
         }
 
         return $collectIds;
@@ -385,7 +342,7 @@ class WordController
 
     public function collectList()
     {
-        $collectIds = $this->getNow('collect', []);
+        $collectIds = WordCollect::firstOrNew(auth()->id());
         $words = $this->getNowBook()->whereIn('id', $collectIds)->orderByDesc('id')->paginate(static::PAGE_SIZE);
 
         return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
@@ -395,7 +352,7 @@ class WordController
     {
         $nowId = request('word_id');
 
-        $collectIds = $this->getNow('collect', []);
+        $collectIds = WordCollect::firstOrNew(auth()->id());
         $model = $this->getNowBook()->whereIn('id', $collectIds)->orderByDesc('id');
         $w = Word::where('id', $nowId)->orderByDesc('id')->first();
         $word = $w->translate;
@@ -416,21 +373,21 @@ class WordController
 
     protected function isCollect($wordId)
     {
-        $collectIds = $this->getNow('collect', []);
+        $collectIds = WordCollect::firstOrNew(auth()->id());
 
-        return in_array($wordId, $collectIds);
+        return in_array($wordId, $collectIds->toArray());
     }
 
     public function config()
     {
-        $config = $this->getNow('config', []);
+        $config = UserConfig::find(auth()->id());
         if (request()->isMethod('post')) {
+
             $config['example'] = request('example');
             $config['english_trans'] = request('english_trans');
             $config['audio_num'] = request('audio_num');
             $config['delay_time'] = request('delay_time');
             $config['auto_jump'] = request('auto_jump');
-            $this->cacheNow($config, 'config');
             flash('设置保存成功！', 'success');
 
         }

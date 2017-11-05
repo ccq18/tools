@@ -30,3 +30,9 @@ pip配置
 ansible-playbook provisioning/prod.yml  --extra-vars "application_version=10.11.5"
 # 发布更新代码
 ansible-playbook -i provisioning/webservers provisioning/prod-distribution.yml  --extra-vars "application_version=10.19"
+
+
+子模块 
+git submodule add  git@gitee.com:ccq18/provisioning.git provisioning
+子模块更新
+git submodule foreach git pull 

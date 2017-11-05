@@ -73,7 +73,12 @@ class WordRepositroy
         return !$this->isEnglish($str);
     }
 
-    public function generateByWords($wordIds,$max)
+    /**
+     * @param $wordIds
+     * @param $max
+     * @return 生成复习列表 array
+     */
+    public function generateReviewListByWords($wordIds,$max)
     {
 
         $readList = [];
@@ -113,27 +118,6 @@ class WordRepositroy
         return  $readList;
     }
 
-    // public function nextId($now, Word $baseModel)
-    // {
-    //     $w = $baseModel->where('id', '>', $now)->first();
-    //     if (empty($w)) {
-    //         $w = $baseModel->latest();
-    //     }
-    //
-    //     return $w->id;
-    // }
-    //
-    // public function latestId($now, Word $baseModel)
-    // {
-    //     $now = max($now, 1);
-    //     $w = $baseModel->where('id', '<', $now)->latest();
-    //     if (empty($w)) {
-    //         $w = Word::first();
-    //     }
-    //
-    //     return $w->id;
-    //
-    //
-    // }
+
 
 }

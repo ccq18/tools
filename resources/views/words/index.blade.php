@@ -64,9 +64,10 @@
                                 <audio src="{{$sent['audio_uk']}}"></audio>
                             </div>
                         @endif
-                        <span class="translateWord">{!!$sent['orig'] !!} </span><br>
-                        {!!$sent['trans'] !!} <br>
-
+                        @if(!empty($w->firstSent()))
+                            <span class="translateWord">{!!$w->firstSent()['orig'] !!} </span><br>
+                            {!!$w->firstSent()['trans'] !!} <br>
+                        @endif
                     @elseif($example == 2)
                         @foreach($w->sents() as $sent)
                             @if(!empty($sent['audio_uk']))
@@ -75,8 +76,10 @@
                                     <audio src="{{$sent['audio_uk']}}"></audio>
                                 </div>
                             @endif
-                            <span class="translateWord">{!!$sent['orig'] !!} </span><br>
-                            {!!$sent['trans'] !!} <br>
+                            @if(!empty($sent))
+                                <span class="translateWord">{!!$sent['orig'] !!} </span><br>
+                                {!!$sent['trans'] !!} <br>
+                            @endif
                         @endforeach
                     @endif
                     <br>
@@ -121,7 +124,7 @@
                     <h4 class="modal-title" id="trans_word"></h4>
                 </div>
                 <div class="modal-body">
-                   <span id="trans_content"></span><br>
+                    <span id="trans_content"></span><br>
                 </div>
                 <div class="modal-footer">
                     <a id="trans_url" class="btn btn-default btn-xs" href="">详细</a>
