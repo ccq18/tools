@@ -13,6 +13,7 @@ use App\PersistModel\WordCollect;
 use App\Repositories\WordRepositroy;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Word\WordListHelper;
 
 class WordController
@@ -24,30 +25,6 @@ class WordController
         return Word::where('book_id', 1);
     }
 
-    public function getWord()
-    {
-        $w = Word::where('word', request('word'))->first();
-        if (empty($w)) {
-            $word = Str::singular(request('word'));
-            $w = Word::where('word', $word)->first();
-            if (empty($w)) {
-                return ['status' => 404, 'data' => null];
-            }
-
-
-        }
-
-
-        return [
-            'status' => 200,
-            'data'   => [
-                'word'         => $w->word,
-                'simple_trans' => $w->simple_trans,
-                'url'          => build_url('/words/index', ['word_id' => $w->id])
-            ]
-        ];
-
-    }
 
     public function index()
     {
@@ -86,6 +63,7 @@ class WordController
         ], $this->getConfig($isAuto)));
     }
 
+
     protected function getConfig($isAuto)
     {
         $config = UserConfig::firstOrNew(auth()->id());
@@ -101,19 +79,20 @@ class WordController
         ];
     }
 
-    protected function getNow($prefix = '', $default = 0)
+    protected function defaultOrPage()
     {
-        $k = 'word7000' . $prefix . auth()->id();
-        $data = \Cache::get($k, $default);
+        $config = UserConfig::firstOrNew(auth()->id());
+        $p = request('page');
+        if (empty($p)) {
+            $n = $this->getNowBook()->where('id', '<', $config->now)->count();
+            $p = floor($n / static::PAGE_SIZE + 1);
 
-        return $data;
-    }
-
-    protected function cacheNow($data, $prefix = '')
-    {
-        $k = 'word7000' . $prefix . auth()->id();
-        \Cache::forever($k, $data);
-
+        } else {
+            $n = $this->getNowBook()->skip(($p - 1) * static::PAGE_SIZE)->first();
+            $config->now = $n ? $n->id : $this->getNowBook()->count();
+        }
+        $config->save();
+        \Request::merge(['page' => $p]);
     }
 
     public function listWord()
@@ -139,21 +118,45 @@ class WordController
 
     }
 
-    protected function defaultOrPage()
+    public function searchWord()
     {
-        $config = UserConfig::firstOrNew(auth()->id());
-        $p = request('page');
-        if (empty($p)) {
-            $n = $this->getNowBook()->where('id', '<', $config->now)->count();
-            $p = floor($n / static::PAGE_SIZE + 1);
+        $w = Word::where('word', request('word'))->first();
+        if (empty($w)) {
+            $word = Str::singular(request('word'));
+            $w = Word::where('word', $word)->first();
+            if (empty($w)) {
+                return ['status' => 404, 'data' => null];
+            }
 
-        } else {
-            $n = $this->getNowBook()->skip(($p - 1) * static::PAGE_SIZE)->first();
-            $config->now = $n ? $n->id : $this->getNowBook()->count();
+
         }
-        $config->save();
-        \Request::merge(['page' => $p]);
+
+
+        return [
+            'status' => 200,
+            'data'   => [
+                'word'         => $w->word,
+                'simple_trans' => $w->simple_trans,
+                'url'          => url('/words/' . $w->id)
+            ]
+        ];
+
     }
+
+    public function getWord($id)
+    {
+
+
+        $w = Word::where('id', '=', $id)->first();
+
+
+        return view('words.word', array_merge([
+            'w'          => $w,
+            'notCollect' => !$this->isCollect($w->id),
+            'backUrl'=> request('backUrl')
+        ], $this->getConfig(false)));
+    }
+
 
     protected function resetList($start)
     {

@@ -1,4 +1,4 @@
-@extends('layouts.full')
+@extends('layouts.app')
 @section('title')
     {{$w->word}}:{{$w->getFirstTranslateText()}}
 @endsection
@@ -13,7 +13,6 @@
 
     <div class="container" style="margin-left: 10px">
         <div class="row">
-            <h3>{{$progress}}</h3>
             <h1>{{$w->word}}</h1>
         </div>
         <div class="row">
@@ -90,22 +89,8 @@
     <nav class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
             <div class="row center-block">
-                @if(!empty($lastUrl))
-                    <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2 ">
-                        <a style="font-size: 3em" href="{{url($lastUrl)}}"
-                           class="glyphicon glyphicon-chevron-left"
-                           aria-hidden="true"></a>
-                    </div>
-                @endif
-                @if(!empty($nextUrl))
-                    <div class="col-md-1 col-xs-1 col-md-offset-3 col-xs-offset-3">
-                        <a style="font-size: 3em" href="{{url($nextUrl)}}"
-                           class="glyphicon glyphicon-chevron-right" id="next_page"
-                           aria-hidden="true"></a>
-                    </div>
-                @endif
                 @if($notCollect)
-                    <div class="col-md-1 col-xs-1 col-md-offset-2 col-xs-offset-2">
+                    <div class="col-md-1 col-xs-1 col-md-offset-10 col-xs-offset-10">
                         <span class="glyphicon glyphicon-plus" id="follow" style="font-size: 3em"></span>
                     </div>
                 @endif

@@ -32,9 +32,11 @@ Route::group(['namespace' => 'Web',], function () {
         Route::get('words/config', 'WordController@config');
         Route::post('words/config', 'WordController@config');
         //单词查询
-        Route::get('words/word', 'WordController@getWord');
+        Route::get('words/search-word', 'WordController@searchWord');
         //单词搜索
         Route::get('words/search', 'WordController@search');
+        Route::get('words/{id}',  'WordController@getWord')->where('id', '[0-9]+');
+        // Route::get('words/{id}', 'WordController@getWord')->where('id', '[0-9]+');;
 
         Route::get('words/index', 'WordController@index');
         Route::get('words', 'WordController@listWord');
