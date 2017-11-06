@@ -389,7 +389,7 @@ class WordController
 
     public function config()
     {
-        $config = UserConfig::find(auth()->id());
+        $config = UserConfig::firstOrNew(auth()->id());
         if (request()->isMethod('post')) {
             //更换单词本
             if($config['book_id']!=request('book_id')){
