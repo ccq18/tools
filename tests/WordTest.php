@@ -281,6 +281,15 @@ class WordTest extends TestCase
         dump($o3->toArray());
 
     }
+
+    public function test111()
+    {
+        $line= 'abbreviation　n.';
+        $isMatch = preg_match('/(.+?)[ 　\s\t]+(\S+)/', $line, $match);
+            dd($line,$match);
+
+
+    }
 }
 
 class PersistDemo extends Persist{

@@ -8,6 +8,27 @@
         <form action="/words/config" method="post">
             <div class="input-group">
                 <label>
+                    单词本
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                                   {{$config['book_id']==1?"checked":""}} name="book_id"
+                                   value="0">
+                            7000常用词
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                                   {{$config['book_id']==2?"checked":""}} name="book_id"
+                                   value="0">
+                            CET6
+                        </label>
+                    </div>
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
                     例句
                     <div class="radio">
                         <label>

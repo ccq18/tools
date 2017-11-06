@@ -14,6 +14,7 @@ use Util\Persist\Persist;
  * @property $audio_num
  * @property $delay_time
  * @property $auto_jump
+ * @property $book_id
  */
 class UserConfig extends Persist
 {
@@ -30,6 +31,7 @@ class UserConfig extends Persist
             'audio_num'     => 0,
             'delay_time'    => 0,
             'auto_jump'     => 0,
+            'book_id'       =>1
         ];
     }
 }

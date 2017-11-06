@@ -22,7 +22,9 @@ class WordController
 
     public function getNowBook()
     {
-        return Word::where('book_id', 1);
+        $config = UserConfig::getNow();
+
+        return Word::where('book_id', $config->book_id);
     }
 
 
@@ -36,7 +38,7 @@ class WordController
                 $config->now = max($config->now, 1);
                 $w = $this->getNowBook()->where('id', '<', $config->now)->orderByDesc('id')->first();
                 if (empty($w)) {
-                    $w = Word::first();
+                    $w = $this->getNowBook()::first();
                 }
                 $config->now = $w->id;
                 break;
@@ -49,7 +51,7 @@ class WordController
                 if (!empty(request('word_id'))) {
                     $config->now = request('word_id');
                 }
-                $w = Word::where('id', '>=', $config->now)->first();
+                $w = $this->getNowBook()->where('id', '>=', $config->now)->first();
                 break;
         }
         $config->save();
@@ -76,6 +78,8 @@ class WordController
             'playNum'      => isset($config['audio_num']) ? $config['audio_num'] : 0,
             'example'      => isset($config['example']) ? $config['example'] : 0,
             'englishTrans' => isset($config['english_trans']) ? $config['english_trans'] : 0,
+            'book_id'     => isset($config['book_id']) ? $config['book_id'] : 0,
+
         ];
     }
 
@@ -101,60 +105,6 @@ class WordController
         $words = $this->getNowBook()->paginate(static::PAGE_SIZE);
 
         return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
-    }
-
-    public function search()
-    {
-        $search = request('search', '');
-        if (resolve(WordRepositroy::class)->isChinese($search)) {
-            $words = Word::where('simple_trans', 'like',
-                '%' . request('search', '') . '%')->paginate(static::PAGE_SIZE);
-        } else {
-            $words = Word::where('word', 'like', request('search', '') . '%')->paginate(static::PAGE_SIZE);
-
-        }
-
-        return view('words.search', ['words' => $words, 'paginate' => $words->links()]);
-
-    }
-
-    public function searchWord()
-    {
-        $w = Word::where('word', request('word'))->first();
-        if (empty($w)) {
-            $word = Str::singular(request('word'));
-            $w = Word::where('word', $word)->first();
-            if (empty($w)) {
-                return ['status' => 404, 'data' => null];
-            }
-
-
-        }
-
-
-        return [
-            'status' => 200,
-            'data'   => [
-                'word'         => $w->word,
-                'simple_trans' => $w->simple_trans,
-                'url'          => url('/words/' . $w->id)
-            ]
-        ];
-
-    }
-
-    public function getWord($id)
-    {
-
-
-        $w = Word::where('id', '=', $id)->first();
-
-
-        return view('words.word', array_merge([
-            'w'          => $w,
-            'notCollect' => !$this->isCollect($w->id),
-            'backUrl'=> request('backUrl')
-        ], $this->getConfig(false)));
     }
 
 
@@ -267,7 +217,7 @@ class WordController
                 break;
         }
         $nowId = $readList['nowWord']['id'];
-        $w = Word::where('id', '=', $nowId)->first();
+        $w = $this->getNowBook()->where('id', '=', $nowId)->first();
         $nowKey = date('Y-m-d');
         $dayReadList = DayReadList::firstOrNew(auth()->id());
 
@@ -381,11 +331,75 @@ class WordController
         return in_array($wordId, $collectIds->toArray());
     }
 
+    public function search()
+    {
+        $search = request('search', '');
+        if (resolve(WordRepositroy::class)->isChinese($search)) {
+            $words = Word::where('simple_trans', 'like',
+                '%' . request('search', '') . '%')->paginate(static::PAGE_SIZE);
+        } else {
+            $words = Word::where('word', 'like', request('search', '') . '%')->paginate(static::PAGE_SIZE);
+
+        }
+
+        return view('words.search', ['words' => $words, 'paginate' => $words->links()]);
+
+    }
+
+    public function searchWord()
+    {
+        $w = Word::where('word', request('word'))->first();
+        if (empty($w)) {
+            $word = Str::singular(request('word'));
+            $w = Word::where('word', $word)->first();
+            if (empty($w)) {
+                return ['status' => 404, 'data' => null];
+            }
+
+
+        }
+
+
+        return [
+            'status' => 200,
+            'data'   => [
+                'word'         => $w->word,
+                'simple_trans' => $w->simple_trans,
+                'url'          => url('/words/' . $w->id)
+            ]
+        ];
+
+    }
+
+    public function getWord($id)
+    {
+
+
+        $w = Word::where('id', '=', $id)->first();
+
+
+        return view('words.word', array_merge([
+            'w'          => $w,
+            'notCollect' => !$this->isCollect($w->id),
+            'backUrl'=> request('backUrl')
+        ], $this->getConfig(false)));
+    }
+
+
+
     public function config()
     {
         $config = UserConfig::find(auth()->id());
         if (request()->isMethod('post')) {
-
+            //更换单词本
+            if($config['book_id']!=request('book_id')){
+                $learnInfo = LearnInfo::firstOrNew(auth()->id());
+                $learnInfo->now = 0;
+                $learnInfo->nowId = 0;
+                $learnInfo->nowAddedId = 0;
+                $learnInfo->save();
+            }
+            $config['book_id'] = request('book_id');
             $config['example'] = request('example');
             $config['english_trans'] = request('english_trans');
             $config['audio_num'] = request('audio_num');
