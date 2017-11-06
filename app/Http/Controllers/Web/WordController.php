@@ -398,7 +398,11 @@ class WordController
                 $learnInfo->nowId = 0;
                 $learnInfo->nowAddedId = 0;
                 $learnInfo->save();
+                $nowReadList = NowReadList::firstOrNew(auth()->id());
+                $nowReadList->data([]);
+                $nowReadList->save();
             }
+
             $config['book_id'] = request('book_id');
             $config['example'] = request('example');
             $config['english_trans'] = request('english_trans');
