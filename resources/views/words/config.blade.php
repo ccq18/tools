@@ -25,6 +25,22 @@
                             CET6
                         </label>
                     </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                                   {{$config['book_id']==4?"checked":""}} name="book_id"
+                                   value="4">
+                            CET4
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                                   {{$config['book_id']==5?"checked":""}} name="book_id"
+                                   value="5">
+                            CET4和CET6
+                        </label>
+                    </div>
                 </label>
             </div>
             <div class="input-group">
