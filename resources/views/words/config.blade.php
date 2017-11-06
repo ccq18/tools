@@ -13,7 +13,7 @@
                         <label>
                             <input type="radio"
                                    {{$config['book_id']==1?"checked":""}} name="book_id"
-                                   value="0">
+                                   value="1">
                             7000常用词
                         </label>
                     </div>
@@ -21,7 +21,7 @@
                         <label>
                             <input type="radio"
                                    {{$config['book_id']==2?"checked":""}} name="book_id"
-                                   value="0">
+                                   value="2">
                             CET6
                         </label>
                     </div>
