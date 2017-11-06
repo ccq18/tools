@@ -20,8 +20,8 @@
                     <div class="radio">
                         <label>
                             <input type="radio"
-                                   {{$config['book_id']==2?"checked":""}} name="book_id"
-                                   value="2">
+                                   {{$config['book_id']==3?"checked":""}} name="book_id"
+                                   value="3">
                             CET6
                         </label>
                     </div>
