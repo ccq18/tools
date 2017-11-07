@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('up-hs-stock')
-                 ->dailyAt('16:00');
+                 ->dailyAt('16:30');
         $schedule->command('command:init-by-shanbay')
                  ->hourly();
     }
