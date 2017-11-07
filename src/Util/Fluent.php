@@ -14,15 +14,15 @@ use Traversable;
 class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Countable,IteratorAggregate
 {
     /**
-     * All of the attributes set on the container.
+     * All of the items set on the container.
      *
      * @var array
      */
-    protected $attributes = [];
+    protected $items = [];
 
-    public function __construct($attributes=[])
+    public function __construct($items=[])
     {
-        $this->attributes = $attributes;
+        $this->items = $items;
 
     }
 
@@ -35,21 +35,21 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function get($key, $default = null)
     {
-        if (array_key_exists($key, $this->attributes)) {
-            return $this->attributes[$key];
+        if (array_key_exists($key, $this->items)) {
+            return $this->items[$key];
         }
 
         return value($default);
     }
 
     /**
-     * Get the attributes from the container.
+     * Get the items from the container.
      *
      * @return array
      */
-    public function getAttributes()
+    public function getitems()
     {
-        return $this->attributes;
+        return $this->items;
     }
 
     /**
@@ -59,7 +59,7 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function toArray()
     {
-        return $this->attributes;
+        return $this->items;
     }
 
     /**
@@ -91,7 +91,7 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function offsetExists($offset)
     {
-        return isset($this->attributes[$offset]);
+        return isset($this->items[$offset]);
     }
 
     // /**
@@ -115,19 +115,19 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
-            $this->attributes[] = $value;
+            $this->items[] = $value;
         } elseif (is_int($offset)) {
-            $this->attributes[intval($offset)] = $value;
+            $this->items[intval($offset)] = $value;
         } else {
-            $this->attributes[$offset] = $value;
+            $this->items[$offset] = $value;
         }
 
     }
 
     public function &offsetGet($offset)
     {
-        if (isset($this->attributes[$offset])) {
-            $returnValue = &$this->attributes[$offset]; // note the &=
+        if (isset($this->items[$offset])) {
+            $returnValue = &$this->items[$offset]; // note the &=
         } else {
             $returnValue = null;
         }
@@ -143,11 +143,11 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function offsetUnset($offset)
     {
-        unset($this->attributes[$offset]);
+        unset($this->items[$offset]);
     }
 
     /**
-     * Handle dynamic calls to the container to set attributes.
+     * Handle dynamic calls to the container to set items.
      *
      * @param  string $method
      * @param  array $parameters
@@ -155,7 +155,7 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function __call($method, $parameters)
     {
-        $this->attributes[$method] = count($parameters) > 0 ? $parameters[0] : true;
+        $this->items[$method] = count($parameters) > 0 ? $parameters[0] : true;
 
         return $this;
     }
@@ -207,7 +207,7 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
 
     public function data($data)
     {
-        $this->attributes = $data;
+        $this->items = $data;
     }
 
     /**
@@ -218,7 +218,7 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function merge($items)
     {
-        $this->attributes = array_merge($this->attributes, $items);
+        $this->items = array_merge($this->items, $items);
     }
 
 
@@ -232,9 +232,9 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
     // public function offsetSet($offset, $value)
     // {
     //     if (is_string($offset) && Str::contains($offset, '.')) {
-    //         $this->attributes = $this->setAttributeByDot($this->attributes, $offset, $value);//
+    //         $this->items = $this->setAttributeByDot($this->items, $offset, $value);//
     //     } else {
-    //         $this->attributes[$offset] = $value;
+    //         $this->items[$offset] = $value;
     //     }
     // }
 
@@ -247,7 +247,7 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
     // public function offsetGet($offset)
     // {
     //     if (is_string($offset) && Str::contains($offset, '.')) {
-    //         return $this->getAttributeByDot($this->attributes, $offset);//
+    //         return $this->getAttributeByDot($this->items, $offset);//
     //     }
     //
     //     return $this->get($offset);
@@ -321,7 +321,7 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function count()
     {
-        return count($this->attributes);
+        return count($this->items);
     }
 
     /**
@@ -333,6 +333,6 @@ class Fluent implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, Coun
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->attributes);
+        return new \ArrayIterator($this->items);
     }
 }

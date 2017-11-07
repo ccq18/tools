@@ -28,28 +28,33 @@ class UpHsStock extends Command
     {
         $http = new \Util\Http();
         collect($stocks)->map(function(Stock $stock)use($http){
-            $y = date('Y');
-            if ($stock->type == Stock::TYPE_SH) {
-                $url = "http://img1.money.126.net/data/hs/kline/day/history/{$y}/0{$stock->code}.json";
-            } elseif ($stock->type == Stock::TYPE_SZ) {
-                $url = "http://img1.money.126.net/data/hs/kline/day/history/{$y}/1{$stock->code}.json";
-            }else{
-                return;
-            }
-
-            $data = $http->getJson($url);
-            $last = StockLog::whereStockId($stock->id)->orderByDesc('created_at')->first();
-
-            foreach ($data['data'] as $v) {
-
-                $createdAt = Carbon::parse($v[0]);
-                if(empty($last)||$createdAt>$last->created_at){
-                    resolve(StockRepository::class)->addStockLogFromWy($stock->id,$v);
-                    $this->info($createdAt->format('Y-m-d').':'.$stock->code);
+            try{
+                $y = date('Y');
+                if ($stock->type == Stock::TYPE_SH) {
+                    $url = "http://img1.money.126.net/data/hs/kline/day/history/{$y}/0{$stock->code}.json";
+                } elseif ($stock->type == Stock::TYPE_SZ) {
+                    $url = "http://img1.money.126.net/data/hs/kline/day/history/{$y}/1{$stock->code}.json";
+                }else{
+                    return;
                 }
 
+                $data = $http->getJson($url);
+                $last = StockLog::whereStockId($stock->id)->orderByDesc('created_at')->first();
+
+                foreach ($data['data'] as $v) {
+
+                    $createdAt = Carbon::parse($v[0]);
+                    if(empty($last)||$createdAt>$last->created_at){
+                        resolve(StockRepository::class)->addStockLogFromWy($stock->id,$v);
+                        $this->info($createdAt->format('Y-m-d').':'.$stock->code);
+                    }
+
+                }
+            }catch (\Exception $e){
+                \Log::error($e->getMessage(),[$stock->toArray()]);
             }
-            sleep( rand(1,10));
+
+            sleep( rand(1,5));
         });
         sleep(60);
 

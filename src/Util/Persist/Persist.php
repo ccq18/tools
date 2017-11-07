@@ -16,7 +16,7 @@ abstract class Persist extends Fluent
     static $_objs = [];
     static $_table = null;
     protected $_key = null;
-    protected $_baseattributes = null;
+    protected $_baseitems = null;
     static $_prefix = 'persist';
 
     public static function redis()
@@ -31,14 +31,14 @@ abstract class Persist extends Fluent
         }
     }
 
-    public function __construct($key = null, $attributes = [], $persisted = false, $autoSave = true)
+    public function __construct($key = null, $items = [], $persisted = false, $autoSave = true)
     {
 
 
-        parent::__construct($this->init($attributes));
+        parent::__construct($this->init($items));
         $this->_key = $key;
         if ($persisted) {
-            $this->_baseattributes = $attributes;
+            $this->_baseitems = $items;
         }
         if ($autoSave) {
             static::$_objs[] = $this;
@@ -46,10 +46,10 @@ abstract class Persist extends Fluent
     }
 
 
-    protected function init($attributes)
+    protected function init($items)
     {
         $structure = $this->structure();
-        return array_merge($structure, $attributes);
+        return array_merge($structure, $items);
     }
 
 
@@ -126,11 +126,11 @@ abstract class Persist extends Fluent
             throw new \Exception('table not exist');
         }
         //若数据无变化则不存储
-        if (json_encode($this->attributes) == json_encode($this->_baseattributes)) {
+        if (json_encode($this->items) == json_encode($this->_baseitems)) {
             return;
         }
-        static::redis()->hset($this->getPersistKey(), $this->_key, json_encode($this->attributes));
-        $this->_baseattributes = $this->attributes;
+        static::redis()->hset($this->getPersistKey(), $this->_key, json_encode($this->items));
+        $this->_baseitems = $this->items;
     }
 
 }
