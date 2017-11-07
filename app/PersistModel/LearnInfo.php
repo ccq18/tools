@@ -11,6 +11,8 @@ use Util\Persist\Persist;
  * @property $now
  * @property $nowId
  * @property $nowAddedId
+ * @property $date
+ * @property $dayStartId
  */
 class LearnInfo extends Persist
 {
@@ -23,7 +25,9 @@ class LearnInfo extends Persist
             'now'        => 0,
             'nowId'      => 0,
             'nowAddedId' => 0,
-            'nowWord'=>[],
+            'nowWord'    => [],
+            'learns' =>[
+            ]
         ];
     }
 

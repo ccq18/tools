@@ -264,7 +264,13 @@ class WordTest extends TestCase
 
     public function testGenerate()
     {
-        dump(resolve(WordRepositroy::class)->generateByWords([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 40));
+        $arr = [];
+        for($i=0;$i<10;$i++){
+            $arr[] = $i;
+        }
+        $rs = resolve(WordRepositroy::class)->getReviewListByIds($arr, count($arr)*3);
+        dump(count($rs));
+        dump($rs);
     }
 
     public function test000()

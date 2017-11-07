@@ -3,7 +3,12 @@
 @section('content')
 
     <div class="container" style="margin-left: 10px">
+        @if(!empty($readListUrl))
+            <div class="row">
+                <a  class="btn btn-default btn-xs" href="{{$readListUrl}}">学习</a>
 
+            </div>
+        @endif
         @foreach($words as $word)
             <div class="row">
                 <a href="{{build_url('/words/index',['word_id'=>$word->id])}}">{{$word->word}}

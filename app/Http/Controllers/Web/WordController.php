@@ -78,7 +78,7 @@ class WordController
             'playNum'      => isset($config['audio_num']) ? $config['audio_num'] : 0,
             'example'      => isset($config['example']) ? $config['example'] : 0,
             'englishTrans' => isset($config['english_trans']) ? $config['english_trans'] : 0,
-            'book_id'     => isset($config['book_id']) ? $config['book_id'] : 0,
+            'book_id'      => isset($config['book_id']) ? $config['book_id'] : 0,
 
         ];
     }
@@ -104,7 +104,11 @@ class WordController
         $this->defaultOrPage();
         $words = $this->getNowBook()->paginate(static::PAGE_SIZE);
 
-        return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
+        return view('words.list', [
+            'words'       => $words,
+            'paginate'    => $words->links(),
+            'readListUrl' => build_url('words/read-word')
+        ]);
     }
 
 
@@ -144,13 +148,10 @@ class WordController
             $nowReadList->data([]);
 
         }
-        //todo 复习昨日内容
-        //todo 加入提问
         //每学60个新词整个复习一次
         if (in_array($learnInfo['now'], [60, 180, 360, 720, 1440])) {
             $nowReadList = $this->mergeByType($nowReadList, $dayReadList[$nowKey], 'read_again');
         }
-
         /**
          * 生成学习列表
          */
@@ -167,7 +168,7 @@ class WordController
             }
         }
         if (!isset($nowReadList[$learnInfo['now']])) {
-            return $learnInfo;
+            return null;
         }
         $nowRead = $nowReadList[$learnInfo['now']];
         $learnInfo['nowId'] = $nowRead['id'];
@@ -175,9 +176,7 @@ class WordController
             $dayReadList[$nowKey][] = $learnInfo['nowId'];
         }
 
-        $learnInfo['nowWord'] = $nowReadList[$learnInfo['now']];
-
-        return $learnInfo;
+        return $nowReadList[$learnInfo['now']];;
 
 
     }
@@ -195,38 +194,56 @@ class WordController
         }
         krsort($words);
 
-        return view('words.learned-list', ['allWords' => $words]);
+        return view('words.learned-list', [
+            'allWords'    => $words,
+            'readListUrl' => build_url('words/read-word', ['type' => 'learned'])
+        ]);
     }
 
     public function readWord()
     {
+        $type = request('type', 'readWord');
         $isAuto = false;
+
         switch (request('action')) {
             case "last":
-                $readList = $this->getNextWordId2(-1);
+                $i = -1;
                 break;
             case "next":
                 $isAuto = true;
-
-                $readList = $this->getNextWordId2(1);
-
+                $i = 1;
                 break;
             default:
-
-                $readList = $this->getNextWordId2(0);
-                break;
+                $i = 0;
         }
-        $nowId = $readList['nowWord']['id'];
-        $w = $this->getNowBook()->where('id', '=', $nowId)->first();
-        $nowKey = date('Y-m-d');
         $dayReadList = DayReadList::firstOrNew(auth()->id());
+        if ($type == 'readWord') {
+            $nowWord = $this->getNextWordId2(-1);;
+            $w = Word::where('id', '=', $nowWord['id'])->first();
+            $nowKey = date('Y-m-d');
+            $progress = count($dayReadList[$nowKey]);
+        } else {
+            if ($type == 'learned') {
+                $allids = [];
+                foreach ($dayReadList as $day => $ids) {
+                    $allids = array_merge($allids, $ids);
+                }
+            } elseif ($type == 'collect') {
+                $allids = WordCollect::firstOrNew(auth()->id())->toArray();
+            }
 
+            $nowWord = resolve(WordRepositroy::class)->getNext($i, $type . '_' . auth()->id(), $allids);;
+            $w = Word::where('id', '=', $nowWord['id'])->first();
+            $nowKey = date('Y-m-d');
+            $progress = '';//count($dayReadList[$nowKey]);
+        }
+        $dayReadList->addWord($nowWord['id']);
         return view('words.index', array_merge([
-            'type'       => $readList['nowWord']['type'],
-            'lastUrl'    => build_url('/words/read-word', ['action' => 'last']),
-            'nextUrl'    => build_url('/words/read-word', ['action' => 'next']),
+            'type'       => $nowWord['type'],
+            'lastUrl'    => build_url('/words/read-word', ['action' => 'last', 'type' => $type]),
+            'nextUrl'    => build_url('/words/read-word', ['action' => 'next', 'type' => $type]),
             'w'          => $w,
-            'progress'   => count($dayReadList[$nowKey]),
+            'progress'   => $progress,
             'notCollect' => !$this->isCollect($w->id),
         ], $this->getConfig($isAuto)));
     }
@@ -298,7 +315,11 @@ class WordController
         $collectIds = WordCollect::firstOrNew(auth()->id());
         $words = $this->getNowBook()->whereIn('id', $collectIds)->orderByDesc('id')->paginate(static::PAGE_SIZE);
 
-        return view('words.list', ['words' => $words, 'paginate' => $words->links()]);
+        return view('words.list', [
+            'words'       => $words,
+            'paginate'    => $words->links(),
+            'readListUrl' => build_url('words/read-word', ['type' => 'collect'])
+        ]);
     }
 
     public function collectDetail()
@@ -381,10 +402,9 @@ class WordController
         return view('words.word', array_merge([
             'w'          => $w,
             'notCollect' => !$this->isCollect($w->id),
-            'backUrl'=> request('backUrl')
+            'backUrl'    => request('backUrl')
         ], $this->getConfig(false)));
     }
-
 
 
     public function config()
@@ -392,7 +412,7 @@ class WordController
         $config = UserConfig::firstOrNew(auth()->id());
         if (request()->isMethod('post')) {
             //更换单词本
-            if($config['book_id']!=request('book_id')){
+            if ($config['book_id'] != request('book_id')) {
                 $learnInfo = LearnInfo::firstOrNew(auth()->id());
                 $learnInfo->now = 0;
                 $learnInfo->nowId = 0;
