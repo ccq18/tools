@@ -231,11 +231,9 @@ class WordController
             } elseif ($type == 'collect') {
                 $allids = WordCollect::firstOrNew(auth()->id())->toArray();
             }
-
             $nowWord = resolve(WordRepositroy::class)->getNext($i, $type . '_' . auth()->id(), $allids);;
             $w = Word::where('id', '=', $nowWord['id'])->first();
-            $nowKey = date('Y-m-d');
-            $progress = '';//count($dayReadList[$nowKey]);
+            $progress = '';
         }
         $dayReadList->addWord($nowWord['id']);
         return view('words.index', array_merge([

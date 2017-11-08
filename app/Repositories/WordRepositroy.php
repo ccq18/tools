@@ -146,7 +146,7 @@ class WordRepositroy
     {
         $ids = $this->getReviewListByIds($listIds, count($listIds) * 3);
 
-        return $this->mergeByType([], $ids, 'first_read');
+        return $this->generateList($ids, 'first_read', []);
     }
 
     public function getNext($i, $key, $allListIds)
@@ -161,8 +161,10 @@ class WordRepositroy
             if (count($allListIds) <= $l->nowLearnEd) {
                 return null;
             }
-            $listIds = array_slice($allListIds, max($l->nowLearned - 2, 0), 60);
-            $readList->listIds = $this->generateReadListByGroup($listIds);
+            $oldIds = collect($readList->listId)->pluck('id')->unique()->values();
+
+            $listIds = array_slice($allListIds, max($l->nowLearned - 2, 0), 200);
+            $readList->listIds =  array_merge($this->generateList($oldIds, 'read_again', []),$this->generateReadListByGroup($listIds,2));
         }
         if (!isset($readList->listIds[$l->now])) {
             return null;
@@ -176,7 +178,7 @@ class WordRepositroy
     }
 
 
-    public function generateReadListByGroup($listIds)
+    public function generateReadListByGroup($listIds,$multiple=2)
     {
 
         $num = 0;
@@ -188,24 +190,24 @@ class WordRepositroy
             if ($num % 4 == 0) {
                 $todayIds = collect($readList)->slice($start)->pluck('id')->unique()->values();
                 $start = count($readList);
-                $readList = $this->mergeByType($readList, $todayIds, 'read_again');
+                $readList = $this->generateList($todayIds, 'read_again', $readList);
             }
             $ids = array_slice($listIds, $i, 10);
-            $ids = $this->getReviewListByIds($ids, count($ids) * 3);
-            $readList = $this->mergeByType($readList, $ids, 'first_read');
+            $ids = $this->getReviewListByIds($ids, count($ids) * $multiple);
+            $readList = $this->generateList($ids, 'first_read', $readList);
         }
 
         return $readList;
     }
 
 
-    protected function mergeByType($list, $ids, $type)
+    protected function generateList($ids, $type, $baseList=[])
     {
         foreach ($ids as $id) {
-            $list[] = ['id' => $id, 'type' => $type];
+            $baseList[] = ['id' => $id, 'type' => $type];
         }
 
-        return $list;
+        return $baseList;
     }
 
 
