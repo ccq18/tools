@@ -236,6 +236,7 @@ class WordController
             $progress = '';
         }
         $dayReadList->addWord($nowWord['id']);
+
         return view('words.index', array_merge([
             'type'       => $nowWord['type'],
             'lastUrl'    => build_url('/words/read-word', ['action' => 'last', 'type' => $type]),
@@ -435,6 +436,11 @@ class WordController
             'config' => $config
         ]);
 
+    }
+
+    public function ant()
+    {
+        return view('words.ant');
     }
 
 

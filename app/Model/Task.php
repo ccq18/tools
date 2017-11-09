@@ -46,7 +46,7 @@ class Task extends Model
     }
 
     public static function add($data){
-        if(Task::whereTaskUrl($data['task_url'])->whereDomain($data['domain'])->first()){
+        if(Task::whereTaskUrl($data['task_url'])->whereIn('status',[0,2])->whereDomain($data['domain'])->first()){
             return false;
         }
 

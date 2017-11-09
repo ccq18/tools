@@ -36,3 +36,13 @@ ansible-playbook -i provisioning/webservers provisioning/prod-distribution.yml  
 git submodule add  git@gitee.com:ccq18/provisioning.git provisioning
 子模块更新
 git submodule foreach git pull 
+
+
+npm install --save-dev babel-plugin-import
+npm install --save-dev babel-preset-stage-0
+npm install --save-dev babel-preset-react  
+npm install --save-dev babel-preset-es2015 
+
+npm run dev
+npm run production
+npm run watch

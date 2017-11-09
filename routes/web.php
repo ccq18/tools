@@ -41,6 +41,7 @@ Route::group(['namespace' => 'Web',], function () {
         Route::get('words/index', 'WordController@index');
         Route::get('words', 'WordController@listWord');
         Route::get('words/read-word', 'WordController@readWord');
+        Route::get('words/ant', 'WordController@ant');
 
         Route::get('words/index', 'WordController@index');
         Route::get('words', 'WordController@listWord');
