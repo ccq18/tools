@@ -163,7 +163,7 @@ class WordController
                         ->pluck('id')->all();
             if (!empty($ids)) {
                 $learnInfo['nowAddedId'] = max($ids);
-                $ids = resolve(WordRepositroy::class)->generateReviewListByWords($ids, 30);
+                $ids = resolve(WordRepositroy::class)->getReviewListByIds($ids, 30);
                 $nowReadList = $this->mergeByType($nowReadList, $ids, 'first_read');
             }
         }
