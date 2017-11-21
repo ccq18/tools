@@ -196,7 +196,7 @@ class WordController
 
         return view('words.learned-list', [
             'allWords'    => $words,
-            'readListUrl' => build_url('words/read-word', ['type' => 'learned'])
+            // 'readListUrl' => build_url('words/read-word', ['type' => 'learned'])
         ]);
     }
 
@@ -225,6 +225,7 @@ class WordController
         } else {
             if ($type == 'learned') {
                 $allids = [];
+
                 foreach ($dayReadList as $day => $ids) {
                     $allids = array_merge($allids, $ids);
                 }
@@ -233,6 +234,7 @@ class WordController
             }
             $nowWord = resolve(WordRepositroy::class)->getNext($i, $type . '_' . auth()->id(), $allids);;
             $w = Word::where('id', '=', $nowWord['id'])->first();
+            if(empty($w))
             $progress = '';
         }
         $dayReadList->addWord($nowWord['id']);
