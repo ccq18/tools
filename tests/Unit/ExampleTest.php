@@ -6,7 +6,6 @@ use App\Model\Task;
 use App\Model\TaskDocument;
 use Carbon\Carbon;
 use Commands\HsStock;
-use Spiders\GithubSpider;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\Yaml\Yaml;
@@ -58,7 +57,7 @@ class ExampleTest extends TestCase
         $test [] = 'szcode2.htm';
         $test [] = 'images/res_03.png';
         $test [] = '../../js/jquery.min.js';
-        $test [] = './../res/js/../jquery/./1.8.3/jquery.js';
+        $test [] = '. /../res/js/../jquery/./1.8.3/jquery.js';
         $obj = new HsStock();
         // foreach ($test as $val) {
         //     echo $obj->filterRelativeUrl($val, $URI_1) . PHP_EOL;
@@ -94,30 +93,30 @@ class ExampleTest extends TestCase
 
     public function test1()
     {
-        $t1 = microtime(true);
-        $d1 = json_decode(file_get_contents(storage_path('data1.json')), true);
-        $d2 = json_decode(file_get_contents(storage_path('data2.json')), true);
-        $data1 = [];
-        foreach ($d1 as $v) {
-            $arr = json_decode($v, true);
-            $data1[$arr['sku'] . $arr['batch_no']] = true;// ['json'=>$v,'arr'=>$arr];
-        }
-        $data2 = [];
-        foreach ($d2 as $v) {
-            $arr = json_decode($v, true);
-            $data2[$arr['sku'] . $arr['batch_no']] = true;//['json'=>$v,'arr'=>$arr];
-        }
-        $keys1 = array_keys($data1);
-        $keys2 = array_keys($data2);
-        $i = 0;
-        foreach ($keys1 as $v) {
-            foreach ($keys2 as $v2) {
-                $i++;
-                // $arr = json_decode($v,true);
-                // $data2[$arr['sku'].$arr['batch_no']] = ['json'=>$v,'arr'=>$arr];
-            }
-
-        }
+        // $t1 = microtime(true);
+        // $d1 = json_decode(file_get_contents(storage_path('data1.json')), true);
+        // $d2 = json_decode(file_get_contents(storage_path('data2.json')), true);
+        // $data1 = [];
+        // foreach ($d1 as $v) {
+        //     $arr = json_decode($v, true);
+        //     $data1[$arr['sku'] . $arr['batch_no']] = true;// ['json'=>$v,'arr'=>$arr];
+        // }
+        // $data2 = [];
+        // foreach ($d2 as $v) {
+        //     $arr = json_decode($v, true);
+        //     $data2[$arr['sku'] . $arr['batch_no']] = true;//['json'=>$v,'arr'=>$arr];
+        // }
+        // $keys1 = array_keys($data1);
+        // $keys2 = array_keys($data2);
+        // $i = 0;
+        // foreach ($keys1 as $v) {
+        //     foreach ($keys2 as $v2) {
+        //         $i++;
+        //         // $arr = json_decode($v,true);
+        //         // $data2[$arr['sku'].$arr['batch_no']] = ['json'=>$v,'arr'=>$arr];
+        //     }
+        //
+        // }
 
         // dump($i);
         // dump(array_diff_key($data1,$data2));

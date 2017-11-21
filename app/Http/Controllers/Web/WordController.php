@@ -218,7 +218,7 @@ class WordController
         }
         $dayReadList = DayReadList::firstOrNew(auth()->id());
         if ($type == 'readWord') {
-            $nowWord = $this->getNextWordId2(-1);;
+            $nowWord = $this->getNextWordId2($i);;
             $w = Word::where('id', '=', $nowWord['id'])->first();
             $nowKey = date('Y-m-d');
             $progress = count($dayReadList[$nowKey]);
