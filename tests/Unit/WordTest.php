@@ -6,6 +6,7 @@ namespace Tests;
 use App\Model\Lang\Word;
 use App\Repositories\WordRepositroy;
 use App\Spl\LinkListHelper;
+use Carbon\Carbon;
 use Ddc\CoreBundle\Service\Express\SfExpress\XmlHelper;
 use Util\Persist\Persist;
 
@@ -35,6 +36,11 @@ class WordTest extends TestCase
 
     }
 
+    public function testaaa()
+    {
+        dd(Carbon::now()->addDays(90));
+
+}
 
     public function testPush2()
     {

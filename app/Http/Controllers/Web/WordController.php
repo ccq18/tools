@@ -56,7 +56,7 @@ class WordController
         }
         $config->save();
 
-        return view('words.index', array_merge([
+        return $this->view('words.index', array_merge([
             'lastUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'last']),
             'nextUrl'    => $w->book_id != 1 ? "" : build_url('/words/index', ['action' => 'next']),
             'w'          => $w,
@@ -104,7 +104,7 @@ class WordController
         $this->defaultOrPage();
         $words = $this->getNowBook()->paginate(static::PAGE_SIZE);
 
-        return view('words.list', [
+        return $this->view('words.list', [
             'words'       => $words,
             'paginate'    => $words->links(),
             'readListUrl' => build_url('words/read-word')
@@ -194,8 +194,8 @@ class WordController
         }
         krsort($words);
 
-        return view('words.learned-list', [
-            'allWords'    => $words,
+        return $this->view('words.learned-list', [
+            'allWords' => $words,
             // 'readListUrl' => build_url('words/read-word', ['type' => 'learned'])
         ]);
     }
@@ -234,12 +234,13 @@ class WordController
             }
             $nowWord = resolve(WordRepositroy::class)->getNext($i, $type . '_' . auth()->id(), $allids);;
             $w = Word::where('id', '=', $nowWord['id'])->first();
-            if(empty($w))
-            $progress = '';
+            if (empty($w)) {
+                $progress = '';
+            }
         }
         $dayReadList->addWord($nowWord['id']);
 
-        return view('words.index', array_merge([
+        return $this->view('words.index', array_merge([
             'type'       => $nowWord['type'],
             'lastUrl'    => build_url('/words/read-word', ['action' => 'last', 'type' => $type]),
             'nextUrl'    => build_url('/words/read-word', ['action' => 'next', 'type' => $type]),
@@ -253,7 +254,7 @@ class WordController
     {
         $listIds = WordGroup::groupBy('list_id')->get(['list_id'])->pluck('list_id')->all();
 
-        return view('words.read-lists', [
+        return $this->view('words.read-lists', [
             'listIds' => $listIds,
         ]);
     }
@@ -269,7 +270,7 @@ class WordController
         $latestId = resolve(WordRepositroy::class)->latestId($listId, $model, 'list_id');
         $nextId = resolve(WordRepositroy::class)->nextId($listId, $model, 'list_id');
 
-        return view('words.read-groups', [
+        return $this->view('words.read-groups', [
             'lastUrl' => $latestId ? url('words/read-list/' . $latestId) : null,
             'nextUrl' => $nextId ? url('words/read-list/' . $nextId) : null,
             'listId'  => $listId,
@@ -288,7 +289,7 @@ class WordController
         $latestId = resolve(WordRepositroy::class)->latestId($groupId, $model, 'group_id');
         $nextId = resolve(WordRepositroy::class)->nextId($groupId, $model, 'group_id');
 
-        return view('words.read-group-list', [
+        return $this->view('words.read-group-list', [
             'words'   => $words,
             'backUrl' => url("words/read-list/$listId"),
             'lastUrl' => build_url("words/read-list/0/{$latestId}"),
@@ -316,7 +317,7 @@ class WordController
         $collectIds = WordCollect::firstOrNew(auth()->id());
         $words = $this->getNowBook()->whereIn('id', $collectIds)->orderByDesc('id')->paginate(static::PAGE_SIZE);
 
-        return view('words.list', [
+        return $this->view('words.list', [
             'words'       => $words,
             'paginate'    => $words->links(),
             'readListUrl' => build_url('words/read-word', ['type' => 'collect'])
@@ -333,7 +334,7 @@ class WordController
         $word = $w->translate;
         $notCollect = !$this->isCollect($w->id);
 
-        return view('words.index', [
+        return $this->view('words.index', [
             'lastUrl'    => build_url('/words/collect/detail',
                 ['word_id' => resolve(WordRepositroy::class)->latestId($nowId, $model)]),
             'next'       => build_url('/words/collect/detail',
@@ -364,7 +365,7 @@ class WordController
 
         }
 
-        return view('words.search', ['words' => $words, 'paginate' => $words->links()]);
+        return $this->view('words.search', ['words' => $words, 'paginate' => $words->links()]);
 
     }
 
@@ -400,7 +401,7 @@ class WordController
         $w = Word::where('id', '=', $id)->first();
 
 
-        return view('words.word', array_merge([
+        return $this->view('words.word', array_merge([
             'w'          => $w,
             'notCollect' => !$this->isCollect($w->id),
             'backUrl'    => request('backUrl')
@@ -434,7 +435,7 @@ class WordController
 
         }
 
-        return view('words.config', [
+        return $this->view('words.config', [
             'config' => $config
         ]);
 
@@ -442,8 +443,20 @@ class WordController
 
     public function ant()
     {
-        return view('words.ant');
+        return $this->view('words.ant');
     }
 
 
+    public function view($tpl, $data = [])
+    {
+        // if (env('IS_AJAX')) {
+        //     return $data;
+        // }
+        if (request()->ajax()) {
+            return $data;
+        }
+
+        return view($tpl, $data);
+
+    }
 }

@@ -30,7 +30,9 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.network "forwarded_port", guest: 443, host: 8443
   config.vm.network "forwarded_port", guest: 6377, host: 6377
-  config.vm.network "private_network", ip: "192.168.2.233"
+  config.vm.network  "forwarded_port", guest: 22, host: 1234
+
+  config.vm.network "private_network", ip: "192.168.2.234"
   config.vm.synced_folder ".", "/vagrant", type: "nfs"
 
   config.vm.provision :ansible do |ansible|
