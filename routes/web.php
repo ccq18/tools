@@ -3,6 +3,9 @@ Auth::routes();
 Route::group(['namespace' => 'Web',], function () {
     // Route::get('/', 'QuestionsController@index');
     Route::get('/', 'WordController@search');
+    Route::get('/api/aa', function(){
+        return 'helloapi';
+    });
 
     Route::get('/home', 'HomeController@index');
     Route::get('email/verify/{token}', ['as' => 'email.verify', 'uses' => 'EmailController@verify']);
