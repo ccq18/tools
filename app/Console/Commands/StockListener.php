@@ -92,7 +92,7 @@ class StockListener extends Command
 
     protected function sendMail($msg, $stock)
     {
-        $title = $msg . "-股票:{$stock['name']} 价格{$stock['price']}";
+        $title = 'service:'.$msg . "-股票:{$stock['name']} 价格{$stock['price']}";
         $this->show($title, true);
         if(!$this->show) {
             Mail::raw(var_export($stock, true), function ($msg) use ($title) {
@@ -100,7 +100,7 @@ class StockListener extends Command
                  * @var Message $msg
                  */
                 $msg->to(['348578429@qq.com']);
-                $msg->from(['1677937163@qq.com']);
+                $msg->from([env('MAIL_USERNAME')]);
                 $msg->subject($title);
             });
         }
