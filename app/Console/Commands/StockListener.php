@@ -60,6 +60,7 @@ class StockListener extends Command
                             }
                         });
                     }
+                    sleep(rand(1, 3));
                 });
 
             } catch (\Exception $e) {
