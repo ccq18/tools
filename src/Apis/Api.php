@@ -12,7 +12,7 @@ class Api
     public function __construct()
     {
         $this->client = new Client([
-            'timeout' => 2.0,
+            'timeout' => 5.0,
         ]);
     }
 
