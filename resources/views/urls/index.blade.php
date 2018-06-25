@@ -44,8 +44,8 @@
         $.post('/url/add', {url: url, data: data, type: type}, function(rs) {
           $('#show').show();
           $('#short_url').html(rs.data.short_url);
-          console.log(rs);
-          alert(rs.message);
+          // console.log(rs);
+          // alert(rs.message);
         });
 
       });
