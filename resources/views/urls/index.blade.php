@@ -38,10 +38,10 @@
       $('#show').hide();
       $('#add_url').click(function() {
         $('#show').hide();
-        var url = $('[name=code]').val();
-        var data = $('[name=data]').text();
+        var code = $('[name=code]').val();
+        var data = $('[name=data]').val();
         var type = $('[name=type]').val();
-        $.post('/url/add', {url: url, data: data, type: type}, function(rs) {
+        $.post('/url/add', {code: code, data: data, type: type}, function(rs) {
           $('#show').show();
           $('#short_url').html(rs.data.short_url);
           // console.log(rs);

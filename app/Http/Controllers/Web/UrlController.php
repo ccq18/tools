@@ -32,9 +32,9 @@ class UrlController extends Controller
      */
     public function add(Request $request)
     {
-        // print_r(get_class_methods($request));
+
         if (!empty($request->get('code'))) {
-            $url = Url::whereCode($request->get('code'))->first();
+            $url = Url::whereCode($request->input('code'))->first();
             if (!empty($url) && auth()->id() != $url->uid) {
                 return $this->response(null, 401, '网址已存在');
             }
@@ -45,9 +45,9 @@ class UrlController extends Controller
             $url->uid = auth()->id();
         }
 
-        $url->data = trim($request->post('data'));
-        $url->code = $request->post('code') ? trim($request->get('code')) : uniqid();
-        $url->type = $request->post('type');
+        $url->data = trim($request->input('data'));
+        $url->code = $request->input('code') ? trim($request->get('code')) : uniqid();
+        $url->type = $request->input('type');
         $url->save();
         $url->short_url = $url->shortUrl();
 
