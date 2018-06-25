@@ -60,6 +60,9 @@ Route::group(['namespace' => 'Web',], function () {
         Route::get('inbox', 'InboxController@index');
         Route::get('inbox/{dialogId}', 'InboxController@show');
         Route::post('inbox/{dialogId}/store', 'InboxController@store');
+        Route::get('url/index', 'UrlController@index');
+        Route::get('url/list', 'UrlController@listUrl');
+        Route::post('url/add', 'UrlController@add');
 
         Route::group(['prefix' => 'account'], function () {
             Route::get('/index', 'AccountController@index');
@@ -69,4 +72,7 @@ Route::group(['namespace' => 'Web',], function () {
 
         });
     });
+
+    Route::any('u/{code}', 'UrlController@redirect');
+
 });

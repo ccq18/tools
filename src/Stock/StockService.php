@@ -3,7 +3,7 @@
 namespace Stock;
 
 
-use Apis\Api;
+use Apis\StockApi;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
 
@@ -43,7 +43,7 @@ class StockService
 
     public function fetch()
     {
-        $api = new Api();
+        $api = new StockApi();
         $stock = $api->getPrice($this->stockCode);
         $this->record($stock);
         $this->showMsg("股票:{$stock['name']} 价格{$stock['price']}");

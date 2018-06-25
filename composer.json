@@ -11,6 +11,7 @@
   "require": {
     "php": ">=7.0.0",
     "barryvdh/laravel-debugbar": "^3.1",
+    "barryvdh/laravel-ide-helper": "^2.4",
     "bupt1987/html-parser": "^3.0",
     "doctrine/dbal": "^2.6",
     "fideloper/proxy": "~3.3",

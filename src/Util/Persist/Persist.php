@@ -49,9 +49,17 @@ abstract class Persist extends Fluent
     protected function init($items)
     {
         $structure = $this->structure();
+
         return array_merge($structure, $items);
     }
 
+    public function only()
+    {
+        $structure = $this->structure();
+        if (!empty($structure)) {
+            $this->attributes = Arr::only($this->attributes, array_keys($structure));
+        }
+    }
 
     //返回基本表结构 方便重构
     public function structure()
@@ -77,6 +85,7 @@ abstract class Persist extends Fluent
     {
         return static::firstOrNew(auth()->id());
     }
+
     public static function firstOrNew($key)
     {
         $v = static::find($key);
@@ -114,7 +123,6 @@ abstract class Persist extends Fluent
     {
         return static::$_prefix . ':' . static::$_table;
     }
-
 
 
     public function save()
