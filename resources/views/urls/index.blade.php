@@ -7,7 +7,7 @@
             {{--<form action="/url/add">--}}
             <div class="form-group">
                 <label for="exampleInputPassword1"> 短网址:</label>
-                {{ url('/u/') }}<input type="text" name="code" width="20%"><br>
+                {{ url('/u/') }}/<input type="text" name="code" width="20%"><br>
             </div>
             <div class="form-group">
 
