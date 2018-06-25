@@ -99,6 +99,12 @@
                         </a>
 
                     </li>
+                    <li>
+                        <a href="{{ url('/url/index') }}">
+                            短网址
+                        </a>
+
+                    </li>
 
                     @if(!is_production())
                         <li>
