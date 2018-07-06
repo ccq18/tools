@@ -14,7 +14,7 @@ class StockListener extends Command
 
     protected $stockCode;
     protected $title = null;
-    protected $show = false;
+    protected $debug = false;
     protected $limit = 0.1;
     protected $linePrice = null;
     protected $max = null;
@@ -22,9 +22,9 @@ class StockListener extends Command
 
     public function handle()
     {
-        $this->show = $this->option('show') == 'true' ? true : false;
+        $this->debug = $this->option('show') == 'true' ? true : false;
         $stockServices = [];
-        if($this->show){
+        if($this->debug){
             $stockServices[] = new StockService(['348578429@qq.com'], 'sz300355');
         }else{
             $stockServices[] = new StockService(['348578429@qq.com'], 'sh600036');
@@ -55,7 +55,7 @@ class StockListener extends Command
                      */
                     $stockService->fetch();
                     $msgs = $stockService->getMsgs();
-                    if ($this->show) {
+                    if ($this->debug) {
                         collect($msgs)->map(function ($msg) {
                             if ($msg['isRed']) {
                                 $this->error($msg['msg']);
