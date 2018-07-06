@@ -1,5 +1,5 @@
 <?php
-Auth::routes();
+// Auth::routes();
 Route::group(['namespace' => 'Web',], function () {
     // Route::get('/', 'QuestionsController@index');
     Route::get('/', 'WordController@search');
@@ -74,5 +74,6 @@ Route::group(['namespace' => 'Web',], function () {
     });
 
     Route::any('u/{code}', 'UrlController@redirect');
+    Route::any('graphql', 'GraphqlController@run');
 
 });

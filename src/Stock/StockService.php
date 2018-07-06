@@ -4,6 +4,8 @@ namespace Stock;
 
 
 use Apis\StockApi;
+use App\Model\Finance\StockSecLog;
+use Carbon\Carbon;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
 
@@ -110,6 +112,36 @@ class StockService
 
     protected function record($stock)
     {
+        $secLog = new StockSecLog();
+        $secLog->name = $stock['name'];
+        $secLog->price = $stock['price'];
+        $secLog->date = $stock['date'];
+        $secLog->time = $stock['time'];
+        $secLog->datetime = Carbon::parse( $stock['date'].$stock['time']);
+        $secLog->max = $stock['max'];
+        $secLog->min = $stock['min'];
+        $secLog->buy1_price = $stock['buy1']['price'];
+        $secLog->buy1_num = $stock['buy1']['num'];
+        $secLog->buy2_price = $stock['buy2']['price'];
+        $secLog->buy2_num = $stock['buy2']['num'];
+        $secLog->buy3_price = $stock['buy3']['price'];
+        $secLog->buy3_num = $stock['buy3']['num'];
+        $secLog->buy4_price = $stock['buy4']['price'];
+        $secLog->buy4_num = $stock['buy4']['num'];
+        $secLog->buy5_price = $stock['buy5']['price'];
+        $secLog->buy5_num = $stock['buy5']['num'];
+        $secLog->sell1_price = $stock['sell1']['price'];
+        $secLog->sell1_num = $stock['sell1']['num'];
+        $secLog->sell2_price = $stock['sell2']['price'];
+        $secLog->sell2_num = $stock['sell2']['num'];
+        $secLog->sell3_price = $stock['sell3']['price'];
+        $secLog->sell3_num = $stock['sell3']['num'];
+        $secLog->sell4_price = $stock['sell4']['price'];
+        $secLog->sell4_num = $stock['sell4']['num'];
+        $secLog->sell5_price = $stock['sell5']['price'];
+        $secLog->sell5_num = $stock['sell5']['num'];
+        $secLog->save();
+
         file_put_contents(storage_path('logs/stock' . $this->stockCode . date('Y-m-d')),
             json_encode(['time' => date('Y-m-d H:i:s'), 'stock' => $stock]) . PHP_EOL, FILE_APPEND);
     }

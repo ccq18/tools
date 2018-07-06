@@ -28,8 +28,12 @@ class StockListener extends Command
             $stockServices[] = new StockService(['348578429@qq.com'], 'sz300355');
         }else{
             $stockServices[] = new StockService(['348578429@qq.com'], 'sh600036');
-            $stockServices[] = new StockService(['348578429@qq.com','1536687236@qq.com'], 'sz300355');
-
+            $stockServices[] = new StockService(['1536687236@qq.com'], 'sz300355');
+            $stockServices[] = new StockService([], 'sh600756');
+            $stockServices[] = new StockService([], 'sz300676');
+            $stockServices[] = new StockService([], 'sh600718');
+            $stockServices[] = new StockService([], 'sz300168');
+            $stockServices[] = new StockService([], 'sz300253');
         }
 
 

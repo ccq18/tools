@@ -1,0 +1,16 @@
+2018-06-25 18:27:07 pid:4163 Workerman[run_subscribe.php] start in DEBUG mode
+2018-06-25 19:10:11 pid:1 Workerman[/www/huobiApi/does/run_request.php] start in DEBUG mode
+2018-06-25 19:46:28 pid:1 Workerman[/www/huobiApi/does/run_request.php] start in DEBUG mode
+2018-06-26 17:44:48 pid:1 Workerman[/www/huobiApi/does/run_request.php] start in DEBUG mode
+2018-06-26 17:45:11 pid:1 Workerman[run_request.php] stopping ...
+2018-06-26 17:45:11 pid:1 Workerman[run_request.php] has been stopped
+2018-06-27 09:39:24 pid:1 Workerman[/www/huobiApi/does/run_request.php] start in DEBUG mode
+2018-07-04 10:37:31 pid:1 Workerman[/www/huobiApi/does/run_request.php] start in DEBUG mode
+2018-07-04 10:38:21 pid:1 Workerman[run_request.php] stopping ...
+2018-07-04 10:38:21 pid:1 Workerman[run_request.php] has been stopped
+2018-07-04 10:38:45 pid:1 Workerman[/www/huobiApi/does/run_request.php] start in DEBUG mode
+2018-07-04 10:40:47 pid:1 Workerman[run_request.php] stopping ...
+2018-07-04 10:40:47 pid:1 Workerman[run_request.php] has been stopped
+2018-07-04 10:43:55 pid:1 Workerman[/www/huobiApi/does/run_request.php] start in DEBUG mode
+2018-07-04 10:52:34 pid:1 Workerman[run_request.php] stopping ...
+2018-07-04 10:52:34 pid:1 Workerman[run_request.php] has been stopped

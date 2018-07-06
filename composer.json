@@ -24,7 +24,8 @@
     "overtrue/laravel-ueditor": "~1.0",
     "paquettg/php-html-parser": "^1.7",
     "phpspec/phpspec": "^4.2",
-    "predis/predis": "^1.1"
+    "predis/predis": "^1.1",
+    "webonyx/graphql-php": "^0.12.2"
   },
   "require-dev": {
     "filp/whoops": "~2.0",
