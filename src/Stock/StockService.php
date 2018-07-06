@@ -4,6 +4,7 @@ namespace Stock;
 
 
 use Apis\StockApi;
+use App\Model\Finance\Stock;
 use App\Model\Finance\StockSecLog;
 use Carbon\Carbon;
 use Illuminate\Mail\Message;
@@ -110,9 +111,21 @@ class StockService
         return $this->msgs;
     }
 
+
+
     protected function record($stock)
     {
+        /**
+         *@var Stock $s
+         */
+        $code = Stock::getCode($this->stockCode);
+
+        $s =  \Cache::remember('stock_cache_'.$this->stockCode,20,function ()use($code){
+            return  Stock::whereCode($code['code'])->whereType($code['type'])->first();
+        });
         $secLog = new StockSecLog();
+        $secLog->stock_id = $s->id??0;
+        $secLog->stock_code = $code['code'];
         $secLog->name = $stock['name'];
         $secLog->price = $stock['price'];
         $secLog->date = $stock['date'];
@@ -138,8 +151,7 @@ class StockService
         $secLog->sell3_num = $stock['sell3']['num'];
         $secLog->sell4_price = $stock['sell4']['price'];
         $secLog->sell4_num = $stock['sell4']['num'];
-        $secLog->sell5_price = $stock['sell5']['price'];
-        $secLog->sell5_num = $stock['sell5']['num'];
+
         $secLog->save();
 
         file_put_contents(storage_path('logs/stock' . $this->stockCode . date('Y-m-d')),

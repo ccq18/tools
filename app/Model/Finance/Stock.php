@@ -28,5 +28,17 @@ class Stock extends Model
     const TYPE_SH = 1;
     const TYPE_SZ = 2;
 
-    //
+    public static function getCode($stockCode)
+    {
+        $t = substr($stockCode,0,2);
+        $code =  substr($stockCode,2);
+        if($t=='sh'){
+            $type= Stock::TYPE_SH;
+        }
+        if($t=='sz'){
+            $type= Stock::TYPE_SZ;
+        }
+        return ['code'=>$code,'type'=>$type];
+
+    }
 }
