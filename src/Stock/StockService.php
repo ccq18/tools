@@ -3,7 +3,7 @@
 namespace Stock;
 
 
-use Apis\StockApi;
+use Apis\SinaStockApi;
 use App\Model\Finance\Stock;
 use App\Model\Finance\StockSecLog;
 use Carbon\Carbon;
@@ -44,10 +44,10 @@ class StockService
 
     }
 
-    public function fetch()
+    public function run($stock)
     {
-        $api = new StockApi();
-        $stock = $api->getPrice($this->stockCode);
+        // $api = new StockApi();
+        // $stock = $api->getPrice($this->stockCode);
         $this->record($stock);
         $this->showMsg("股票:{$stock['name']} 价格{$stock['price']}");
         if (empty($this->linePrice)) {
@@ -156,5 +156,10 @@ class StockService
 
         file_put_contents(storage_path('logs/stock' . $this->stockCode . date('Y-m-d')),
             json_encode(['time' => date('Y-m-d H:i:s'), 'stock' => $stock]) . PHP_EOL, FILE_APPEND);
+    }
+
+    public function getStockCode()
+    {
+        return $this->stockCode;
     }
 }

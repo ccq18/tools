@@ -5,7 +5,7 @@ namespace Apis;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 
-class StockApi
+class SinaStockApi
 {
     protected $client = null;
 

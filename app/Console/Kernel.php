@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\InitWordByShanbay::class,
         \App\Console\Commands\GenerateNiujing::class,
         Auto::class,
-        \App\Console\Commands\StockListener::class
+        \App\Console\Commands\StockListener::class,
+        \App\Console\Commands\Translate::class,
     ];
 
     /**

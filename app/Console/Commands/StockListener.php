@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Stock\StockProxyService;
 use Stock\StockService;
 
 
@@ -23,49 +24,43 @@ class StockListener extends Command
     public function handle()
     {
         $this->debug = $this->option('show') == 'true' ? true : false;
-        $stockServices = [];
+        $stockService = new StockProxyService();
+        // $stockServices = [];
         if($this->debug){
-            $stockServices[] = new StockService(['348578429@qq.com'], 'sz300355');
+            $stockService->add(['348578429@qq.com'], 'sz300355');
         }else{
-            $stockServices[] = new StockService(['348578429@qq.com'], 'sh600036');
-            $stockServices[] = new StockService(['1536687236@qq.com'], 'sz300355');
-            $stockServices[] = new StockService([], 'sh600756');
-            $stockServices[] = new StockService([], 'sz300676');
-            $stockServices[] = new StockService([], 'sh600718');
-            $stockServices[] = new StockService([], 'sz300168');
-            $stockServices[] = new StockService([], 'sz300253');
+            $stockService->add(['348578429@qq.com'], 'sh600036');
+            $stockService->add(['1536687236@qq.com'], 'sz300355');
+            $stockService->add([], 'sh600756');
+            $stockService->add([], 'sz300676');
+            $stockService->add([], 'sh600718');
+            $stockService->add([], 'sz300168');
+            $stockService->add([], 'sz300253');
         }
 
 
-        $stockServices = collect($stockServices);
+        // $stockServices = collect($stockServices);
         while (true) {
             try {
 
-                if (!(
-                    Carbon::now()->between(Carbon::parse('9:30'), Carbon::parse('11:30')) ||
-                    Carbon::now()->between(Carbon::parse('13:00'), Carbon::parse('15:00'))
-                )) {
-                    $this->info('sleep');
-                    sleep(5);
-                    continue;
+                // if (!(
+                //     Carbon::now()->between(Carbon::parse('9:30'), Carbon::parse('11:30')) ||
+                //     Carbon::now()->between(Carbon::parse('13:00'), Carbon::parse('15:00'))
+                // )) {
+                //     $this->info('sleep');
+                //     sleep(5);
+                //     continue;
+                // }
+                $msgs = $stockService->fetch();
+                if ($this->debug) {
+                    collect($msgs)->map(function ($msg) {
+                        if ($msg['isRed']) {
+                            $this->error($msg['msg']);
+                        } else {
+                            $this->info($msg['msg']);
+                        }
+                    });
                 }
-                $stockServices->map(function ($stockService) {
-                    /**
-                     * @var StockService $stockService
-                     */
-                    $stockService->fetch();
-                    $msgs = $stockService->getMsgs();
-                    if ($this->debug) {
-                        collect($msgs)->map(function ($msg) {
-                            if ($msg['isRed']) {
-                                $this->error($msg['msg']);
-                            } else {
-                                $this->info($msg['msg']);
-                            }
-                        });
-                    }
-                    sleep(rand(1, 3));
-                });
 
             } catch (\Exception $e) {
                 $this->info(date('Y-m-d H:i:s ') . $e->getMessage());
