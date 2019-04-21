@@ -37,7 +37,7 @@ class ClientHelper
         $response = $this->client->request($method, $uri, $newOptions);
         $content = $this->getContent($response);
         if (static::$debug) {
-            file_put_contents(storage_path('req-' . date('YmdHis-') . uniqid() . ''), $content);
+            file_put_contents(storage_path('logs/req-' . date('YmdHis-') . uniqid() . ''), $content);
         }
 
         return $content;

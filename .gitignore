@@ -7,4 +7,3 @@ provisioning/*.retry
 /.env
 /.vagrant/
 /data
-storage
