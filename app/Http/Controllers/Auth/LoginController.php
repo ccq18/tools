@@ -48,6 +48,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        dd(11);
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
