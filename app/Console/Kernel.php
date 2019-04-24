@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\StockListener::class,
         \App\Console\Commands\Translate::class,
         \App\Console\Commands\JdListener::class,
+        \App\Console\Commands\FormatUrl::class,
     ];
 
     /**

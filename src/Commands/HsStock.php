@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use PHPHtmlParser\Dom\AbstractNode;
 use Util\Db;
 
-class HsStock extends SpiderBase
+class HsStock extends AutoSpider
 {
 
 
@@ -25,7 +25,7 @@ class HsStock extends SpiderBase
     const TYPE_SH_STOCK_DETAIL = 'sh-stock-detail';
     const TYPE_SZ_STOCK_DETAIL = 'sz-stock-detail';
 
-    public function runnerTaskInit()
+    public function initTask()
     {
         $this->addTask('http://www.wstock.net/wstock/market/shcode1.htm', static::TYPE_SH_STOCK_CODE);
         $this->addTask('http://www.wstock.net/wstock/market/szcode1.htm', static::TYPE_SZ_STOCK_CODE);

@@ -5,9 +5,14 @@ namespace Util;
 
 use Psr\Http\Message\ResponseInterface;
 
-class SpiderHelper
+class RequestHelper
 {
     public static function simpleShowArr($arr, $limit = 999)
+    {
+       var_dump(static::simpleArr($arr,$limit));
+    }
+
+    protected static function simpleArr($arr, $limit = 999)
     {
         if ($limit <= 0) {
             return gettype($arr);
@@ -18,7 +23,7 @@ class SpiderHelper
                 continue;
             }
             if (is_array($v)) {
-                $rs[$k] = static::simpleShowArr($v, $limit - 1);
+                $rs[$k] = static::simpleArr($v, $limit - 1);
             } else {
                 $rs[$k] = $v;
             }
@@ -54,8 +59,9 @@ class SpiderHelper
 
         $output = static::getUrlParams($path);
         $param_str = http_build_query(array_merge($output, $parameters));
+        $param_str = empty($param_str) ? "" : '?' . $param_str;
 
-        return url(ltrim(static::getUrlPath($path), '\/') . (empty($parm_str) ? "" : '?' . $param_str));
+        return url(ltrim(static::getUrlPath($path), '\/') . $param_str);
     }
 
     public static function getUrlParams($url)
@@ -83,10 +89,13 @@ class SpiderHelper
         $params = var_export(static::getUrlParams($url), true);
          echo <<<EOF
 \$params = {$params};     
-\$url = SpiderHelper::buildUrl('{$path}', \$params);
+\$url = RequestHelper::buildUrl('{$path}', \$params);
 EOF;
 
     }
 
+    public static  function getPageNum($pageCount,$pageSize){
+        return ceil($pageCount/$pageSize);
+    }
 
 }

@@ -6,7 +6,7 @@ namespace Commands;
 use App\Model\Github\GithubRepository;
 use App\Model\Task;
 
-class GithubCommand extends SpiderBase
+class GithubCommand extends AutoSpider
 {
     //http://img1.money.126.net/data/hs/kline/day/history/2015/0000842.json
     //开盘价	收盘价	最高价	最低价	成交量	涨跌幅
@@ -16,7 +16,7 @@ class GithubCommand extends SpiderBase
     protected $domain = 'github.com';
 
 
-    public function runnerTaskInit()
+    public function initTask()
     {
         $http = new \Util\Http();
         $starturls = ['https://github.com/search?utf8=%E2%9C%93&q=php'];

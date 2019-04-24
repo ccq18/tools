@@ -202,3 +202,15 @@ function xml_to_array($xml)
     return $values;
 
 }
+
+function rdata($name)
+{
+    $rs = file_get_contents(storage_path($name));
+
+    return json_decode($rs, true);
+}
+
+function wdata($name, $content)
+{
+    return file_put_contents(storage_path($name), json_encode($content));
+}

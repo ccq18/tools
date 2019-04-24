@@ -1,14 +1,13 @@
 <?php
 // Auth::routes();
 use App\Console\Commands\JdListener;
+use Util\RequestHelper;
 
 Route::group(['namespace' => 'Web',], function () {
     // Route::get('/', 'QuestionsController@index');
     Route::get('/', 'WordController@search');
     Route::get('/jdact', function () {
-        $url = "https://so.m.jd.com/list/itemSearch.action?ptag=37287.6.5&promotion_aggregation=yes&activityId=50004594574&skuId=36700607795&pro_d=%E8%B7%A8%E8%87%AA%E8%90%A5%2F%E5%BA%97%E9%93%BA%E6%BB%A1%E5%87%8F&pro_s=%E6%BB%A1299%E5%85%83%E5%87%8F100%E5%85%83";
-        $infos = resolve(JdListener::class)->getList($url);
-
+        $infos = resolve(JdListener::class)->getCoupon(197751398);
         return $infos;
     });
     Route::get('/api/aa', function () {

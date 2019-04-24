@@ -9,12 +9,13 @@ use Psr\Http\Message\ResponseInterface;
 class ClientHelper
 {
     static $debug = false;
+    protected $response;
 
     public function __construct($options = ['timeout' => 5.0,], $headers = null, $cookies = null)
     {
         // $cookieJar = CookieJar::fromArray([
-            //     'shshshfpa'='485323f9-9e37-bc1f-4319-6bae032c11da-1510539925',
-            // ], 'www.devkang.com');
+        //     'shshshfpa'='485323f9-9e37-bc1f-4319-6bae032c11da-1510539925',
+        // ], 'www.devkang.com');
         $this->decode = function ($data) {
             return json_decode($data, true);
         };
@@ -28,15 +29,19 @@ class ClientHelper
 
     public function request($method, $uri = '', array $options = [])
     {
-        $newOptions= [];
-        foreach ($options as $k=>$v){
-            if (!empty($v)){
-                $newOptions[$k]=$v;
+        $newOptions = [];
+        foreach ($options as $k => $v) {
+            if (!empty($v)) {
+                $newOptions[$k] = $v;
             }
         }
+        // $newOptions['debug'] = static::$debug;
         $response = $this->client->request($method, $uri, $newOptions);
+        $this->response = $response;
         $content = $this->getContent($response);
         if (static::$debug) {
+            $newOptionStr = var_export($newOptions, true);
+            $logs = "method:\n {$method}\n uri:\n {$uri}\n newOptions:\n {$newOptionStr}\n content:\n{$content}\n";
             file_put_contents(storage_path('logs/req-' . date('YmdHis-') . uniqid() . ''), $content);
         }
 
@@ -88,23 +93,23 @@ class ClientHelper
     }
 
 
-    public function getApi($uri, $query=[], $headers = [])
+    public function getApi($uri, $query = [], $headers = [])
     {
         return $this->decode($this->get($uri, $query, $headers));
     }
 
 
-    public function deleteApi($uri, $data=[], $query = [], $headers = [])
+    public function deleteApi($uri, $data = [], $query = [], $headers = [])
     {
         return $this->decode($this->delete($uri, $data, $query, $headers));
     }
 
-    public function putApi($uri, $data=[], $query = [], $headers = [])
+    public function putApi($uri, $data = [], $query = [], $headers = [])
     {
         return $this->decode($this->put($uri, $data, $query, $headers));
     }
 
-    public function postApi($uri, $data=[], $query = [], $headers = [])
+    public function postApi($uri, $data = [], $query = [], $headers = [])
     {
         return $this->decode($this->post($uri, $data, $query, $headers));
     }
