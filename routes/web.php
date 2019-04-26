@@ -10,8 +10,9 @@ Route::group(['namespace' => 'Web',], function () {
         $infos = resolve(JdListener::class)->getCoupon(197751398);
         return $infos;
     });
-    Route::get('/api/aa', function () {
-        return 'helloapi';
+
+    Route::get('/api/ip', function () {
+        return $_SERVER;
     });
 
     Route::get('/home', 'HomeController@index');

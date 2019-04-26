@@ -59,12 +59,6 @@ class JdListener extends SpiderBase
 //
 
 
-    // public function getAllItems($activityId, $search1, $search2)
-    // {
-    //
-    //
-    // }
-
     /**
      * @param $infos [
      * classes
@@ -268,21 +262,9 @@ class JdListener extends SpiderBase
         return $this->decode($match[1]);
     }
 
-
     public function initTask()
     {
         $this->addTask('search', '', ['keyword' => 'apple']);
-    }
-    protected $cases = [];
-    public function addCase($type,$call){
-        $this->cases[$type] = $call;
-        return $this;
-    }
-    public function doCase(Task $task){
-        if(!empty($this->cases[$task->type])){
-            return call_user_func($this->cases[$task->type]);
-        }
-        return '';
     }
 
     public function runTask(Task $task)

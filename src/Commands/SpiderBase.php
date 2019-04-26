@@ -84,4 +84,16 @@ abstract class SpiderBase extends Command
     }
 
 
+
+    protected $cases = [];
+    protected function addCase($type,$call){
+        $this->cases[$type] = $call;
+        return $this;
+    }
+    protected function doCase(Task $task){
+        if(!empty($this->cases[$task->type])){
+            return call_user_func($this->cases[$task->type]);
+        }
+        return '';
+    }
 }
