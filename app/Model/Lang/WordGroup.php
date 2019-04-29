@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\WordGroup whereWordId($value)
  * @mixin \Eloquent
  * @property-read \App\Model\Lang\Word $word
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\WordGroup newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\WordGroup newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\WordGroup query()
  */
 class WordGroup extends Model
 {

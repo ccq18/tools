@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRecord whereStartedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRecord whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRecord whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRecord newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRecord newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRecord query()
  */
 class LoanRecord extends Model
 {

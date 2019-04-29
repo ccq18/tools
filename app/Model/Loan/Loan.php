@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\Loan query()
  */
 class Loan extends Model
 {

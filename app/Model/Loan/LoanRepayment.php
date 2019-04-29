@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRepayment whereRepaymentAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRepayment whereRepaymentStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRepayment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRepayment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRepayment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Loan\LoanRepayment query()
  */
 class LoanRepayment extends Model
 {

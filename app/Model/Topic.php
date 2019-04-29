@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Topic whereQuestionsCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Topic whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Topic newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Topic newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Topic query()
  */
 class Topic extends Model
 {

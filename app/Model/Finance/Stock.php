@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\Stock whereUnit($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\Stock whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\Stock newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\Stock newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\Stock query()
  */
 class Stock extends Model
 {

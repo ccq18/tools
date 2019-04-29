@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 
 use App\Console\Commands\Jd\JdSpider;
+use App\Model\JdProduct;
 use App\Model\Task;
 use Commands\SpiderBase;
 use GuzzleHttp\Client;
@@ -77,13 +78,14 @@ class JdListener extends SpiderBase
     }
 
 
-    public function search($keyword){
-      // keyword=Apple&searchFrom=search&sf=11&as=1
+    public function search($keyword)
+    {
+        // keyword=Apple&searchFrom=search&sf=11&as=1
         $params = [
-            'keyword'            => $keyword,//'50004594574',
-            'searchFrom'                 => 'search',
-            'sf'                 => 11,
-            'as'                 => 1,
+            'keyword'    => $keyword,//'50004594574',
+            'searchFrom' => 'search',
+            'sf'         => 11,
+            'as'         => 1,
         ];
         $url = RequestHelper::buildUrl('https://so.m.jd.com/ware/search.action?', $params);
         $content = $this->client->get($url);
@@ -93,30 +95,33 @@ class JdListener extends SpiderBase
 
         return $this->decode($match[1]);
     }
-    public function searchItems($keyword,$page, $pagesize){
-        $params = array (
-            'keyword' => $keyword,
-            'datatype' => '1',
-            'callback' => 'jdSearchResultBkCbA',
-            'page'                  => $page,
-            'pagesize'              => $pagesize,
-            'ext_attr' => 'no',
-            'brand_col' => 'no',
-            'price_col' => 'no',
-            'color_col' => 'no',
-            'size_col' => 'no',
-            'ext_attr_sort' => 'no',
-            'merge_sku' => 'yes',
+
+    public function searchItems($keyword, $page, $pagesize)
+    {
+        $params = [
+            'keyword'         => $keyword,
+            'datatype'        => '1',
+            'callback'        => 'jdSearchResultBkCbA',
+            'page'            => $page,
+            'pagesize'        => $pagesize,
+            'ext_attr'        => 'no',
+            'brand_col'       => 'no',
+            'price_col'       => 'no',
+            'color_col'       => 'no',
+            'size_col'        => 'no',
+            'ext_attr_sort'   => 'no',
+            'merge_sku'       => 'yes',
             'multi_suppliers' => 'yes',
-            'area_ids' => '1,72,2819',
-            'qp_disable' => 'no',
-            'fdesc' => '北京',
-            't1' => '1556132713017',
-        );
+            'area_ids'        => '1,72,2819',
+            'qp_disable'      => 'no',
+            'fdesc'           => '北京',
+            't1'              => '1556132713017',
+        ];
         $url = RequestHelper::buildUrl('https://so.m.jd.com/ware/search._m2wq_list', $params);
 
 
         $content = $this->client->get($url);
+
         return $this->decodeJsonP('jdSearchResultBkCbA', $content);
     }
 
@@ -222,7 +227,7 @@ class JdListener extends SpiderBase
         $content = $this->client->get("https://yx.3.cn/service/info.action?ids={$productId}&callback=jsonp424792");
         $info = $this->decodeJsonP('jsonp424792', $content);
         // $rs['info'] =$info[$productId.''];
-
+        $rs['id'] = $productId;
         $rs['info'] = array_only($info[$productId . ''], ['imagePath', 'name']);
         // $content = $this->client->get("https://wq.jd.com/commodity/promo/get?skuid={$productId}&callback=jsonp6574");
         // $promos = $this->decodeJsonP('jsonp6574', $content);
@@ -239,7 +244,8 @@ class JdListener extends SpiderBase
 // subextinfo: "{"extType":1,"subExtType":1,"subRuleList":[{"needMoney":"299","rewardMoney":"100","subRuleList":[],"subRuleType":1}]}"
 //    }
         //
-        $content = $this->client->get("https://wq.jd.com/mjgj/fans/queryusegetcoupon?callback=getCouponListCBA&platform=3&cid=12209&sku={$productId}&popId=760236&t=0.9722696676999263");
+        $content = $this->client->get("https://wq.jd.com/mjgj/fans/queryusegetcoupon?callback=getCouponListCBA&platform=3&cid=12209&sku={$productId}&popId={$product['stock']['D']['vid']}&t=0.9722696676999263");
+
         $coupons = $this->decodeJsonP('getCouponListCBA', $content, ';');
         $rs['coupons'] = $coupons['coupons'];
 
@@ -262,66 +268,97 @@ class JdListener extends SpiderBase
         return $this->decode($match[1]);
     }
 
-    public function initTask()
+    protected function initTask()
     {
-        $this->addTask('search', '', ['keyword' => 'apple']);
+        // https://so.m.jd.com/list/itemSearch.action?lng=121.260643&lat=31.329815&activityId=21194353928&un_area=2_2826_51943_0&sid=e77de29ffa406cef198378c1ae93ee3w&_ts=1556453451082&ShareTm=l%2BPXQS64PB1UTK6tW7hnWmXSwe6nyA5w9k59yqZCkxx1fHmHc2lE6WyuiehMn33jVPLXoXjSsCNznSMWIFS098WxzX1KLyhWmMzs5KEZpUGyR8nyuNWxn0BoRqj6KUBMS9u9EDBgfJ0lbcshhhOHpFDntEgY3VicJteHRiPoTyc%3D&ad_od=share&utm_source=androidapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=Wxfriends&from=singlemessage
+        $this->addTask('actsearch', '', ['activityId' => '21194353928','search1'=>'','search2'=>'']);
+        // $this->addTask('search', '', ['keyword' => 'apple']);
     }
 
-    public function runTask(Task $task)
+    protected function runTask(Task $task)
     {
 
-        // return $this->addCase('search',function ()use($task){
-        //     $infos = $this->getHeadList($task->extra['activityId'], $task->extra['search1'], $task->extra['search2']);
-        //
-        //     $rs = $this->formatHead($infos);
-        //     $pageSize = 50;
-        //     $pageNum = RequestHelper::getPageNum($rs['page']['ResultCount'], $pageSize);
-        //     for ($page = 1; $page <= $pageNum; $page++) {
-        //         $this->addTask('getItems', '', ['activityId' => $task->extra['activityId'], 'page' => $page, 'pageSize' => $pageSize]);
-        //
-        //     }
-        //
-        //     return $rs;
-        // })->addCase('getItems',function ()use($task){
-        //     $infos = $this->getItems($task->extra['activityId'], $task->extra['page'], $task->extra['pageSize']);
-        //     $products = $this->formatProducts($infos);
-        //     foreach ($products as $product){
-        //         $this->addTask('getProduct','',['productId'=>$product['productId']]);
-        //     }
-        //     return $products;
-        // })->addCase('getProduct',function ()use($task){
-        //     $product = $this->getProduct($task->extra['productId']);
-        //
-        //     return $product;
-        // })
-        //             ->doCase($task);
-        return $this->addCase('search',function ()use($task){
-            $infos = $this->search($task->extra['keyword']);
 
-            $rs = $this->formatHead($infos);
-            $pageSize = 50;
-            $pageNum = RequestHelper::getPageNum($rs['page']['ResultCount'], $pageSize);
-            for ($page = 1; $page <= $pageNum; $page++) {
-                $this->addTask('searchItems', '', ['keyword' => $task->extra['keyword'], 'page' => $page, 'pageSize' => $pageSize]);
+        return $this
+            ->addCase('actsearch', function () use ($task) {
+                $infos = $this->getHeadList($task->extra['activityId'], $task->extra['search1'],
+                    $task->extra['search2']);
 
-            }
+                $rs = $this->formatHead($infos);
+                $pageSize = 50;
+                $pageNum = RequestHelper::getPageNum($rs['page']['ResultCount'], $pageSize);
+                for ($page = 1; $page <= $pageNum; $page++) {
+                    $this->addTask('getActItems', '',
+                        ['activityId' => $task->extra['activityId'], 'page' => $page, 'pageSize' => $pageSize]);
 
-            return $rs;
-        })->addCase('searchItems',function ()use($task){
-            $infos = $this->searchItems($task->extra['keyword'], $task->extra['page'], $task->extra['pageSize']);
-            $products = $this->formatProducts($infos);
-            foreach ($products as $product){
-                $this->addTask('getProduct','',['productId'=>$product['productId']]);
-            }
-            return $products;
-        })->addCase('getProduct',function ()use($task){
-            $product = $this->getProduct($task->extra['productId']);
+                }
 
-            return $product;
-        })
-                    ->doCase($task);
+                return $rs;
+            })->addCase('getActItems', function () use ($task) {
+                $infos = $this->getItems($task->extra['activityId'], $task->extra['page'], $task->extra['pageSize']);
+                $products = $this->formatProducts($infos);
+                foreach ($products as $product) {
+                    $this->addTask('getProduct', '', ['productId' => $product['productId']]);
+                }
 
+                return $products;
+            })
+            ->addCase('search', function () use ($task) {
+                $infos = $this->search($task->extra['keyword']);
+
+                $rs = $this->formatHead($infos);
+                $pageSize = 50;
+                $pageNum = RequestHelper::getPageNum($rs['page']['ResultCount'], $pageSize);
+                for ($page = 1; $page <= $pageNum; $page++) {
+                    $this->addTask('searchItems', '',
+                        ['keyword' => $task->extra['keyword'], 'page' => $page, 'pageSize' => $pageSize]);
+
+                }
+
+                return $rs;
+            })->addCase('searchItems', function () use ($task) {
+                $infos = $this->searchItems($task->extra['keyword'], $task->extra['page'], $task->extra['pageSize']);
+                $products = $this->formatProducts($infos);
+                foreach ($products as $product) {
+                    $this->addTask('getProduct', '', ['productId' => $product['productId']]);
+                }
+
+                return $products;
+            })->addCase('getProduct', function () use ($task) {
+                $product = $this->getProduct($task->extra['productId']);
+                /**
+                 * @var JdProduct $jdProduct
+                 */
+                $jdProduct =JdProduct::findOrNew($task->extra['productId']);
+                $jdProduct->name = $product['info']['name'];
+                $promos = '';
+                foreach ($product['promos'] as $v) {
+                    if (isset($v[15])) {
+                        $promos .= $v[15] . '|';
+                    }
+
+                }
+                $jdProduct->promos = $promos;
+                $coupons = '';
+                foreach ($product['coupons'] as $v) {
+                    $coupons .= "满{$v['quota']}减{$v['discount']}-{$v['name']}|";
+                }
+                $jdProduct->coupons = $coupons;
+                $jdProduct->id = $product['id'];
+                $jdProduct->url = "https://item.m.jd.com/product/{$product['id']}.html";
+                $jdProduct->save();
+                return $product;
+            })
+            ->doCase($task);
 
 
     }
+
+
+    // public function handle()
+    // {
+    //     $rs = $this->client->getApi('http://service.issue.pw/api/ip');
+    //     $rs = $this->getProduct(17757120747);
+    //     print_r($rs);
+    // }
 }

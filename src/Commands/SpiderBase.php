@@ -15,6 +15,7 @@ use Illuminate\Console\Command;
 abstract class SpiderBase extends Command
 {
     use SpiderHelper;
+    const ERROR_EMPTY_TASK=1001;
 
     protected $description = 'run spider';
 
@@ -28,34 +29,45 @@ abstract class SpiderBase extends Command
             $this->initTask();
         }
         while (true) {
-            $task = $this->upOneTask($this->domain);
-            if (empty($task)) {
-                $this->info('END');
-                break;
-            }
-            $task->status = Task::STATUS_RUNNING;
-            $task->save();
-            $this->info($task->type . ' ' . $task->task_url ."\n". var_export($task->extra, true));
-            //根据页面类型解析
             try {
+                $task = $this->upOneTask($this->domain);
+                if (empty($task)) {
+                    sleep(100);
+                    continue;
+                }
+                $task->status = Task::STATUS_RUNNING;
+                $task->save();
+                $this->info($task->type . ' ' . $task->task_url . "\n" . var_export($task->extra, true));
+                //根据页面类型解析
+
                 $pageContent = $this->runTask($task);
                 $this->complateTask($task, $pageContent);
             } catch (\Exception $e) {
-                //todo retry
                 \Log::error($e->getMessage(), $e->getTrace());
                 echo $e->getMessage() . PHP_EOL;
+                $task->retry++;
+                if ($task->retry > $this->getMaxRetry()) {
+                    $task->status = Task::STATUS_ERROR;
+                } else {
+                    $task->status = Task::STATUS_INIT;
+                }
+                $task->save();
             }
-            // sleep(60);
         }
     }
 
-    public abstract function initTask();
+    protected function getMaxRetry()
+    {
+        return 3;
+    }
+
+    protected abstract function initTask();
 
 
-    public abstract function runTask(Task $task);
+    protected abstract function runTask(Task $task);
 
 
-    public function getUrl($url)
+    protected function getUrl($url)
     {
         if (substr($url, 0, 4) == 'http') {
             return $url;
@@ -84,16 +96,21 @@ abstract class SpiderBase extends Command
     }
 
 
-
     protected $cases = [];
-    protected function addCase($type,$call){
+
+    protected function addCase($type, $call)
+    {
         $this->cases[$type] = $call;
+
         return $this;
     }
-    protected function doCase(Task $task){
-        if(!empty($this->cases[$task->type])){
+
+    protected function doCase(Task $task)
+    {
+        if (!empty($this->cases[$task->type])) {
             return call_user_func($this->cases[$task->type]);
         }
+
         return '';
     }
 }

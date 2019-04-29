@@ -35,7 +35,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $sell3_num
  * @property float $sell4_price
  * @property int $sell4_num
-
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog whereBuy1Num($value)
@@ -67,6 +66,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog whereStockCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockSecLog whereStockId($value)
  */
 class StockSecLog extends Model
 {

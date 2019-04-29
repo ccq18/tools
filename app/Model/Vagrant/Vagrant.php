@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\Vagrant whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Model\Vagrant\Vagrant withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Model\Vagrant\Vagrant withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\Vagrant newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\Vagrant newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\Vagrant query()
  */
 class Vagrant extends Model
 {

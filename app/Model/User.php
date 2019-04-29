@@ -71,6 +71,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User whereType($value)
  * @property-read \App\Model\Account\Account $account
  * @property-read \App\Model\Account\Account $frozenAccount
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User query()
  */
 class User extends Authenticatable
 {

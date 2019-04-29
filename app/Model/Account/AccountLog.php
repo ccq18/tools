@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountLog whereUpdatedAt($value)
  * @property float $amount
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountLog whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountLog query()
  */
 class AccountLog extends Model
 {

@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vote whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vote whereUid($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vote newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vote newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vote query()
  */
 class Vote extends Model
 {

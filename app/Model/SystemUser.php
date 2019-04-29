@@ -64,6 +64,9 @@ use App\Model\Account\Account;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\SystemUser whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\SystemUser whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\SystemUser newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\SystemUser newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\SystemUser query()
  */
 class SystemUser extends User
 {

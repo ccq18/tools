@@ -15,6 +15,7 @@ class AddTypeIntoTaskDocuments extends Migration
     {
         Schema::table('task_documents', function (Blueprint $table) {
             $table->string('type',10);
+
         });
     }
 
@@ -27,6 +28,7 @@ class AddTypeIntoTaskDocuments extends Migration
     {
         Schema::table('task_documents', function (Blueprint $table) {
             $table->dropColumn('type');
+
         });
     }
 }

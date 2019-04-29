@@ -19,7 +19,12 @@ class ClientHelper
         $this->decode = function ($data) {
             return json_decode($data, true);
         };
-        $this->client = new Client(array_merge($options, ['cookies' => $cookies, 'headers' => $headers]));
+        $this->client = new Client(array_merge($options, ['cookies' => $cookies, 'headers' => $headers,
+        //                                                   'proxy' =>[
+        //     'http'  => '125.117.147.115:28066', // Use this proxy with "http"
+        //     'https' => '125.117.147.115:28066', // Use this proxy with "https",
+        // ]
+        ]));
     }
 
     public static function debug()
@@ -35,14 +40,13 @@ class ClientHelper
                 $newOptions[$k] = $v;
             }
         }
-        // $newOptions['debug'] = static::$debug;
         $response = $this->client->request($method, $uri, $newOptions);
         $this->response = $response;
         $content = $this->getContent($response);
         if (static::$debug) {
             $newOptionStr = var_export($newOptions, true);
             $logs = "method:\n {$method}\n uri:\n {$uri}\n newOptions:\n {$newOptionStr}\n content:\n{$content}\n";
-            file_put_contents(storage_path('logs/req-' . date('YmdHis-') . uniqid() . ''), $content);
+            file_put_contents(storage_path('logs/req-' . date('YmdHis-') . uniqid() . ''), $logs);
         }
 
         return $content;

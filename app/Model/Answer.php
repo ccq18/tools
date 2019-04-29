@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer whereVotesCount($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Answer query()
  */
 class Answer extends Model
 {

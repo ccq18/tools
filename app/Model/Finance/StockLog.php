@@ -34,6 +34,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereHighPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereLowPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog whereOpenPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Finance\StockLog query()
  */
 class StockLog extends Model
 {

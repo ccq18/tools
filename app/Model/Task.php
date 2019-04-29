@@ -29,6 +29,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereParseStatus($value)
  * @property-read \App\Model\TaskDocument $taskDocument
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereHash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereExtra($value)
+ * @property int $retry
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Task whereRetry($value)
  */
 class Task extends Model
 {

@@ -18,6 +18,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\TaskDocument whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\TaskDocument whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $type
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\TaskDocument newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\TaskDocument newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\TaskDocument query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\TaskDocument whereType($value)
+ * @property int $retry
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\TaskDocument whereRetry($value)
  */
 class TaskDocument extends Model
 {

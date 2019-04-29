@@ -40,6 +40,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question whereUid($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Question query()
  */
 class Question extends Model
 {

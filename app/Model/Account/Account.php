@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\Account whereUpdatedAt($value)
  * @property string $title
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\Account whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\Account newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\Account newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\Account query()
  */
 class Account extends Model
 {

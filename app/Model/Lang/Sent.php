@@ -18,6 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Sent whereTrans($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Sent whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Sent newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Sent newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Sent query()
  */
 class Sent extends Model
 {

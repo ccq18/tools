@@ -15,6 +15,8 @@ class AddExtraIntoTasks extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             $table->string('extra');
+            $table->tinyInteger('retry')->default(0);
+
             $table->string('domain',50)->change();
             $table->dropIndex('tasks_index_unique_hash');
             $table->unique(['domain','hash'],'tasks_domain_hash_unique');
@@ -32,6 +34,7 @@ class AddExtraIntoTasks extends Migration
             $table->dropColumn('extra');
             $table->dropIndex('tasks_domain_hash_unique');
             $table->unique(['hash'],'tasks_index_unique_hash');
+            $table->dropColumn('retry');
         });
     }
 }

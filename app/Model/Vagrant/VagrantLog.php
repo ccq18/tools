@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\VagrantLog whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\VagrantLog whereVagrantId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\VagrantLog newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\VagrantLog newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Vagrant\VagrantLog query()
  */
 class VagrantLog extends Model
 {

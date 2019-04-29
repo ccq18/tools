@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Url whereCode($value)
  * @property string|null $data
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Url whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Url newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Url newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Url query()
  */
 class Url extends Model
 {

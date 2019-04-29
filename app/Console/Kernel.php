@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Translate::class,
         \App\Console\Commands\JdListener::class,
         \App\Console\Commands\FormatUrl::class,
+        \App\Console\Commands\TaskHelper::class,
     ];
 
     /**

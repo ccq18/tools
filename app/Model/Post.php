@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post whereUid($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Post query()
  */
 class Post extends Model
 {

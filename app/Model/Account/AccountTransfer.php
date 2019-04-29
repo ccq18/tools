@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereToAccountId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereToUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Account\AccountTransfer query()
  */
 class AccountTransfer extends Model
 {

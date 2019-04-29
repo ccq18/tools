@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereToUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Message query()
  */
 class Message extends Model
 {

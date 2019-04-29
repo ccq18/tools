@@ -40,6 +40,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $simple_trans
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereSimpleTrans($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Lang\Word query()
  */
 class Word extends Model
 {

@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow whereUid($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\Follow query()
  */
 class Follow extends Model
 {
