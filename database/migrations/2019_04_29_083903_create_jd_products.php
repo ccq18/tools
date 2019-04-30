@@ -19,7 +19,7 @@ class CreateJdProducts extends Migration
             $table->string('coupons');
             $table->string('promos');
             $table->string('url');
-            $table->string('img_url');
+            // $table->string('img_url');
             $table->timestamps();
 
         });

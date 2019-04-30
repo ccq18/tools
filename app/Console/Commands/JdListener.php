@@ -20,12 +20,13 @@ class JdListener extends SpiderBase
     protected $client;
     protected $baseUrl = '';
     protected $domain = 'jd.com';
+    protected $useProxy = true;
 
     public function __construct()
     {
         parent::__construct();
         // $this->addTask()
-        $this->client = new ClientHelper();
+        $this->client = new ClientHelper(['timeout'=>3],null,null,true);
         ClientHelper::debug();
 
     }
