@@ -3277,13 +3277,14 @@ class ClientHelper
 
     protected function isSuccess($ip){
         try {
-            $link = 'http://service.issue.pw/api/ip';
+            $link = 'http://itgou.top/ITblacklist/itblacklist/select?gs=优才创智&add=武汉&key=787760669';
             $client = new Client(['proxy' => "{$ip['ip']}:{$ip['port']}", 'timeout' => 1]);
             $rs = $client->get($link)->getBody()->getContents();
             $rs = json_decode($rs, true);
-            if ($rs['REMOTE_ADDR'] == $ip['ip']) {
-                return true;
-            }
+            // if ($rs['REMOTE_ADDR'] == $ip['ip']) {
+            //
+            // }
+            return true;
 
         } catch (\Exception $e) {
 
