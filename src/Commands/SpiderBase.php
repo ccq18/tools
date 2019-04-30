@@ -42,6 +42,7 @@ abstract class SpiderBase extends Command
 
                 $pageContent = $this->runTask($task);
                 $this->complateTask($task, $pageContent);
+                $this->info("success");
             } catch (\Exception $e) {
                 \Log::error($e->getMessage(), $e->getTrace());
                 echo $e->getMessage() . PHP_EOL;
