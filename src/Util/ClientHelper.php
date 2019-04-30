@@ -3252,7 +3252,8 @@ class ClientHelper
             $successIps = [];
             $ips = array_slice($allips,$now,20);
             if(empty($ips)){
-                dump('ip已用完');
+                \Log::error('ip已用完');
+                sleep(100);
             }
             \Cache::forever('ip_slice', $now+20);
             foreach ($ips as $k => $ip) {
