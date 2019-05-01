@@ -20,45 +20,17 @@ class JdListener extends SpiderBase
     protected $client;
     protected $baseUrl = '';
     protected $domain = 'jd.com';
-    protected $useProxy = true;
+    protected $useProxy = false;
 
     public function __construct()
     {
         parent::__construct();
         // $this->addTask()
-        $this->client = new ClientHelper(['timeout'=>3],null,null,true);
+        $this->client = new ClientHelper(['timeout'=>3],null,null,$this->useProxy);
         ClientHelper::debug();
 
     }
 
-
-
-//     // $url = "https://so.m.jd.com/list/itemSearch.action?ptag=37287.6.5&promotion_aggregation=yes&activityId=50004594574&skuId=36700607795&pro_d=%E8%B7%A8%E8%87%AA%E8%90%A5%2F%E5%BA%97%E9%93%BA%E6%BB%A1%E5%87%8F&pro_s=%E6%BB%A1299%E5%85%83%E5%87%8F100%E5%85%83";
-//
-//     // // $itemUrl = "https://so.m.jd.com/list/itemSearch._m2wq_list?activityId=50004594574&promotion_aggregation=yes&neverpop=yes&datatype=1&callback=jdSearchResultBkCbE&page=6&pagesize=10&ext_attr=no&brand_col=no&price_col=no&color_col=no&size_col=no&ext_attr_sort=no&multi_suppliers=yes&rtapi=no&area_ids=1,72,2819";
-//
-//     // $infos = $this->getAllItems('50004594574', '跨自营/店铺满减', '满299元减100元');
-//     // // $infos = $this->getHeadItems(  '50004594574', 1,10);
-//     // unset($infos['data']['searchm']['ObjB_TextCollection']);
-// $product = $this->getProduct(25595409532);
-//     // SpiderHelper::formatUrlToCode('https://so.m.jd.com/list/itemSearch.action?activityId=50004594574&promotion_aggregation=yes&neverpop=yes&filt_type=catid,L12204M12204;&area_ids=1,72,2819&pro_d=%E8%B7%A8%E8%87%AA%E8%90%A5%2F%E5%BA%97%E9%93%BA%E6%BB%A1%E5%87%8F&pro_s=%E6%BB%A1299%E5%85%83%E5%87%8F100%E5%85%83');
-//
-//     // print_r($rs);
-//     // $infos = $this->getHeadItems(  '50004594574', 1,10);
-//     //
-//     // print_r($infos);
-//     // $infos = $this->getProduct(  '50004594574', 1,10);
-//
-//     // print_r($infos);
-//
-//     // $product = $this->fetchProduct($productId);
-//     // SpiderHelper::simpleShowArr($productId);
-//     // // $itemUrl = "https://so.m.jd.com/list/itemSearch._m2wq_list?activityId=50004594574&promotion_aggregation=yes&neverpop=yes&datatype=1&callback=jdSearchResultBkCbE&page=6&pagesize=10&ext_attr=no&brand_col=no&price_col=no&color_col=no&size_col=no&ext_attr_sort=no&multi_suppliers=yes&rtapi=no&area_ids=1,72,2819";
-//     // $rs = $this->getHeadItems($itemUrl);
-//     //  SpiderHelper::formatUrlToCode("https://so.m.jd.com/list/itemSearch.action?ptag=37287.6.5&promotion_aggregation=yes&activityId=50004594574&skuId=36700607795&pro_d=%E8%B7%A8%E8%87%AA%E8%90%A5%2F%E5%BA%97%E9%93%BA%E6%BB%A1%E5%87%8F&pro_s=%E6%BB%A1299%E5%85%83%E5%87%8F100%E5%85%83");
-//     SpiderHelper::formatUrlToCode("https://so.m.jd.com/list/itemSearch._m2wq_list?activityId=50004594574&promotion_aggregation=yes&neverpop=yes&datatype=1&callback=jdSearchResultBkCbE&page=6&pagesize=10&ext_attr=no&brand_col=no&price_col=no&color_col=no&size_col=no&ext_attr_sort=no&multi_suppliers=yes&rtapi=no&area_ids=1,72,2819");
-//
-//
 
 
     /**
@@ -272,7 +244,7 @@ class JdListener extends SpiderBase
     protected function initTask()
     {
         // https://so.m.jd.com/list/itemSearch.action?lng=121.260643&lat=31.329815&activityId=21194353928&un_area=2_2826_51943_0&sid=e77de29ffa406cef198378c1ae93ee3w&_ts=1556453451082&ShareTm=l%2BPXQS64PB1UTK6tW7hnWmXSwe6nyA5w9k59yqZCkxx1fHmHc2lE6WyuiehMn33jVPLXoXjSsCNznSMWIFS098WxzX1KLyhWmMzs5KEZpUGyR8nyuNWxn0BoRqj6KUBMS9u9EDBgfJ0lbcshhhOHpFDntEgY3VicJteHRiPoTyc%3D&ad_od=share&utm_source=androidapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=Wxfriends&from=singlemessage
-        $this->addTask('actsearch', '', ['activityId' => '21194353928','search1'=>'','search2'=>'']);
+        $this->addTask('actsearch', '', ['activityId' => '21197798815','search1'=>'','search2'=>'']);
         // $this->addTask('search', '', ['keyword' => 'apple']);
     }
 
