@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'sso',
         'passwords' => 'users',
     ],
 
@@ -36,14 +36,19 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'api_users',
-        ],
+        // 'web' => [
+        //     'driver' => 'session',
+        //     'provider' => 'api_users',
+        // ],
+        //
+        // 'api' => [
+        //     'driver' => 'token',
+        //     'provider' => 'api_users',
+        // ],
 
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'api_users',
+        'sso' => [
+            'driver' => 'session',
+            'provider' => 'sso_authorized_users',
         ],
     ],
 
@@ -66,8 +71,8 @@ return [
 
     'providers' => [
 
-        'api_users' => [
-            'driver' => 'api_token',
+        'sso_authorized_users' => [
+            'driver' => 'sso_authorization',
         ],
 
     ],

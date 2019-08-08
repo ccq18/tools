@@ -31,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
         $this->app->alias(\App\Pagination\LengthAwarePaginator::class,\Illuminate\Pagination\LengthAwarePaginator::class);
-
+        $this->app->singleton('ssohelper', function ($app) {
+            return new \SsoAuth\AuthHelper( env('AUTH_SERVER'));
+        });
+        $this->app->alias('ssohelper',\SsoAuth\AuthHelper::class);
     }
 }

@@ -17,6 +17,7 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        //认证成功 调整到后台页
         if (Auth::guard($guard)->check()) {
             return redirect('/home');
         }

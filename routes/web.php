@@ -1,8 +1,10 @@
 <?php
-// Auth::routes();
 use App\Console\Commands\JdListener;
-use Util\RequestHelper;
 
+Route::get('/logout', function (){
+    auth('sso')->logout();
+    return redirect(resolve(SsoAuth\AuthHelper::class)->getLogoutUrl(build_url('/')));
+});
 Route::group(['namespace' => 'Web',], function () {
     // Route::get('/', 'QuestionsController@index');
     Route::get('/', 'WordController@search');
@@ -38,7 +40,8 @@ Route::group(['namespace' => 'Web',], function () {
 
     Route::get('setting', 'SettingController@index');
     Route::post('setting', 'SettingController@store');
-    Route::group(['middleware' => ['auth']], function () {
+    // Route::group(['middleware' => ['ssoauth']], function () {
+    Route::group(['middleware' => ['ssoauth']], function () {
         //单词
         Route::get('words/config', 'WordController@config');
         Route::post('words/config', 'WordController@config');
@@ -80,7 +83,6 @@ Route::group(['namespace' => 'Web',], function () {
 
         });
     });
-
     Route::any('u/{code}', 'UrlController@redirect');
     Route::any('graphql', 'GraphqlController@run');
 

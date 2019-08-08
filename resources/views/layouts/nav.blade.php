@@ -9,8 +9,8 @@
     <ul class="nav navbar-nav navbar-right">
         <!-- Authentication Links -->
         @if (Auth::guest())
-            <li><a href="{{ url('/login') }}">登 录</a></li>
-            <li><a href="{{ url('/register') }}">注 册</a></li>
+            <li><a href="{{ login_url() }}">登 录</a></li>
+            <li><a href="{{ register_url() }}">注 册</a></li>
         @else
 
             <li>
@@ -116,15 +116,10 @@
 
                     @endif
                     <li>
-                        <a href="{{ url('/logout') }}"
-                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                        <a href="{{ logout_url() }}">
                             退出登录
                         </a>
 
-                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
                     </li>
                 </ul>
             </li>

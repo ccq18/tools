@@ -3,9 +3,8 @@
 namespace App\Providers;
 
 use Auth;
-use Auth\AuthUserProvider;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use SsoAuth\SsoUserProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -26,8 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Auth::provider('api_token', function () {
-            return new AuthUserProvider();
+        Auth::provider('sso_authorization', function () {
+            return new SsoUserProvider();
         });
 
         //

@@ -1,5 +1,7 @@
 <?php
 
+
+
 if (!function_exists('user')) {
     /**
      * @param null $driver
@@ -213,4 +215,16 @@ function rdata($name)
 function wdata($name, $content)
 {
     return file_put_contents(storage_path($name), json_encode($content));
+}
+
+
+function login_url(){
+    return resolve(SsoAuth\AuthHelper::class)->getLoginUrl();
+}
+
+function logout_url(){
+    return url('/logout');
+}
+function register_url(){
+    return resolve(SsoAuth\AuthHelper::class)->getRegisterUrl();
 }

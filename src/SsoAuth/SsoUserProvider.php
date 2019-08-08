@@ -1,11 +1,12 @@
 <?php
 
-namespace Auth;
+namespace SsoAuth;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider as Provider;
+use Util\AuthHelper;
 
-class AuthUserProvider implements Provider
+class SsoUserProvider implements Provider
 {
 
     /**
@@ -17,7 +18,12 @@ class AuthUserProvider implements Provider
     public function retrieveById($identifier)
     {
 
-        // TODO: Implement retrieveById() method.
+        $user=   resolve(\SsoAuth\AuthHelper::class)->getUserById($identifier);
+        if(empty($user)){
+            return null;
+        }
+        return new SsoUser($user);
+
     }
 
     /**
@@ -52,9 +58,13 @@ class AuthUserProvider implements Provider
      */
     public function retrieveByCredentials(array $credentials)
     {
+        $user = resolve(\SsoAuth\AuthHelper::class)->getUserByToken($credentials['token']);
+        // dd('user',$user);
+        if(empty($user)){
+            return null;
+        }
+        return new SsoUser($user);
 
-
-        // return ;
     }
 
     /**
@@ -66,7 +76,6 @@ class AuthUserProvider implements Provider
      */
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
-        //认证
-        // TODO: Implement validateCredentials() method.
+        return true;
     }
 }

@@ -13,14 +13,16 @@ use GuzzleHttp\Client;
 class Http
 {
     protected $url = '';
-    protected $sleep_time, $interval, $now_num;
+    protected $sleepTime, $interval, $nowNum;
     protected $client = null;
+    protected $baseUrl;
 
-    public function __construct($interval = PHP_INT_MAX, $sleep_time = 0)
+    public function __construct($baseUrl = '', $interval = PHP_INT_MAX, $sleep_time = 0)
     {
-        $this->sleep_time = $sleep_time;
+        $this->baseUrl = $baseUrl;
+        $this->sleepTime = $sleep_time;
         $this->interval = $interval;
-        $this->now_num;
+        $this->nowNum;
         $this->client = new Client();
     }
 
@@ -29,40 +31,45 @@ class Http
         return $this->url;
     }
 
-    private function to_url($path, $parameters = [])
+    private function toUrl($url, $parameters = [])
     {
-        $info = parse_url($path);
+        if (!empty($this->baseUrl)) {
+            $url = rtrim($this->baseUrl, '/') . '/' . ltrim($url, '/');
+        }
+        $info = parse_url($url);
         $params = isset($info['query']) ? $info['query'] : "";
         parse_str($params, $output);
         $parm_str = http_build_query(array_merge($output, $parameters));
-        return $this->clear_urlcan($path) . (empty($parm_str) ? "" : '?' . $parm_str);
+
+        return $this->clearUrlParam($url) . (empty($parm_str) ? "" : '?' . $parm_str);
     }
 
-    private function clear_urlcan($url)
+    private function clearUrlParam($url)
     {
         if (strpos($url, '?') !== false) {
             $url = substr($url, 0, strpos($url, '?'));
         }
+
         return $url;
     }
 
     protected function waitOrDo()
     {
-        $this->now_num++;
-        if ($this->now_num % $this->interval == 0) {
-            sleep($this->sleep_time);
+        $this->nowNum++;
+        if ($this->nowNum % $this->interval == 0) {
+            sleep($this->sleepTime);
         }
     }
 
     public function get($url, $params = [], $headers = [], $timeout = 10)
     {
         $this->waitOrDo();
-        $this->url = $this->to_url($url, $params);
+        $this->url = $this->toUrl($url, $params);
         $options = [];
-        if(!empty($headers)){
+        if (!empty($headers)) {
             $options['headers'] = $headers;
         }
-        if(!empty($timeout)){
+        if (!empty($timeout)) {
             $options['timeout'] = $timeout;
         }
 
@@ -74,15 +81,15 @@ class Http
     {
 
         $this->waitOrDo();
-        $this->url = $this->to_url($url, $params);
+        $this->url = $this->toUrl($url, $params);
         $options = [];
-        if(!empty($headers)){
+        if (!empty($headers)) {
             $options['headers'] = $headers;
         }
-        if(!empty($data)){
+        if (!empty($data)) {
             $options['form_params'] = $data;
         }
-        if(!empty($timeout)){
+        if (!empty($timeout)) {
             $options['timeout'] = $timeout;
         }
 
@@ -92,12 +99,12 @@ class Http
     public function delete($url, $params = [], $headers = [], $timeout = 10)
     {
         $this->waitOrDo();
-        $this->url = $this->to_url($url, $params);
+        $this->url = $this->toUrl($url, $params);
         $options = [];
-        if(!empty($headers)){
+        if (!empty($headers)) {
             $options['headers'] = $headers;
         }
-        if(!empty($timeout)){
+        if (!empty($timeout)) {
             $options['timeout'] = $timeout;
         }
 
@@ -107,15 +114,15 @@ class Http
     public function post($url, $data = [], $params = [], $headers = [], $timeout = 10)
     {
         $this->waitOrDo();
-        $this->url = $this->to_url($url, $params);
+        $this->url = $this->toUrl($url, $params);
         $options = [];
-        if(!empty($headers)){
+        if (!empty($headers)) {
             $options['headers'] = $headers;
         }
-        if(!empty($data)){
+        if (!empty($data)) {
             $options['form_params'] = $data;
         }
-        if(!empty($timeout)){
+        if (!empty($timeout)) {
             $options['timeout'] = $timeout;
         }
 
