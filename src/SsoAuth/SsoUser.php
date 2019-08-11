@@ -3,8 +3,9 @@
 namespace SsoAuth;
 
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class SsoUser implements UserContract
+class SsoUser implements UserContract, JWTSubject
 {
     protected  $attributes;
 
@@ -119,5 +120,25 @@ class SsoUser implements UserContract
     public function __unset($key)
     {
         unset($this->attributes[$key]);
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+       return $this->getAuthIdentifier();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+       return $this->attributes;
     }
 }

@@ -217,7 +217,10 @@ function wdata($name, $content)
     return file_put_contents(storage_path($name), json_encode($content));
 }
 
-
+function json_response($data, $message = 'success', $status = 200)
+{
+    return response()->json(['data' => $data, 'message' => $message, 'status' => $status], 200);
+}
 function login_url(){
     return resolve(SsoAuth\AuthHelper::class)->getLoginUrl();
 }

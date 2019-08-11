@@ -20,13 +20,13 @@ class SsoAuthToken
         auth()->shouldUse('sso');
         /** @var \Illuminate\Auth\SessionGuard $guard */
         $guard = auth()->guard();
-        //认证失败 跳转到登录页
+        //token认证流程
         if (!$guard->check()) {
             //token认证流程
-            $token = request('token');
+            $token = request('ticket');
             if(!empty($token)){
-                $url = rtrim($request->fullUrlWithQuery(['token' => null]), '?');
-                $isAuth  = $guard->attempt(['token' => $request->get('token')]);
+                $url = rtrim($request->fullUrlWithQuery(['ticket' => null]), '?');
+                $isAuth  = $guard->attempt(['ticket' => $request->get('ticket')]);
                 if ($isAuth) {
                     return redirect($url);
                 }

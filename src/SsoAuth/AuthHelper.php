@@ -55,8 +55,8 @@ class AuthHelper
         return $this->http->getJson("/user/{$id}");
     }
 
-    public function getUserByToken($token)
+    public function getUserByTicket($ticket)
     {
-        return $this->http->getJson('auth-token', ['token' => $token]);
+        return $this->http->getJson('auth-token', ['ticket' => $ticket]);
     }
 }

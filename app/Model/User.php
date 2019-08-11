@@ -12,6 +12,7 @@ use App\Model\Setting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * Class User
@@ -75,7 +76,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Model\User query()
  */
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     const USER_SYSTEM = 2;
     const USER_NORMAL = 1;
@@ -251,5 +252,25 @@ class User extends Authenticatable
                               ->orderByDesc('id')
                               ->get();
 
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+       return $this->id;
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return $this->attributes;
     }
 }

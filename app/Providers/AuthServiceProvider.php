@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Auth;
+use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use SsoAuth\SsoUserProvider;
 
@@ -28,7 +29,9 @@ class AuthServiceProvider extends ServiceProvider
         Auth::provider('sso_authorization', function () {
             return new SsoUserProvider();
         });
-
+        \Auth::provider('eloquent', function ($app, $config) {
+            return new EloquentUserProvider($this->app['hash'], $config['model']);
+        });
         //
     }
 }

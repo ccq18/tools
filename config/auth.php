@@ -45,7 +45,10 @@ return [
         //     'driver' => 'token',
         //     'provider' => 'api_users',
         // ],
-
+        'api' => [
+            'driver' => 'jwt',      // 原来是 token 改成jwt
+            'provider' => 'sso_authorized_users',
+        ],
         'sso' => [
             'driver' => 'session',
             'provider' => 'sso_authorized_users',
@@ -73,6 +76,10 @@ return [
 
         'sso_authorized_users' => [
             'driver' => 'sso_authorization',
+        ],
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => \App\Model\User::class,
         ],
 
     ],

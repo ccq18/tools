@@ -58,7 +58,7 @@ class SsoUserProvider implements Provider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        $user = resolve(\SsoAuth\AuthHelper::class)->getUserByToken($credentials['token']);
+        $user = resolve(\SsoAuth\AuthHelper::class)->getUserByTicket($credentials['ticket']);
         // dd('user',$user);
         if(empty($user)){
             return null;

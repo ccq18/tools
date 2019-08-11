@@ -22,7 +22,7 @@ class SsoAuthenticate
         $guard = auth()->guard();
         //认证失败 跳转到登录页
         if (!$guard->check()) {
-            return redirect(login_url());
+            return redirect(resolve(\SsoAuth\AuthHelper::class)->getLoginUrl());
         }
 
         return $next($request);
