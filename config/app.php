@@ -179,8 +179,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-
-
+        \Dto\DtoProvider::class,
 
     ],
 

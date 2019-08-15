@@ -5,6 +5,7 @@ Route::get('/logout', function (){
     auth('sso')->logout();
     return redirect(resolve(SsoAuth\AuthHelper::class)->getLogoutUrl(build_url('/')));
 });
+
 Route::group(['namespace' => 'Web',], function () {
     // Route::get('/', 'QuestionsController@index');
     Route::get('/', 'WordController@search');
@@ -16,8 +17,10 @@ Route::group(['namespace' => 'Web',], function () {
     Route::get('/api/ip', function () {
         return $_SERVER;
     });
+    Route::get('/dto', 'HomeController@demodto');
 
-    Route::get('/home', 'HomeController@index');
+
+    Route::get('/home', 'HomeController@index')->middleware('auth');
     Route::get('email/verify/{token}', ['as' => 'email.verify', 'uses' => 'EmailController@verify']);
     Route::resource('questions', 'QuestionsController', [
         'names' => [

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Dto\DtoService;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,5 +16,13 @@ class Controller extends BaseController
     {
         return response()->json(['data' => $data,'code'=>$code,'message'=>$message]);
 
+    }
+
+
+
+    public function dto($data, $dtoProvider)
+    {
+        $data = resolve(DtoService::class)->transfer($data, $dtoProvider);
+        return $this->response($data);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Dto\DtoBuilder;
 use Illuminate\Http\Request;
 
 /**
@@ -11,14 +12,16 @@ use Illuminate\Http\Request;
  */
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
+
+
+    public function demodto(){
+        return $this->dto(
+            ['key1' => ['key3'=>111], 'key2' => ['key3'=>123],],
+            function (DtoBuilder $dtoBuilder) {
+                $dtoBuilder->add('key1.key3', ['format' => 'string']);
+                $dtoBuilder->add('key2.key3', ['format' => 'string','as'=>'key4']);
+            }
+        );
     }
 
     /**
