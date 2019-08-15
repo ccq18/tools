@@ -1,3 +1,8 @@
+ ## sso安装
+ 重命名 .env.example 为.env
+ 配置 .env 文件
+ ## 
+ 
  composer require tymon/jwt-auth 1.0.0-rc.4.1 
  
  
@@ -45,4 +50,15 @@
         "token_type":"",
         "expires_in":""
     }
+    ```
+    
+## post /api/logout ticket登录
+
+    params:
+    ```json
+    {"url":"",token}
+    ```
+    resonse:
+    ```
+   url
     ```
