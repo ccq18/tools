@@ -222,12 +222,12 @@ function json_response($data, $message = 'success', $code = 200)
     return response()->json(['data' => $data, 'message' => $message, 'code' => $code], 200);
 }
 function login_url(){
-    return resolve(SsoAuth\AuthHelper::class)->getLoginUrl();
+    return resolve(Ido\Tools\SsoAuth\AuthHelper::class)->getLoginUrl();
 }
 
 function logout_url(){
     return url('/logout');
 }
 function register_url(){
-    return resolve(SsoAuth\AuthHelper::class)->getRegisterUrl();
+    return resolve(Ido\Tools\SsoAuth\AuthHelper::class)->getRegisterUrl();
 }

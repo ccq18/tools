@@ -3,7 +3,7 @@ use App\Console\Commands\JdListener;
 
 Route::get('/logout', function (){
     auth('sso')->logout();
-    return redirect(resolve(SsoAuth\AuthHelper::class)->getLogoutUrl(build_url('/')));
+    return redirect(resolve(Ido\Tools\SsoAuth\AuthHelper::class)->getLogoutUrl(build_url('/')));
 });
 
 Route::group(['namespace' => 'Web',], function () {

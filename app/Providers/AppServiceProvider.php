@@ -32,8 +32,8 @@ class AppServiceProvider extends ServiceProvider
         }
         $this->app->alias(\App\Pagination\LengthAwarePaginator::class,\Illuminate\Pagination\LengthAwarePaginator::class);
         $this->app->singleton('ssohelper', function ($app) {
-            return new \SsoAuth\AuthHelper( env('AUTH_SERVER'),env('API_SECRET'));
+            return new \Ido\Tools\SsoAuth\AuthHelper( env('AUTH_SERVER'),env('API_SECRET'));
         });
-        $this->app->alias('ssohelper',\SsoAuth\AuthHelper::class);
+        $this->app->alias('ssohelper', \Ido\Tools\SsoAuth\AuthHelper::class);
     }
 }

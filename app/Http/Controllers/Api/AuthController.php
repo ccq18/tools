@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Model\User;
-use SsoAuth\AuthHelper;
+use Ido\Tools\SsoAuth\AuthHelper;
 
 class AuthController
 {
@@ -28,7 +28,7 @@ class AuthController
     public function getLoginUrl()
     {
         $fromUrl = request('url');
-        $loginUrl = resolve(\SsoAuth\AuthHelper::class)->getLoginUrl($fromUrl);
+        $loginUrl = resolve(\Ido\Tools\SsoAuth\AuthHelper::class)->getLoginUrl($fromUrl);
 
         return json_response($loginUrl);
     }
@@ -43,7 +43,7 @@ class AuthController
     {
         auth('api')->logout();
         $fromUrl = request('url');
-        return json_response(resolve(\SsoAuth\AuthHelper::class)->getLogoutUrl($fromUrl), 'Successfully logged out');
+        return json_response(resolve(\Ido\Tools\SsoAuth\AuthHelper::class)->getLogoutUrl($fromUrl), 'Successfully logged out');
     }
 
     /**

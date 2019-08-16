@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             // \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \SsoAuth\Middleware\SsoAuthToken::class,
+            \Ido\Tools\SsoAuth\Middleware\SsoAuthToken::class,
         ],
 
         'api' => [
@@ -56,7 +56,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
 
-        'ssoauth' =>\SsoAuth\Middleware\SsoAuthenticate::class,
+        'ssoauth' => \Ido\Tools\SsoAuth\Middleware\SsoAuthenticate::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
