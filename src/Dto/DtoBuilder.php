@@ -3,7 +3,6 @@
 namespace Dto;
 
 
-use Domain\DomainException;
 
 class DtoBuilder
 {
