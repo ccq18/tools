@@ -1,2 +1,7 @@
-git subtree add --prefix packages/tools --squash tools/master
-git subtree push --prefix=packages/tool2 tools master
+工具类
+## dto
+1.注册 
+\Ido\Tools\Dto\DtoProvider::class,
+2. 使用参考 DtoTest.php
+## SsoAuth
+222

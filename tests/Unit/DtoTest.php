@@ -1,13 +1,14 @@
 <?php
 
-namespace Tests\Unit;
+namespace Ido\Tools\Tests\Unit;
 
 
 use Ido\Tools\Dto\Dto;
 use Ido\Tools\Dto\DtoBuilder;
+use Ido\Tools\Dto\DtoProvider;
 use Ido\Tools\Dto\DtoService;
-use Tests\TestCase;
 
+use PHPUnit\Framework\TestCase;
 
 class DemoDto implements Dto
 {
@@ -21,9 +22,24 @@ class DemoDto implements Dto
 
 class DtoTest extends TestCase
 {
+    /**
+     * Sets up the fixture, for example, open a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        $formater = function ($value, $format) {
+            settype($value, $format);
+            return $value;
+        };
+        foreach (['boolean', 'bool', 'integer', 'int', 'float', 'double', 'string'] as $format) {
+            DtoBuilder::addFormater($format, $formater);
+        }
+
+    }
     public function testDto()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             ['key1' => 123, 'key2' => 456,],
             function (DtoBuilder $dtoBuilder) {
                 $dtoBuilder->add('key1');
@@ -52,7 +68,7 @@ class DtoTest extends TestCase
 //    }
     public function testList()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             [
                 'key1' => 123,
                 'key2' => ['key3' => 'hahaha', 'key4' => 'key4'],
@@ -73,7 +89,7 @@ class DtoTest extends TestCase
 
     public function testAs()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             [
                 'key1' => 123,
                 'key2' => 456,
@@ -91,7 +107,7 @@ class DtoTest extends TestCase
 
     public function testDtoClass()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             [
                 'key1' => 123,
                 'key2' => 456,
@@ -105,7 +121,7 @@ class DtoTest extends TestCase
 
     public function testDtoClass2()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             [
                 'key1' => 123,
                 'key2' => [
@@ -129,7 +145,7 @@ class DtoTest extends TestCase
 
     public function testFormat1()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             ['key1' => "123.1", 'key2' => 456,],
             function (DtoBuilder $dtoBuilder) {
                 $dtoBuilder->add('key1', ['format' => function ($v) {
@@ -147,7 +163,7 @@ class DtoTest extends TestCase
 
     public function testFormat2()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             ['key1' => 123.1, 'key2' => 456,],
             function (DtoBuilder $dtoBuilder) {
                 $dtoBuilder->add('key1', ['format' => 'string']);
@@ -163,7 +179,7 @@ class DtoTest extends TestCase
 
     public function testMethod()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             ['key1' => ['key3'=>111], 'key2' => ['key3'=>123],],
             function (DtoBuilder $dtoBuilder) {
                 $dtoBuilder->add('key1.key3', ['format' => 'string']);
@@ -180,10 +196,11 @@ class DtoTest extends TestCase
 
     public function testTransfer()
     {
-        $rs = resolve(DtoService::class)->transfer(
+        $rs = $this->getObj()->transfer(
             ['key1' => 123],
             function (DtoBuilder $dtoBuilder) {
-                $dtoBuilder->add('key1', ['format' => 'string','transfer'=>[123=>'one']]);
+                dd(1);
+                $dtoBuilder->add('key1', ['format' => 'string']);
             }
         );
 
@@ -193,4 +210,9 @@ class DtoTest extends TestCase
     }
 
 
+    public function getObj(){
+
+        return new DtoService();
+    }
+    
 }

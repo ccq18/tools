@@ -1,98 +1,28 @@
 {
-  "name": "laravel/laravel",
-  "description": "The Laravel Framework.",
-  "keywords": [
-    "framework",
-    "laravel"
-  ],
-  "license": "MIT",
-  "type": "project",
-
-  "require": {
-    "php": ">=7.0.0",
-    "ext-json": "*",
-    "barryvdh/laravel-debugbar": "^3.1",
-    "barryvdh/laravel-ide-helper": "^2.4",
-    "bupt1987/html-parser": "^3.0",
-    "doctrine/dbal": "^2.6",
-    "fideloper/proxy": "~3.3",
-    "guzzlehttp/guzzle": "^6.3",
-    "laracasts/flash": "2.0.*",
-    "laravel/framework": "5.5.*",
-    "laravel/tinker": "~1.0",
-    "naux/sendcloud": "1.1.*",
-    "overtrue/laravel-filesystem-qiniu": "^0.0.1",
-    "overtrue/laravel-ueditor": "~1.0",
-    "paquettg/php-html-parser": "^1.7",
-    "phpspec/phpspec": "^4.2",
-    "predis/predis": "^1.1",
-    "tymon/jwt-auth": "1.0.0-rc.4.1",
-    "webonyx/graphql-php": "^0.12.2",
-    "ido/tools": "dev-master"
-  },
-  "require-dev": {
-    "filp/whoops": "~2.0",
-    "fzaninotto/faker": "~1.4",
-    "laracasts/behat-laravel-extension": "^1.0",
-    "mockery/mockery": "0.9.*",
-    "phpunit/phpunit": "~6.0",
-    "symfony/css-selector": "3.1.*",
-    "symfony/dom-crawler": "3.1.*",
-    "codeception/codeception": "^2.3"
-  },
-  "autoload": {
-    "files": [
-      "app/Support/helpers.php"
+    "name": "ido/tools",
+    "authors": [
+        {
+            "name": "放肆",
+            "email": "348578429@qq.com"
+        }
     ],
-    "classmap": [
-      "database/seeds",
-      "database/factories"
-    ],
-    "psr-4": {
-      "App\\": "app/",
-      "": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "dont-discover": [
-      ]
-    }
-  },
-  "scripts": {
-    "post-root-package-install": [
-      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-    ],
-    "post-create-project-cmd": [
-      "@php artisan key:generate"
-    ],
-    "post-autoload-dump": [
-      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-      "@php artisan package:discover"
-    ]
-  },
-  "config": {
-    "preferred-install": "dist",
-    "sort-packages": true,
-    "optimize-autoloader": true,
-    "github-oauth": {
-      "github.com": "81b3cd9301627ff5b1fb74a711261166492273a5"
-    }
-  },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "git@github.com:ccq18/tools.git"
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "~6.0"
     },
-    {
-      "type": "composer",
-      "url": "https://mirrors.aliyun.com/composer/"
+    "config": {
+        "github-oauth": {
+            "github.com": "81b3cd9301627ff5b1fb74a711261166492273a5"
+        }
     },
-    {"packagist": false}
-  ]
+    "autoload": {
+        "psr-4": {
+            "Ido\\Tools\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ido\\Tools\\Tests\\": "tests/"
+        }
+    }
 }

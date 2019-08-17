@@ -1,9 +1,0 @@
-/node_modules
-/vendor
-/.idea
-Homestead.json
-Homestead.yaml
-provisioning/*.retry
-/.env
-/.vagrant/
-/data
