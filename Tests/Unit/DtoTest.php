@@ -7,8 +7,8 @@ use Ido\Tools\Dto\Dto;
 use Ido\Tools\Dto\DtoBuilder;
 use Ido\Tools\Dto\DtoProvider;
 use Ido\Tools\Dto\DtoService;
+use Tests\TestCase;
 
-use PHPUnit\Framework\TestCase;
 
 class DemoDto implements Dto
 {

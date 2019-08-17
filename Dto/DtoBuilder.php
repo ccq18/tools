@@ -63,7 +63,7 @@ class DtoBuilder
     }
 
     protected function transfer($transfer, $value){
-        if(is_array($transfer)){
+        if(!is_array($transfer)){
             throw new \Exception(" transfer 类型不正确");
         }
         return $transfer[$value]??null;
@@ -105,6 +105,9 @@ class DtoBuilder
     }
 
     protected function getValueByKey($carry,$item){
+        if(is_array($carry)){
+            return $carry[$item];
+        }
         if ($carry instanceof Model && $carry->relationLoaded($item)) {
             return $carry->getRelation($item);
         }
@@ -129,6 +132,7 @@ class DtoBuilder
             } catch (BadMethodCallException $e) {
             }
         }
+
         //attribute
         return  $carry->{$item};
     }
