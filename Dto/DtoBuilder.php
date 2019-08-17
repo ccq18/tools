@@ -105,7 +105,6 @@ class DtoBuilder
     }
 
     protected function getValueByKey($carry,$item){
-        dump(11);
         if(is_array($carry)){
             return $carry[$item];
         }
