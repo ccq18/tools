@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Model\Vagrant\Vagrant;
-use Util\FileBrowser;
+use Ido\Tools\Util\FileBrowser;
 use Vagrant\VagrantRunner;
 
 class VagrantReload implements ShouldQueue

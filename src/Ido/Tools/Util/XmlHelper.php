@@ -1,6 +1,6 @@
 <?php
 
-namespace Ddc\CoreBundle\Service\Express\SfExpress;
+namespace Ido\Tools\Util;
 
 use Ddc\CoreBundle\Service\Express\SfExpress\Response as SFResponse;
 use Ddc\StoreBundle\Entity\Deliver;

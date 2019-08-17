@@ -27,8 +27,7 @@
     "phpspec/phpspec": "^4.2",
     "predis/predis": "^1.1",
     "tymon/jwt-auth": "1.0.0-rc.4.1",
-    "webonyx/graphql-php": "^0.12.2",
-    "ido/tools": "dev-master"
+    "webonyx/graphql-php": "^0.12.2"
   },
   "require-dev": {
     "filp/whoops": "~2.0",

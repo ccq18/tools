@@ -6,8 +6,10 @@
  * Time: 下午9:49
  */
 
-namespace Util;
+namespace Ido\Tools\ClassGenerator;
 
+
+use Util\Tpl;
 
 class ClassGenerator
 {
@@ -56,7 +58,7 @@ class ClassGenerator
         }
         $isMapper = $option['isMapper']??false;
         $isGenerateByArray = $option['isGenerateByArray']??false;
-        $code = Tpl::parse(file_get_contents(__DIR__ . '/Generate/class.tpl'), [
+        $code = Tpl::parse(file_get_contents(__DIR__ . '/Tpl/class.tpl'), [
             'properties' => $properties,
             'namespace' => $namespace,
             'className' => $className,

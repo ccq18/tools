@@ -6,7 +6,7 @@ use App\Model\Banner;
 use App\Model\User;
 use GuzzleHttp\Client;
 use Tests\TestCase;
-use Util\FileBrowser;
+use Ido\Tools\Util\FileBrowser;
 use Util\Reflection;
 
 class Mcrypt

@@ -6,11 +6,11 @@
  * Time: 11:21
  */
 
-namespace Util;
+namespace Ido\Tools\Util;
 
 use PDO;
 
-class Db
+class DbHelper
 {
     protected $pdo;
     protected $host, $dbname, $user, $pwd, $port;

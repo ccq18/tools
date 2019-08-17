@@ -18,7 +18,7 @@ abstract class AutoSpider extends Command
     public function handle()
     {
         $runner = $this->argument('runner');
-        $this->http = new \Util\Http();
+        $this->http = new \Ido\Tools\Util\Http();
         if ($runner == 'parse') {
             $this->runParse();
         } else {

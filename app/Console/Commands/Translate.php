@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 
 use App\Model\Lang\Word;
 use Illuminate\Console\Command;
-use Util\FileReader;
+use Ido\Tools\Util\FileReader;
 
 class Translate extends Command
 {

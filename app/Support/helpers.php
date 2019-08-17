@@ -83,7 +83,7 @@ if (!function_exists('str_translate')) {
     {
         static $http = null;
         if (empty($http)) {
-            $http = new Util\Http();
+            $http = new \Ido\Tools\Util\Http();
         }
 
         return $http->getJson("http://fanyi.youdao.com/openapi.do", [
@@ -100,7 +100,7 @@ if (!function_exists('str_translate')) {
     {
         static $http = null;
         if (empty($http)) {
-            $http = new Util\Http();
+            $http = new \Ido\Tools\Util\Http();
         }
 
         return $http->get("http://dict-co.iciba.com/api/dictionary.php", [
@@ -114,7 +114,7 @@ if (!function_exists('str_translate')) {
     {
         static $http = null;
         if (empty($http)) {
-            $http = new Util\Http();
+            $http = new \Ido\Tools\Util\Http();
         }
 
         $str = $http->get("http://dict-co.iciba.com/api/dictionary.php", [

@@ -3,7 +3,7 @@
 namespace Commands;
 
 use Illuminate\Console\Command;
-use Util\FileBrowser;
+use Ido\Tools\Util\FileBrowser;
 
 
 class CodeLine extends Command

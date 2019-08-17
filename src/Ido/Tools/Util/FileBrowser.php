@@ -6,7 +6,7 @@
  * Time: 10:47
  */
 
-namespace Util;
+namespace Ido\Tools\Util;
 
 class FileBrowser
 {

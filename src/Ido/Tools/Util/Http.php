@@ -6,7 +6,7 @@
  * Time: 15:48
  */
 
-namespace Util;
+namespace Ido\Tools\Util;
 
 use GuzzleHttp\Client;
 

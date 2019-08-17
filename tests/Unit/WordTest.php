@@ -7,7 +7,7 @@ use App\Model\Lang\Word;
 use App\Repositories\WordRepositroy;
 use App\Spl\LinkListHelper;
 use Carbon\Carbon;
-use Ddc\CoreBundle\Service\Express\SfExpress\XmlHelper;
+use Ido\Tools\Util\XmlHelper;
 use Util\Persist\Persist;
 
 class WordTest extends TestCase

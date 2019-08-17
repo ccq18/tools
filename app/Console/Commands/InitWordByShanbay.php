@@ -6,7 +6,7 @@ use App\Model\Lang\Word;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Util\Http;
+use Ido\Tools\Util\Http;
 
 class InitWordByShanbay extends Command
 {

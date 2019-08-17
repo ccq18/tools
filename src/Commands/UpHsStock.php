@@ -26,7 +26,7 @@ class UpHsStock extends Command
 
     public function upStocks($stocks)
     {
-        $http = new \Util\Http();
+        $http = new \Ido\Tools\Util\Http();
         collect($stocks)->map(function(Stock $stock)use($http){
             try{
                 $y = date('Y');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Util;
+namespace Ido\Tools\Util;
 
 
 class FileReader

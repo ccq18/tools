@@ -9,7 +9,6 @@ use App\Model\Task;
 use App\Repositories\StockRepository;
 use Carbon\Carbon;
 use PHPHtmlParser\Dom\AbstractNode;
-use Util\Db;
 
 class HsStock extends AutoSpider
 {
