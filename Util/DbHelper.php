@@ -27,32 +27,103 @@ class DbHelper
     /**
      * @return array[
      * 'table_name' => [
-     * ['name'=>'', 'column_type'=>'', 'type'=>'', 'comment'=>'',],
+     * ['name'=>'', 'column_type'=>'', 'type'=>'', 'comment'=>'','is_nullable'],
      * ]
      * ]
      */
     function getTables()
     {
-        $tbs = $this->execute("select table_name from information_schema.tables  where table_schema = ?", [$this->dbname]);
+        $tbs = $this->execute("select table_name from information_schema.tables  where table_schema = ?",
+            [$this->dbname]);
         $rs = [];
         foreach ($tbs as $v) {
             //取得表信息
             $rs[$v['table_name']] = $this->getTableInfo($v['table_name']);
         }
+
         return $rs;
     }
 
     public function getTableInfo($tableName)
     {
-        $fieldInfo = $this->execute("SELECT COLUMN_NAME name,COLUMN_TYPE column_type ,DATA_TYPE type,COLUMN_TYPE column_tyoe,COLUMN_COMMENT comment FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=?", [$this->dbname, $tableName]);
+        $fieldInfo = $this->execute("SELECT COLUMN_NAME `name`,COLUMN_TYPE `column_type` ,DATA_TYPE `type`,COLUMN_COMMENT `comment`,IS_NULLABLE `is_nullable`,CHARACTER_MAXIMUM_LENGTH `length`,NUMERIC_PRECISION `numeric_precision`,
+NUMERIC_SCALE `numeric_scale` FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME=?",
+            [$this->dbname, $tableName]);
         $fields = [];
         foreach ($fieldInfo as $field) {
             if ($field['type'] == 'tinyint') {
                 $field['data_types'] = $this->getDataTypes($field['name'], $tableName);
             }
+
+            $field['is_nullable'] = $field['is_nullable'] == 'YES';
             $fields[$field['name']] = $field;
         }
+
         return $fields;
+    }
+
+    // type `is_nullable`, `length`, `numeric_precision`,
+    //  `numeric_scale`
+    /**
+     * @param $columnType  array [type,column_type  is_nullable, length, numeric_precision, numeric_scale]
+     * @param $value
+     */
+    public function checkTypes($columnType, $value)
+    {
+
+
+
+        if (is_null($value)) {
+            if (!$columnType['is_nullable']) {
+                return [false, '不能为空', 1];
+            }
+        }
+        if (in_array($columnType['type'], ['char','enum', 'text', 'varchar', 'longtext','tinytext','mediumtext','longtext', 'varbinary','set','blob','mediumblob','longblob'])) {
+            if(in_array($columnType['type'], ['char','enum', 'text', 'varchar', 'longtext','tinytext','mediumtext','longtext'])){
+                if (!is_string($value)) {
+                    return [false, '类型不正确'];
+                }
+            }
+            $length = strlen($value);
+            if ($length > $columnType['length']) {
+                return [false, '长度超过限制'];
+            }
+        } else if (in_array($columnType['type'], [ 'tinyint', 'smallint', 'mediumint', 'int', 'bigint'])) {
+            if (!is_int($value)) {
+                return [false, '类型不正确'];
+            }
+            if(strripos($columnType['column_type'],'unsigned')>0) {
+                $limits = [
+                    'bigint'    => ['min' => 0, 'max' => 18446744073709551615],
+                    'int'       => ['min' => 0, 'max' => 4294967295],
+                    'tinyint'   => ['min' => 0, 'max' => 255],
+                    'smallint'  => ['min' => 0, 'max' => 65535],
+                    'mediumint' => ['min' => 0, 'max' => 8388607],
+                ];
+            }else{
+                $limits= [
+                    'bigint'    => ['min' => -9223372036854775808, 'max' => 9223372036854775807],
+                    'int'       => ['min' => -2147483648, 'max' => 2147483647],
+                    'tinyint'   => ['min' => -128, 'max' => 127],
+                    'smallint'  => ['min' => -32768, 'max' => 32767],
+                    'mediumint' => ['min' => -8388608, 'max' => 8388607],
+                ];
+            }
+            $limit = $limits[$columnType['type']];
+            if(!($value<=$limit['max'] && $value>=$limit['min'])){
+                return [false, '数字范围不正确'];
+            }
+
+        }else if (in_array($columnType['type'], ['bit', 'double','float', 'decimal',])) {
+            if (!is_int($value)) {
+                return [false, '类型不正确'];
+            }
+            //todo
+        }else if (in_array($columnType['type'], ['date', 'timestamp', 'datetime','date'])) {
+            //todo
+        }
+
+        return [true, '成功'];
     }
 
     public function getDataTypes($column, $tb)
@@ -63,6 +134,7 @@ class DbHelper
         foreach ($rs as $v) {
             $r[] = $v[$column];
         }
+
         return $r;
     }
 
@@ -71,6 +143,7 @@ class DbHelper
     {
         $fields = implode(',', array_keys($data));
         $values = '\'' . implode('\',\'', $data) . '\'';
+
         return "insert into {$tb}({$fields})values({$values});";
     }
 
@@ -97,8 +170,12 @@ class DbHelper
                 $column_sqls[] = "`{$column['field']}` " . $column['type'] . "  NOT NULL";
             }
         }
-        if (!empty($primary_key)) $column_sqls[] = "PRIMARY KEY (`{$primary_key}`)";
-        $create_sql = "CREATE TABLE IF NOT EXISTS   `{$tb1}` (" . PHP_EOL . implode(',' . PHP_EOL, $column_sqls) . PHP_EOL . ") DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = InnoDB;" . PHP_EOL;
+        if (!empty($primary_key)) {
+            $column_sqls[] = "PRIMARY KEY (`{$primary_key}`)";
+        }
+        $create_sql = "CREATE TABLE IF NOT EXISTS   `{$tb1}` (" . PHP_EOL . implode(',' . PHP_EOL,
+                $column_sqls) . PHP_EOL . ") DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = InnoDB;" . PHP_EOL;
+
         return $create_sql;
     }
 
@@ -110,7 +187,8 @@ class DbHelper
             /*字段更新*/
             $up_columns['`' . $k . '`'] = "{$v} as `{$k}`";
         }
-        $up_sql = PHP_EOL . "INSERT into {$tb1}(" . implode(',', array_keys($up_columns)) . ") select " . implode(',', $up_columns) . " from {$tb2};" . PHP_EOL . PHP_EOL;
+        $up_sql = PHP_EOL . "INSERT into {$tb1}(" . implode(',', array_keys($up_columns)) . ") select " . implode(',',
+                $up_columns) . " from {$tb2};" . PHP_EOL . PHP_EOL;
 
         return $up_sql;
     }
@@ -149,9 +227,22 @@ class DbHelper
         $start = ($page - 1) * $page_size;
         $rs = $this->query("{$sql} limit {$start},{$page_size}", $param);
         if (empty($rs)) {
-            return ['page_size' => $page_size, 'page' => $page, 'total_page' => $total_page, 'total_record' => $count, 'list' => []];
+            return [
+                'page_size'    => $page_size,
+                'page'         => $page,
+                'total_page'   => $total_page,
+                'total_record' => $count,
+                'list'         => []
+            ];
         }
-        return ['page_size' => $page_size, 'page' => $page, 'total_page' => $total_page, 'total_record' => $count, 'list' => $rs];
+
+        return [
+            'page_size'    => $page_size,
+            'page'         => $page,
+            'total_page'   => $total_page,
+            'total_record' => $count,
+            'list'         => $rs
+        ];
     }
 
 
@@ -168,11 +259,12 @@ class DbHelper
             $dbpwd = C('DB_PWD');
             $dbcharset = C('DB_CHARSET');
             $dsn = "mysql:dbname={$dbname};host={$host};port={$port};charset={$dbcharset}";
-            $this->pdo = new \PDO($dsn, $dbuser, $dbpwd, array(
+            $this->pdo = new \PDO($dsn, $dbuser, $dbpwd, [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
-            ));
+            ]);
             $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
         }
+
         return $this->pdo;
     }
 
@@ -193,6 +285,7 @@ class DbHelper
         } catch (\Exception $e) {
             throw  new \Exception($e->getMessage() . ' sql:' . $sql . ' param:' . var_export($bindArr, true));
         }
+
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
 
     }
@@ -245,6 +338,7 @@ class DbHelper
                         $bindArr[$key] = $v;
                     }
                     $i++;
+
                     return $key;
                 },
                 $sql

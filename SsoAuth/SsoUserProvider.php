@@ -4,7 +4,6 @@ namespace Ido\Tools\SsoAuth;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider as Provider;
-use Ido\Tools\Util\AuthHelper;
 
 class SsoUserProvider implements Provider
 {
